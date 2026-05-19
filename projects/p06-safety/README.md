@@ -52,7 +52,7 @@ The `EnsembleSecurityAnalyzer` in the solution wraps three sub-analyzers, each c
 
 `EnsembleSecurityAnalyzer` returns the maximum severity across concrete results. `UNKNOWN` is filtered when at least one child is concrete, so a missing assessment does not absorb a real `HIGH`. If a child analyzer raises, the ensemble treats that as `HIGH`. An analyzer crash is a loud failure, not a silent pass.
 
-The three sub-analyzers overlap on obvious cases like `rm -rf /` or `curl ... | sh`. That redundancy is the point. They diverge on prompt injection (Pattern only), cross-field safety (PolicyRail only), and novel semantic threats (LLM-assessed only).
+The deterministic sub-analyzers overlap on obvious cases like `rm -rf /` or `curl ... | sh`. That redundancy is the point. They diverge on prompt injection (Pattern only), cross-field safety (PolicyRail only), and novel semantic threats (LLM-assessed only).
 
 ### Procedure
 
