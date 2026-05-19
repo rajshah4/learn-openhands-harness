@@ -12,8 +12,8 @@
 | Directory | What's inside |
 |---|---|
 | `code_search_mcp.py` | Minimal dependency-free stdio MCP server with one `search_code` tool. It indexes the target repo and returns ranked snippets. |
-| `starter/` | `run_retrieval.py`. Runs the default lexical tool set and includes the helper that builds the MCP config. |
-| `solution/` | `run_retrieval.py`. Runs lexical-only and lexical+MCP configs and compares event/cost/MCP-call counts. Plus `mcp_decision_rule.md`, the one-line decision rule to keep. |
+| `starter/` | `run_retrieval.py` runs the default lexical tool set and includes the helper that builds the MCP config. |
+| `solution/` | `run_retrieval.py` runs lexical-only and lexical+MCP configs and compares event/cost/MCP-call counts. Plus `mcp_decision_rule.md`, the one-line decision rule to keep. |
 
 ## Agent-assisted path
 
