@@ -72,7 +72,7 @@ ORG_HIGH_PATTERNS = [
         "org.package_install",
     ),
     (
-        r"\brm\s+(?!.*(?:^|\s)-i(?:\s|$)).+",
+        r"\brm\s+(?!(?:.*\s)?-i(?:\s|$)).+",
         "File deletion without an interactive prompt",
         "org.file_delete",
     ),
