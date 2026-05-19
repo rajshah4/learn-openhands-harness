@@ -39,7 +39,21 @@ starting in P06 when the tutorial moves into sandboxed workspaces.
 
 The canvas dev script will install Python dependencies into uvx-managed envs on first run. You don't manage those envs yourself.
 
-> **Optional: pin SDK versions for reproducible traces.** The project scripts use `uv run --with openhands-sdk --with openhands-tools` to pull the latest published versions. That keeps the lab simple, but trace event counts and metric shapes can drift between re-runs if the SDK changes. For frozen versions, generate a hash-locked file once with `uv pip compile --generate-hashes` over an explicit dependency list, then install with `uv pip install -r requirements.txt --require-hashes`. The project scripts are unchanged either way; keep this path only if you want comparable traces across re-runs.
+> **Optional: pin SDK versions for reproducible traces.** The project scripts use `uv run --with openhands-sdk --with openhands-tools`, which resolves the latest published versions on each run. Trace event counts and metric shapes can drift between re-runs if the SDK changes. To pin, compile a hash-locked file once:
+>
+> ```bash
+> printf 'openhands-sdk\nopenhands-tools\nopenhands-workspace\n' \
+>     | uv pip compile - --generate-hashes -o pinned-requirements.txt
+> ```
+>
+> Then run project scripts with `--with-requirements` in place of the inline `--with` arguments:
+>
+> ```bash
+> uv run --with-requirements pinned-requirements.txt \
+>     python projects/p01-agent-trace/starter/run_baseline.py
+> ```
+>
+> The script files are unchanged; only the command you type changes. Note: `uv pip install -r requirements.txt` does **not** help here, because `uv run --with` ignores the active virtualenv and resolves dependencies fresh each call. The pin has to live on the `uv run` command itself. Keep this path only if you want comparable traces across re-runs.
 
 ---
 
