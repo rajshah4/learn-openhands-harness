@@ -11,7 +11,7 @@
 
 | Directory | What's inside |
 |---|---|
-| `starter/` | `run_memory.py`. runs against a repo with no `AGENTS.md` and no condenser config. TODOs for adding memory. |
+| `starter/` | `run_memory.py` runs against a repo with no `AGENTS.md` and no condenser config. TODOs for adding memory. |
 | `solution/` | `run_memory.py` runs both configs and saves trace JSON. `compare_traces.py` compares saved traces. `AGENTS.md` is a sample for agent-canvas, and `condenser_notes.md` is the policy note to keep. |
 
 ## Agent-assisted path

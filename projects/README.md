@@ -8,7 +8,7 @@ The pattern is behavior first: decide what agent behavior you want, change the s
 
 > **Inspired by [walkinglabs/learn-harness-engineering](https://github.com/walkinglabs/learn-harness-engineering)**, which organizes harness learning as a sequence of cumulative projects on the same Electron app rather than disconnected one-off ablations. That's a better shape for learning than the standard "here are some experiments" format, and it adapts naturally to OpenHands. The phase names, the two-column "What You Do / Harness Mechanism" preamble, and the "each project's solution becomes the next project's starter" property are all borrowed from there. Credit where it's due.
 
-> **Common task for P01-P03 and P05.** Pick one repo and one prompt, and freeze them. A good default: clone [`OpenHands/agent-canvas`](https://github.com/OpenHands/agent-canvas) and use the prompt `"Find every place VITE_BACKEND_HOST is read or set, and write a short note explaining how the dev script picks the backend."`. narrow, repeatable, doesn't write code, and forces real retrieval. P04 intentionally switches to a larger release-readiness task so decomposition has something real to improve.
+> **Common task for P01-P03 and P05.** Pick one repo and one prompt, and freeze them. A good default: clone [`OpenHands/agent-canvas`](https://github.com/OpenHands/agent-canvas) and use the prompt `"Find every place VITE_BACKEND_HOST is read or set, and write a short note explaining how the dev script picks the backend."`, narrow, repeatable, doesn't write code, and forces real retrieval. P04 intentionally switches to a larger release-readiness task so decomposition has something real to improve.
 
 ---
 

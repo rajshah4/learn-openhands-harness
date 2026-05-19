@@ -11,8 +11,8 @@
 
 | Directory | What's inside |
 |---|---|
-| `starter/` | `run_routing.py`. runs a single flagship model with TODOs for adding a small model and a routing policy. |
-| `solution/` | `run_routing.py`. all three configs (flagship, small, routed) with per-config metrics printed side by side. |
+| `starter/` | `run_routing.py` runs a single flagship model with TODOs for adding a small model and a routing policy. |
+| `solution/` | `run_routing.py`, all three configs (flagship, small, routed) with per-config metrics printed side by side. |
 
 ## Agent-assisted path
 

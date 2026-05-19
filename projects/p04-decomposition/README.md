@@ -13,7 +13,7 @@ The inspiration is the Harvey LAB / "Trust Your Harness" pattern: hold the model
 
 | Directory | What's inside |
 |---|---|
-| `starter/` | `run_decomposition.py`. runs the monolithic task and leaves TODOs for the decomposed workflow. |
+| `starter/` | `run_decomposition.py` runs the monolithic task and leaves TODOs for the decomposed workflow. |
 | `solution/` | `run_decomposition.py` runs monolithic and decomposed workflows on copied workspaces. `score_report.py` scores saved reports. `decomposition_plan.md` and `evaluation_rubric.md` are the artifacts to keep. |
 
 ## Agent-assisted path

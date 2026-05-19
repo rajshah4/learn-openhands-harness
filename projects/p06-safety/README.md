@@ -11,7 +11,7 @@
 
 | Directory | What's inside |
 |---|---|
-| `starter/` | `run_safety.py`. runs with local workspace, no security analyzer. Plus `org_security_policy.j2`. a template with TODO placeholders. |
+| `starter/` | `run_safety.py` runs with local workspace, no security analyzer. Plus `org_security_policy.j2`, a template with TODO placeholders. |
 | `solution/` | `run_safety.py` wires deterministic analyzers + `LLMSecurityAnalyzer` + `ConfirmRisky()` + `DockerWorkspace`. It also has `--classify-dry` and terminal confirmation handling. Plus `org_security_policy.j2`, a completed policy. |
 
 ## Agent-assisted path

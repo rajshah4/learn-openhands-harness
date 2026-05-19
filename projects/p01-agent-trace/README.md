@@ -11,8 +11,8 @@
 
 | Directory | What's inside |
 |---|---|
-| `starter/` | `run_baseline.py`. runs the prompt and prints raw event count + cost. The minimum viable SDK run. |
-| `solution/` | `run_baseline.py`. same script, extended to print a structured trace summary. Plus `trace_checklist.md`. the trace-reading checklist to keep. |
+| `starter/` | `run_baseline.py` runs the prompt and prints raw event count + cost. The minimum viable SDK run. |
+| `solution/` | `run_baseline.py`, same script, extended to print a structured trace summary. Plus `trace_checklist.md`, the trace-reading checklist to keep. |
 
 ## Agent-assisted path
 
