@@ -40,6 +40,20 @@ For a company, "allowed versus not allowed" should be a shared harness artifact,
 
 The policy template changes how the agent labels its own actions. It does not create a hard block by itself. Treat it as the written policy, then pair it with analyzers and confirmation behavior. The solution uses `PolicyRailSecurityAnalyzer` and `PatternSecurityAnalyzer` for local deterministic checks, plus `LLMSecurityAnalyzer` to read the model-provided `security_risk`.
 
+### What each analyzer catches
+
+The `EnsembleSecurityAnalyzer` in the solution wraps three sub-analyzers, each catching what the others can miss.
+
+`PolicyRailSecurityAnalyzer` checks a small set of named structural rules (fetch-to-exec, raw-disk-op, catastrophic-delete) against each normalized segment of the action. The per-segment design prevents a dangerous-sounding mention in the agent's *reasoning* from triggering a rail meant for what gets *executed*.
+
+`PatternSecurityAnalyzer` scans two corpora: tool arguments for shell-destructive and code-execution signatures, and all fields (including reasoning) for prompt-injection signatures. Different threats live in different fields.
+
+`LLMSecurityAnalyzer` reads the `security_risk` the generating model attached to the action it emitted. No second model call happens here; the layer gates on the model's own assessment, which catches semantic intent no pattern library can enumerate.
+
+`EnsembleSecurityAnalyzer` returns the maximum severity across concrete results. `UNKNOWN` is filtered when at least one child is concrete, so a missing assessment does not absorb a real `HIGH`. If a child analyzer raises, the ensemble treats that as `HIGH`. An analyzer crash is a loud failure, not a silent pass.
+
+The three sub-analyzers overlap on obvious cases like `rm -rf /` or `curl ... | sh`. That redundancy is the point. They diverge on prompt injection (Pattern only), cross-field safety (PolicyRail only), and novel semantic threats (LLM-assessed only).
+
 ### Procedure
 
 1. Fill in the TODOs in `starter/org_security_policy.j2` with your organization's rules.
