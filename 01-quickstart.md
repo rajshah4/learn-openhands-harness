@@ -39,6 +39,8 @@ starting in P06 when the tutorial moves into sandboxed workspaces.
 
 The canvas dev script will install Python dependencies into uvx-managed envs on first run. You don't manage those envs yourself.
 
+> **Optional: pin SDK versions for reproducible traces.** The project scripts use `uv run --with openhands-sdk --with openhands-tools` to pull the latest published versions. That keeps the lab simple, but trace event counts and metric shapes can drift between re-runs if the SDK changes. For frozen versions, generate a hash-locked file once with `uv pip compile --generate-hashes` over an explicit dependency list, then install with `uv pip install -r requirements.txt --require-hashes`. The project scripts are unchanged either way; keep this path only if you want comparable traces across re-runs.
+
 ---
 
 ## 1.2 Clone and start the canvas
