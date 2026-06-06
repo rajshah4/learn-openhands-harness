@@ -19,7 +19,7 @@
 1. Open this `README.md` and `starter/` only.
 2. Ask your coding agent to complete the TODOs without reading `solution/`.
 3. Require it to run the smoke check or live command below and report the result.
-4. Compare against `solution/` only after your starter works, then note what differed.
+4. Compare against `solution/` only after your starter works, then read `solution/README.md` for the solution brief and note what differed.
 
 ## Before you run
 

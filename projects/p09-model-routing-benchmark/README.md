@@ -18,6 +18,8 @@ The frontier model is the consultant, not the default employee.
 
 This project has starter code and completed solutions. Start with the starter files when teaching the lesson, then use the solution files to compare the intended design.
 
+After you attempt the starter, read `solution/README.md` for the solution brief. It explains why the reference implementation is split into a frontier baseline, static router, cascade runner, and shared routing core.
+
 | Purpose | Starter | Solution |
 |---|---|---|
 | Baseline run and static rules routing | `starter/run_routing.py` | `solution/run_frontier.py`, `solution/run_static_rules.py` |

@@ -38,7 +38,7 @@ As of June 4, 2026, OpenHands dynamic workflow support is still in [software-age
 3. Ask it what should remain in harness code versus what can move into a skill.
 4. Ask it to build the solution without reading `solution/`.
 5. Require it to run the dry-run smoke check. Only run live dynamic mode if your SDK install includes workflow support.
-6. Compare against `solution/` and write down what orchestration code disappeared, and what guardrails had to be added.
+6. Compare against `solution/`, read `solution/README.md` for the solution brief, and write down what orchestration code disappeared and what guardrails had to be added.
 
 ## Before you run
 
