@@ -22,4 +22,4 @@ Watch this when you reach P08. It explains why some orchestration code should re
 2. Quickstart and harness tour.
 3. P01 through P07.
 4. Dynamic workflows video.
-5. P08 and P09.
+5. P08, P09, and P10.

@@ -38,4 +38,4 @@ The full setup is in the [Quickstart](/quickstart). The runnable source is in th
 
 ## What You Will Build
 
-By P07, you will have a runnable `harness.py` that combines model selection, tool policy, retrieval, memory, safety, sandboxing, and critic evaluation. P08 and P09 are advanced extensions for dynamic workflows and measured model routing.
+By P07, you will have a runnable `harness.py` that combines model selection, tool policy, retrieval, memory, safety, sandboxing, and critic evaluation. P08, P09, and P10 are advanced extensions for dynamic workflows, measured model routing, and indexing agent history.

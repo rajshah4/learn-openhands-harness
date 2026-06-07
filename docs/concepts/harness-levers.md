@@ -15,6 +15,7 @@ Each project changes one lever. Keep the task stable, change the harness, then i
 | Critic | Did evaluation stop false completion? | [P07](/projects/p07-capstone) |
 | Workflow | Did model-authored orchestration reduce glue code? | [P08](/projects/p08-dynamic-workflows) |
 | Escalation | Did routing recover when cheap got stuck? | [P09](/projects/p09-model-routing-benchmark) |
+| History | Did indexing past sessions beat scanning them? | [P10](/projects/p10-history-index) |
 
 ## The Rule
 

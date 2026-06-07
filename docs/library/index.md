@@ -15,6 +15,7 @@ The library is where course artifacts become reusable harness material. The repo
 | Critic rubric | Evaluation and iterative refinement | [P07](/projects/p07-capstone) |
 | Workflow skill | Bounded model-authored orchestration | [P08](/projects/p08-dynamic-workflows) |
 | Escalation policy | Switching models on evidence | [P09](/projects/p09-model-routing-benchmark) |
+| History index policy | When to index agent history vs scan it | [P10](/projects/p10-history-index) |
 
 ## Start With These
 

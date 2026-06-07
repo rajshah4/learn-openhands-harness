@@ -15,6 +15,7 @@ The projects are the runnable heart of the course. Each one changes one harness 
 | [P07: Critic Capstone](/projects/p07-capstone) | Add evaluation and compose the harness | Critic, rubric, `harness.py` |
 | [P08: Dynamic Workflows](/projects/p08-dynamic-workflows) | Reduce orchestration code | Workflow skill and decision rule |
 | [P09: Model Routing Benchmark](/projects/p09-model-routing-benchmark) | Escalate on evidence | Routing table and escalation policy |
+| [P10: Indexing Agent History](/projects/p10-history-index) | Index unbounded history | History index policy |
 
 ## How To Work
 

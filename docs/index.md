@@ -56,7 +56,7 @@ Harness engineering is the work around the model. The model writes code. The har
   </div>
   <div class="course-card">
     <h3>Build The Harness</h3>
-    <p>Work through P01 to P09. Each project changes one harness lever and asks you to inspect the trace before keeping the policy.</p>
+    <p>Work through P01 to P10. Each project changes one harness lever and asks you to inspect the trace before keeping the policy.</p>
     <p><a href="/learn-openhands-harness/projects/">Open the projects</a></p>
   </div>
   <div class="course-card">
