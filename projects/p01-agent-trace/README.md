@@ -49,7 +49,7 @@ If your Agent Canvas server is Dockerized, either set `WORKSPACE_DIR=/projects/a
    mkdir -p .openhands-runs/traces
    export CONVERSATION_ID=<id-from-the-canvas-url-or-sidebar>
    curl -sS \
-     -H "X-Session-API-Key: $(cat ~/.openhands/agent-canvas/session-api-key.txt)" \
+     -H "X-Session-API-Key: $(cat ~/.openhands/agent-canvas/api-key.txt)" \
      "http://127.0.0.1:18000/api/conversations/$CONVERSATION_ID/events/search" \
      > .openhands-runs/traces/p01-baseline-events.json
    ```

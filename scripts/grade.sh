@@ -86,7 +86,14 @@ from pydantic import SecretStr
 from openhands.sdk import LLM, Conversation, RemoteConversation, Workspace
 from openhands.tools.preset.default import get_default_agent
 
-api_key = (Path.home() / ".openhands" / "agent-canvas" / "session-api-key.txt").read_text().strip()
+_canvas_dir = Path.home() / ".openhands" / "agent-canvas"
+api_key = os.environ.get("AGENT_SERVER_API_KEY")
+for _name in ("api-key.txt", "session-api-key.txt"):  # newer build, then older
+    if api_key:
+        break
+    _key_path = _canvas_dir / _name
+    if _key_path.exists():
+        api_key = _key_path.read_text().strip()
 llm = LLM(usage_id="agent", model=os.environ["LLM_MODEL"], api_key=SecretStr(os.environ["LLM_API_KEY"]))
 agent = get_default_agent(llm=llm, cli_mode=True)
 ws = Workspace(host="http://127.0.0.1:18000", api_key=api_key,
