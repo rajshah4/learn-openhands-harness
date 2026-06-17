@@ -1,9 +1,5 @@
 # P12: Goal And Mission Harness
 
-| What You Do | Turn a loose `/goal` loop into a measurable mission harness. |
-|---|---|
-| Harness Mechanism | Persistent goal state, completion criteria, verifier evidence, budgets, sensors, actuators, and an access envelope. |
-
 ## What Problem Are You Solving?
 
 Most coding agents now ship some form of persistent goal. You hand it an objective once, and it keeps working, turn after turn, until it decides the objective is met. Codex has `/goal`; other harnesses ship the same idea under other names.
