@@ -4,7 +4,7 @@ The full tour lives in [`02-harness-tour.md`](https://github.com/rajshah4/learn-
 
 ## The Task
 
-Use Agent Canvas to ask a real code-reading question against `agent-canvas`:
+After Agent Canvas onboarding is complete, ask a real code-reading question against `agent-canvas`:
 
 ```text
 Find every place VITE_BACKEND_HOST and VITE_BACKEND_BASE_URL are read or set

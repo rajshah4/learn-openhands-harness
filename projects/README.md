@@ -1,6 +1,6 @@
 # Projects: Learning Path
 
-Seven cumulative projects plus five advanced extensions. P01-P07 each change one harness lever and produce a config artifact that carries forward. By P07 you'll have a runnable `harness.py` and an agent-trace evaluation record that wires together everything you kept: your trace-reading checklist, model routing, retrieval decision, decomposition plan, memory policy, security profile, sandbox, and critic. P08 asks whether dynamic workflows can reduce orchestration code without hiding too much control inside the model. P09 returns to model routing as a measured benchmark with escalation. P10 indexes unbounded agent history. P11 measures the subagent context boundary. P12 turns long-running goals into mission contracts with criteria, verifiers, budgets, and envelopes.
+Seven cumulative projects plus five advanced extensions. P01-P07 each change one harness lever and produce a config artifact that carries forward. By P07 you'll have a runnable `harness.py` and an agent-trace evaluation record that wires together everything you kept: your trace-reading checklist, model routing, retrieval decision, decomposition plan, memory policy, security profile, sandbox, and critic. P08 asks whether dynamic workflows can reduce orchestration code without hiding too much control inside the model. P09 returns to model routing as a measured benchmark with escalation. P10 indexes unbounded agent history. P11 measures the subagent context boundary. P12 turns long-running goals into goal scaffolds with criteria, verifiers, budgets, and envelopes.
 
 If you're using this as a first learning path, treat P01-P05 as the core concepts. P06-P07 are the advanced path where safety, verification, and composition start looking like production harness design. P08-P12 are optional until you are comfortable reading traces from multi-step work.
 
@@ -87,8 +87,8 @@ PROJECT EVOLUTION (OpenHands harness)
                                        keep: subagent decision rule
                                              + context-isolation benchmark
        v
-  P12  Goal and mission harness       → MAKE "DONE" PROVABLE
-                                       keep: mission contract
+  P12  Goal scaffolding               → MAKE "DONE" PROVABLE
+                                       keep: goal scaffold
                                              + verifier/evidence policy
 
   Each project produces a concrete artifact.
@@ -283,7 +283,7 @@ Prompt: "Find every place VITE_BACKEND_HOST and VITE_BACKEND_BASE_URL are read o
 | B research | single | | | | | |
 | B research | subagents | | | | | |
 
-## P12: Goal and mission harness
+## P12: Goal scaffolding
 | Scenario | Goal strategy | Verifier evidence | Budget behavior | Envelope behavior | Pass/fail |
 |---|---|---|---|---|---|
 | true missing dots | caller-side MVP | | | | |

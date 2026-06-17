@@ -67,7 +67,7 @@ Three phases, in order. Each builds on the previous one.
 2. **[Harness tour](./02-harness-tour.md).** Give the agent a real task, read the trace, and see the five parts of a harness (model, tools, memory, safety, architecture) in the context of what actually happened.
 3. **[Projects](./projects/).** Seven cumulative projects plus five advanced extensions, each with a `starter/` and `solution/`. Change one lever at a time, keep the artifact, move on.
 
-Each project follows the [walkinglabs/learn-harness-engineering](https://github.com/walkinglabs/learn-harness-engineering) pattern: `starter/` is your starting point, `solution/` is the reference. Each solution becomes the next project's foundation; by P07 you have a complete `harness.py` and an evaluation trace you can defend. P08, P09, P10, P11, and P12 are advanced extensions: dynamic workflows, measured model routing, indexing agent history, measuring subagent context isolation, and turning long-running goals into mission contracts.
+Each project follows the [walkinglabs/learn-harness-engineering](https://github.com/walkinglabs/learn-harness-engineering) pattern: `starter/` is your starting point, `solution/` is the reference. Each solution becomes the next project's foundation; by P07 you have a complete `harness.py` and an evaluation trace you can defend. P08, P09, P10, P11, and P12 are advanced extensions: dynamic workflows, measured model routing, indexing agent history, measuring subagent context isolation, and turning long-running goals into goal scaffolds.
 
 The most important habit is separating constants from variables. A model
 router, security profile, default tool list, memory policy, and sandbox belong
@@ -87,7 +87,7 @@ Task prompt, repo path, budget, and one-off exceptions stay outside the harness.
 | [P09: Model Routing Benchmark](./projects/p09-model-routing-benchmark/) | Select the most appropriate model |
 | [P10: Indexing Agent History](./projects/p10-history-index/) | Add a database/index over conversation traces |
 | [P11: Subagents](./projects/p11-subagents/) | When do subagents make sense? |
-| [P12: Goal And Mission Harness](./projects/p12-goal-mission-harness/) | Make long-running goals verifiable |
+| [P12: Goal Scaffolding](./projects/p12-goal-scaffolding/) | Make long-running goals verifiable |
 
 ---
 
@@ -117,7 +117,7 @@ set +a
 
 Optional knobs: `LLM_MODEL` for the main model, `LLM_MODEL_SMALL` for routing experiments, `WORKSPACE_DIR` for the repo the agent inspects. Never commit a real `.env`. If a key leaks, rotate it.
 
-**Safety note.** This tutorial starts dockerless on purpose. That's the easiest way to see the agent server, HTTP API, filesystem, and trace without another layer in the way. Current Agent Canvas uses `npm run dev` for this local stack, and tool calls run directly on your host. Point it at a scratch repo, not one you care about. P06 moves you to Docker. Until then, treat dockerless mode as a learning microscope, not a safe operating mode.
+**Safety note.** This tutorial starts dockerless on purpose. That's the easiest way to see the agent server, HTTP API, filesystem, and trace without another layer in the way. For the course, use an Agent Canvas source checkout and `npm run dev` so the first harness-tour task has the repo available to inspect. The public Agent Canvas quickstart also supports `npm install -g @openhands/agent-canvas && agent-canvas` and a Docker image, but those are less useful for this first source-reading exercise. In the from-source dev stack, tool calls run directly on your host. Point it at a scratch repo, not one you care about. P06 moves you to Docker. Until then, treat dockerless mode as a learning microscope, not a safe operating mode.
 
 ---
 
@@ -145,7 +145,7 @@ None of this is required. The tutorial is self-contained.
 
 ## Where to go from here
 
-After P07 you have a working `harness.py` and the mental model to extend it. P08, P09, P10, P11, and P12 show five extensions in detail: dynamic workflows, where reusable orchestration policy moves into skills; model routing, where the harness chooses the cheapest model it trusts and escalates on evidence; indexing agent history, where unbounded past sessions move into a queryable index instead of being scanned; subagents, where a context boundary becomes a measured tradeoff; and goals, where a persistent objective becomes a mission contract with criteria, verifiers, budgets, and envelopes. A few other directions worth exploring:
+After P07 you have a working `harness.py` and the mental model to extend it. P08, P09, P10, P11, and P12 show five extensions in detail: dynamic workflows, where reusable orchestration policy moves into skills; model routing, where the harness chooses the cheapest model it trusts and escalates on evidence; indexing agent history, where unbounded past sessions move into a queryable index instead of being scanned; subagents, where a context boundary becomes a measured tradeoff; and goals, where a persistent objective becomes a goal scaffold with criteria, verifiers, budgets, and envelopes. A few other directions worth exploring:
 
 - **More use cases.** The [OpenHands use cases overview](https://docs.openhands.dev/openhands/usage/use-cases/overview) shows what people are building with coding harnesses beyond the tutorial tasks: migrations, test generation, documentation, issue triage. Good source of fresh prompts to stress-test your harness against.
 - **Multi-agent orchestration.** This tutorial builds a single-agent harness. The [openhands-multi-agent-demo](https://github.com/rajshah4/openhands-multi-agent-demo) shows the next step: composing multiple harnesses (Claude Code, Gemini CLI, OpenHands) into an implement, test, review pipeline. Three orchestration patterns, same workflow, different isolation and state-sharing tradeoffs.

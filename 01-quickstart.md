@@ -59,11 +59,16 @@ The canvas dev script will install Python dependencies into uvx-managed envs on 
 
 ## 1.2 Clone and start the canvas
 
-Current Agent Canvas uses `npm run dev` for the full local no-Docker stack. Older
-checkouts called this `dev:dangerously-dockerless`; the warning still applies.
-Keep the first run small and reversible. A good target is a scratch clone or the
-tiny default workspace created by the canvas. Do not point it at your main work
-repo until you have moved to the Docker path in the tour.
+Current Agent Canvas can start three ways: the published `agent-canvas` command,
+the Docker image, or a source checkout. Use the source checkout for this course.
+The next lesson asks the agent to inspect `agent-canvas` itself, so having the
+repo on disk is part of the exercise.
+
+This starts the full local no-Docker stack. Older checkouts called the same idea
+`dev:dangerously-dockerless`; the warning still applies. Keep the first run
+small and reversible. A good target is the `agent-canvas` checkout you just
+cloned or another scratch repo. Do not point it at your main work repo until you
+have moved to the Docker path in the tour.
 
 ```bash
 git clone https://github.com/OpenHands/agent-canvas.git
@@ -90,7 +95,7 @@ What this actually does, from `DEVELOPMENT.md`:
 - Spawns the automation backend via `uvx` on `127.0.0.1:18001`.
 - Starts a Vite dev server on `http://localhost:3001`.
 - Starts an ingress proxy on `http://localhost:8000`; this is the URL you open.
-- Writes isolated state under `~/.openhands/agent-canvas/` (session key, conversation persistence, workspaces, bash event log, tmux sockets). This means it won't fight the default OpenHands desktop/cloud-backed state, but repeated Agent Canvas dev runs will share this local state.
+- Writes a dev API key at `~/.openhands/agent-canvas/api-key.txt` and stores conversations, workspaces, bash events, and tmux sockets under the Agent Canvas state directory. By default that state directory is `~/.openhands/agent-canvas/`; set `OH_CANVAS_SAFE_STATE_DIR=/path/to/state` if you want a disposable state directory for a run.
 
 You should see logs from the agent server, automation backend, Vite, and ingress interleaved. Wait until the launcher prints `Ready at http://localhost:18000/server_info` and then `Main UI: http://localhost:8000/`. Then open `http://localhost:8000` in a browser.
 
@@ -119,7 +124,7 @@ fi
 You can also run `scripts/health.sh`, which uses the same fallback when `jq`
 is not installed.
 
-If you get a connection refused, the server isn't up yet. Wait, then try again. `/health`, `/ready`, and `/server_info` are public server-detail endpoints. Most `/api/*` routes are authenticated because the dev script generates or reuses a session key. For direct API calls, send `X-Session-API-Key` with the value from `~/.openhands/agent-canvas/session-api-key.txt`, or export `SESSION_API_KEY` / `VITE_SESSION_API_KEY` yourself before starting the stack.
+If you get a connection refused, the server isn't up yet. Wait, then try again. `/health`, `/ready`, and `/server_info` are public server-detail endpoints. Most `/api/*` routes are authenticated because the dev script generates or reuses a local API key. For direct API calls, send `X-Session-API-Key` with the value from `~/.openhands/agent-canvas/api-key.txt`, or export `LOCAL_BACKEND_API_KEY` before starting the stack.
 
 The interesting endpoints, all documented in the [agent-server architecture page](https://docs.openhands.dev/sdk/arch/agent-server):
 
@@ -143,8 +148,8 @@ One subtle but important distinction: `/server_info` lists every tool the server
 In the browser:
 
 1. Open `http://localhost:8000`.
-2. Create a new conversation. If this is your first run, set the provider API key and model in the canvas LLM settings first: open **Settings → LLM** in the sidebar, or go directly to `http://localhost:8000/settings`.
-3. Type something narrow and verifiable. A good first prompt is:
+2. If this is your first run, complete the onboarding flow: choose **OpenHands** as the agent, make sure the backend check says you are connected, and set your provider, model, and API key in **Set up your LLM**. The wizard's **Say hello** step is a smoke test; for the course prompt, start a normal new chat after onboarding.
+3. Start a new conversation against the `agent-canvas` workspace and type something narrow and verifiable. A good first prompt is:
 
    > Read the current repo and write three facts about it into `FACTS.txt`.
 
@@ -152,7 +157,7 @@ In the browser:
 
 You'll see the canvas render a sequence of typed events: tool calls such as `terminal`, `file_editor`, and `task_tracker`, tool returns, model deltas, and a final message. In this tutorial, we'll call that sequence the **agent trace**. Each row is one event from the [`Event`](https://docs.openhands.dev/sdk/arch/events) framework. Save this trace; we'll come back to it in the harness tour.
 
-If `FACTS.txt` shows up in the workspace directory the canvas chose, usually under `~/.openhands/agent-canvas/workspaces/`, you have a working harness end-to-end.
+If `FACTS.txt` shows up in the workspace directory the canvas chose, usually under the state directory's `workspaces/` folder (`~/.openhands/agent-canvas/workspaces/` by default, or `$OH_CANVAS_SAFE_STATE_DIR/workspaces/` when overridden), you have a working harness end-to-end.
 
 ---
 
@@ -173,7 +178,7 @@ Set `WORKSPACE_DIR=/path/to/repo` if you want the SDK run to inspect a repo othe
 than the current directory. If your agent server is Dockerized, use the
 host/server path mapping from §1.2.
 
-If this exits with `Missing required environment variable: LLM_API_KEY`, the server is fine; the SDK client just doesn't have model credentials in your shell. Source `.env`, export `LLM_API_KEY`, or use the canvas LLM settings path from §1.4.
+If this exits with `Missing required environment variable: LLM_API_KEY`, the server is fine; the SDK client just doesn't have model credentials in your shell. Source `.env`, export `LLM_API_KEY`, or finish the canvas LLM setup from §1.4.
 
 You should now have *two* conversations on the same agent server: one started from the canvas, one from Python. They share workspace state (subject to `working_dir`) and event persistence. Open the canvas; you can see the SDK-created conversation in the sidebar. That's not a coincidence. Both clients write through the same `/api/conversations` endpoint.
 
@@ -184,7 +189,8 @@ You should now have *two* conversations on the same agent server: one started fr
 Before moving on, confirm all of these are true:
 
 - [ ] `curl http://127.0.0.1:18000/health` returns `"status": "ok"`.
-- [ ] The canvas at `http://localhost:8000` shows your test conversation.
+- [ ] The canvas at `http://localhost:8000` has completed onboarding: agent selected, backend connected, LLM configured.
+- [ ] The canvas shows your test conversation.
 - [ ] `FACTS.txt` exists in the working directory the canvas chose.
 - [ ] You've eyeballed the agent trace and recognize at least: a user message, a `terminal` or `file_editor` tool call, the matching observation, and an agent message.
 - [ ] You ran the SDK script *and* the canvas conversation against the same server, and both show up.
@@ -198,8 +204,9 @@ If any of the above is false, fix it now. Common failures and fixes:
 | Server exits immediately, no health endpoint | `uvx` install/start failure or a busy port | Re-read the launcher error; rerun after freeing the port or fixing `uvx` |
 | `500 Internal Server Error` when creating a conversation, with a host path like `/Users/...` or `/private/var/...` in the stack trace | Dockerized agent server cannot see the host path passed as `working_dir` | Set `AGENT_WORKSPACE_HOST_ROOT` + `AGENT_WORKSPACE_SERVER_ROOT`, or set `WORKSPACE_DIR` to the server path such as `/projects/agent-canvas` |
 | `500 Internal Server Error` with `tmux` / `File name too long` | macOS temp path made the tmux socket path too long | Restart the server with a short tmux temp dir: `mkdir -p /private/tmp/oh-tmux && TMUX_TMPDIR=/private/tmp/oh-tmux npm run dev` |
-| `401 Unauthorized` from `/api/*` | Dev server generated a session API key | Send `X-Session-API-Key: $(cat ~/.openhands/agent-canvas/session-api-key.txt)` or pin `SESSION_API_KEY` / `VITE_SESSION_API_KEY` before restart |
-| Canvas blank, console errors about CORS | Frontend pointing at wrong backend | In the full dockerless stack, `VITE_BACKEND_BASE_URL` should point at the ingress URL (`http://127.0.0.1:8000` by default), and `VITE_BACKEND_HOST` should use `127.0.0.1:8000` for the Vite proxy. In frontend-only mode, point it at your existing backend. |
+| `401 Unauthorized` from `/api/*` | Dev server generated a local API key | Send `X-Session-API-Key: $(cat ~/.openhands/agent-canvas/api-key.txt)` or pin `LOCAL_BACKEND_API_KEY` before restart |
+| Canvas blank, console errors about CORS | Frontend pointing at wrong backend | In the full dockerless stack, let `npm run dev` own the frontend, backend, and ingress. In frontend-only mode, point `VITE_BACKEND_BASE_URL` at the ingress URL and set `VITE_BACKEND_HOST` for the Vite proxy. |
 | Canvas can't connect, port 8000 in use | Some other dev server | Set `PORT=8123 npm run dev` |
+| Launcher says backend, automation, or Vite port is busy | One of the internal dev ports is already taken | Set explicit internal ports, for example `OH_CANVAS_SAFE_BACKEND_PORT=18100 OH_CANVAS_SAFE_AUTOMATION_PORT=18101 OH_CANVAS_SAFE_VITE_PORT=3101 PORT=8123 npm run dev` |
 
 Once the checklist passes, move on to [`02-harness-tour.md`](./02-harness-tour.md).

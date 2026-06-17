@@ -1,4 +1,4 @@
-# Starter: P12 Goal And Mission Harness
+# Starter: P12 Goal Scaffolding
 
 ## What You Are Building
 
@@ -12,13 +12,13 @@ The repo-local MVP fixture already has:
 - token usage accounting,
 - a completion prompt.
 
-The missing part is the mission contract: criteria, verifier, sensors, actuators, envelope, and hard stop policy.
+The missing part is the goal scaffold: criteria, verifier, sensors, actuators, envelope, and hard stop policy.
 
 ## Your Tasks
 
 1. Read `goal_mvp/state.py`, `goal_mvp/controller.py`, `goal_mvp/tools.py`, and `goal_mvp/prompts.py`.
 2. Run `python test_goal_mvp.py` from the project directory.
-3. Fill in `goal_contract.py` so a one-line goal becomes a structured contract.
+3. Fill in `goal_scaffold.py` so a one-line goal becomes a structured scaffold.
 4. Fill in `probe_goal_mvp.py` with at least three probes:
    - complete after budget exceeded,
    - complete without verifier evidence,

@@ -4,7 +4,7 @@ A coding agent is not just a model. It's a model wrapped in a **harness**: the c
 
 In this tour you'll give the agent a real task, watch it work, and then walk through the trace to see each part of the harness in action. The [projects](./projects/) will have you change each one.
 
-> **Prerequisites:** a running agent server and canvas from the [quickstart](./01-quickstart.md), and the `agent-canvas` repo cloned locally.
+> **Prerequisites:** a running agent server and canvas from the [quickstart](./01-quickstart.md), completed Agent Canvas onboarding, and the `agent-canvas` repo cloned locally.
 
 ---
 
@@ -14,7 +14,7 @@ You just set up the agent-canvas project in the quickstart. The canvas frontend 
 
 It also makes a good harness test. The agent has to search across multiple files, read what it finds, connect the dots, and produce a written summary, without modifying anything. You'll reuse this same prompt across the early projects so you can compare how different harness configurations change the agent's behavior on the same task.
 
-Open the canvas at `http://localhost:8000`. Start a new conversation and paste this prompt:
+Open the canvas at `http://localhost:8000`. If the first-run wizard appears, finish the agent, backend, and LLM setup from the quickstart. Then start a new conversation and paste this prompt:
 
 ```
 Find every place VITE_BACKEND_HOST and VITE_BACKEND_BASE_URL are read or set
@@ -48,7 +48,7 @@ Count the events. Note what tools the agent used, how many times, and in what or
 
 Somewhere in that trace, an LLM read the context and decided what to do next. Which model was it?
 
-If you used the canvas defaults, it's whatever you configured in the model picker. If you ran `quickstart.py`, it's the `LLM_MODEL` you exported (or the Sonnet 4.5 default). Either way, one model did all the work: reasoning, tool selection, writing the answer.
+If you used the canvas defaults, it's whatever you configured during the LLM setup step. If you ran `quickstart.py`, it's the `LLM_MODEL` you exported (or the Sonnet 4.5 default). Either way, one model did all the work: reasoning, tool selection, writing the answer.
 
 That's fine for a first run, but it's also the most expensive configuration. In a real harness you might route cheap tasks to a small model, hard tasks to a flagship, and vision tasks to a multimodal one. OpenHands supports model configuration through `LLM` and [`LLMRegistry`](https://docs.openhands.dev/sdk/guides/llm-registry), and local/in-process harnesses can also use [`RouterLLM`](https://docs.openhands.dev/sdk/guides/llm-routing). [P02](./projects/p02-model-routing/) uses a remote-safe routing policy before agent construction, then compares the cost.
 

@@ -15,7 +15,8 @@ Optional:
     LLM_MODEL            LiteLLM-style provider/model string
                          (default anthropic/claude-sonnet-4-5-20250929)
     AGENT_SERVER          Default http://127.0.0.1:18000
-    AGENT_SERVER_API_KEY  Session key for authenticated dev servers
+    AGENT_SERVER_API_KEY  API key for authenticated dev servers
+                         (defaults to ~/.openhands/agent-canvas/api-key.txt)
     WORKSPACE_DIR         Repo/workspace to give the agent (default: cwd)
 """
 
@@ -52,14 +53,27 @@ def resolve_working_dir() -> str:
     return resolve_server_working_dir()
 
 
+def resolve_agent_server_api_key() -> str | None:
+    configured = os.environ.get("AGENT_SERVER_API_KEY")
+    if configured:
+        return configured
+
+    key_dir = Path.home() / ".openhands" / "agent-canvas"
+    for key_path in (
+        key_dir / "api-key.txt",
+        key_dir / "session-api-key.txt",  # Older Agent Canvas dev builds.
+    ):
+        if key_path.exists():
+            return key_path.read_text().strip()
+
+    return None
+
+
 def main() -> None:
     api_key = require_env("LLM_API_KEY")
     model = os.environ.get("LLM_MODEL", DEFAULT_MODEL)
     server = os.environ.get("AGENT_SERVER", "http://127.0.0.1:18000")
-    session_key_path = Path.home() / ".openhands" / "agent-canvas" / "session-api-key.txt"
-    agent_server_api_key = os.environ.get("AGENT_SERVER_API_KEY")
-    if agent_server_api_key is None and session_key_path.exists():
-        agent_server_api_key = session_key_path.read_text().strip()
+    agent_server_api_key = resolve_agent_server_api_key()
 
     from pydantic import SecretStr
     from openhands.sdk import LLM, Conversation, RemoteConversation, Workspace

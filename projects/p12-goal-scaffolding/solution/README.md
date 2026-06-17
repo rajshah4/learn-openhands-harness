@@ -1,4 +1,4 @@
-# Solution Brief: P12 Goal And Mission Harness
+# Solution Brief: P12 Goal Scaffolding
 
 ## What This Solution Shows
 
@@ -10,27 +10,27 @@ The reference solution therefore treats the goal feature as three layers:
 
 1. **Goal loop.** Persist the objective and continue while active.
 2. **Goal critic.** Audit stop attempts and feed back missing work through iterative refinement.
-3. **Mission layer.** Own criteria, verifier results, budgets, evidence, and envelope policy.
+3. **Goal scaffolding layer.** Own criteria, verifier results, budgets, evidence, and envelope policy.
 
 ## Start With These Files
 
 | File | Why it matters |
 |---|---|
-| `goal_contract.py` | Shows the state a mission harness needs beyond an objective string. |
+| `goal_scaffold.py` | Shows the state a goal scaffold needs beyond an objective string. |
 | `probe_goal_mvp.py` | Runs deterministic probes against the repo-local goal MVP fixture. |
-| `../../p12-goal-mission-harness/README.md` | Main lesson and live run procedure. |
+| `../../p12-goal-scaffolding/README.md` | Main lesson and live run procedure. |
 
 Use the repo-local fixture as the implementation under test:
 
 ```bash
-cd projects/p12-goal-mission-harness
+cd projects/p12-goal-scaffolding
 python test_goal_mvp.py
 ```
 
 Then run the solution probes from the course repo:
 
 ```bash
-cd projects/p12-goal-mission-harness
+cd projects/p12-goal-scaffolding
 python solution/probe_goal_mvp.py
 ```
 
@@ -38,7 +38,7 @@ If you have access to an external modified SDK checkout, compare it explicitly:
 
 ```bash
 GOAL_MVP_REPO=/path/to/goal-mvp-checkout \
-  python projects/p12-goal-mission-harness/solution/probe_goal_mvp.py
+  python projects/p12-goal-scaffolding/solution/probe_goal_mvp.py
 ```
 
 ## Key Design Choices
@@ -66,12 +66,12 @@ The expected probe pattern against the current MVP is:
 | `token_formula_cached_discount` | pass | The budget metric discounts cached prompt tokens. |
 | `budget_complete_override_gap` | gap | A run can mark complete after crossing the budget. |
 | `completion_without_evidence_gap` | gap | `update_goal complete` accepts no verifier evidence. |
-| `contract_schema_gap` | gap | `GoalState` has no criteria, verifier, sensors, actuators, envelope, or evidence. |
+| `scaffold_schema_gap` | gap | `GoalState` has no criteria, verifier, sensors, actuators, envelope, or evidence. |
 | `blocked_first_turn_gap` | gap | The tool can mark blocked on turn 1. |
 | `max_turns_leaves_active_gap` | gap | A max-turn cap stops the driver but leaves status `active`. |
 | `status_terminal_semantics_gap` | gap | `paused` and `blocked` do not continue, but are not terminal by the helper. |
 
-Those gaps are not an indictment of the MVP. They are the point of the lab. The MVP teaches that the continuation loop is easy enough to prototype. The system-owned mission semantics are the hard part.
+Those gaps are not an indictment of the MVP. They are the point of the lab. The MVP teaches that the continuation loop is easy enough to prototype. The system-owned goal scaffolding semantics are the hard part.
 
 ## GoalCritic Composite
 
@@ -102,7 +102,7 @@ That gets the continuation mechanism closer to the SDK core, but a production `/
 The practical shape is:
 
 ```text
-MissionContract
+GoalScaffold
   -> GoalState
   -> GoalCritic finish gate
   -> Verifier runner
@@ -122,10 +122,10 @@ Your solution is on the right track if it can answer these questions without rel
 - Which commands ran?
 - Did any command or edit violate the envelope?
 - Why did the goal stop: complete, blocked, budget-limited, capped, or verifier-failed?
-- Could the same goal resume after process restart with the same contract?
+- Could the same goal resume after process restart with the same scaffold?
 
 ## Valid Variations
 
-You can keep the caller-side loop for a Phase 1 demo if the goal service owns verifier checks and terminal-state transitions. You can move continuation into `GoalCritic` if you want the SDK to own finish interception. You can use both: caller-side or server-side goal state to store the mission, and `GoalCritic` to turn incomplete finish attempts into continuation.
+You can keep the caller-side loop for a Phase 1 demo if the goal service owns verifier checks and terminal-state transitions. You can move continuation into `GoalCritic` if you want the SDK to own finish interception. You can use both: caller-side or server-side goal state to store the goal scaffold, and `GoalCritic` to turn incomplete finish attempts into continuation.
 
 The design to avoid is prompt-only trust. A prompt can tell the model to audit itself. A harness has to decide what counts as proof.

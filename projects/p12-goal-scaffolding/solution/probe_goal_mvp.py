@@ -2,7 +2,7 @@
 """Deterministic probes for the OpenHands goal MVP.
 
 These are not replacements for unit tests. They ask product-level questions:
-can the MVP enforce budgets, evidence, blockers, and mission-contract state
+can the MVP enforce budgets, evidence, blockers, and goal-scaffolding state
 without trusting the agent's final narration?
 """
 
@@ -220,7 +220,7 @@ def probe_max_turns_leaves_active_gap() -> Probe:
     )
 
 
-def probe_contract_schema_gap() -> Probe:
+def probe_scaffold_schema_gap() -> Probe:
     state_fields = {field.name for field in fields(GoalState)}
     expected = {
         "criteria",
@@ -234,10 +234,10 @@ def probe_contract_schema_gap() -> Probe:
     missing = sorted(expected - state_fields)
     gap = bool(missing)
     return Probe(
-        name="contract_schema_gap",
+        name="scaffold_schema_gap",
         result="gap" if gap else "pass",
         severity="high" if gap else "info",
-        summary="GoalState stores objective, budget, and lifecycle, but not a full mission contract.",
+        summary="GoalState stores objective, budget, and lifecycle, but not a full goal scaffold.",
         detail=f"missing_fields={missing}",
     )
 
@@ -264,7 +264,7 @@ PROBES = [
     probe_completion_without_evidence_gap,
     probe_status_terminal_semantics_gap,
     probe_max_turns_leaves_active_gap,
-    probe_contract_schema_gap,
+    probe_scaffold_schema_gap,
     probe_token_formula_cached_discount,
 ]
 

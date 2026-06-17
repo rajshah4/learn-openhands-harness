@@ -1,4 +1,4 @@
-"""Reference mission contract for P12.
+"""Reference goal scaffold for P12.
 
 This is deliberately small. It is a schema sketch that names the state a goal
 feature needs before a harness can make trustworthy completion decisions.
@@ -33,7 +33,7 @@ class Envelope:
 
 
 @dataclass
-class MissionContract:
+class GoalScaffold:
     objective: str
     criteria: list[Criterion]
     verifier: Verifier
@@ -67,8 +67,8 @@ class MissionContract:
         return errors
 
 
-def slugify_dot_contract() -> MissionContract:
-    return MissionContract(
+def slugify_dot_scaffold() -> GoalScaffold:
+    return GoalScaffold(
         objective=(
             "Preserve dots in slugify so slugify('api.v1 endpoint') returns "
             "'api.v1-endpoint'."
@@ -130,9 +130,9 @@ def slugify_dot_contract() -> MissionContract:
 
 
 def main() -> int:
-    contract = slugify_dot_contract()
-    errors = contract.validation_errors()
-    print(json.dumps(asdict(contract), indent=2))
+    scaffold = slugify_dot_scaffold()
+    errors = scaffold.validation_errors()
+    print(json.dumps(asdict(scaffold), indent=2))
     if errors:
         print("\nValidation errors:")
         print("\n".join(errors))

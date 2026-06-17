@@ -1,7 +1,7 @@
-"""Starter mission contract for P12.
+"""Starter goal scaffold for P12.
 
 Fill this in after reading the goal MVP. The point is to make the hidden
-contract explicit enough that a harness could enforce it.
+scaffold explicit enough that a harness could enforce it.
 """
 
 from __future__ import annotations
@@ -32,7 +32,7 @@ class Envelope:
 
 
 @dataclass
-class MissionContract:
+class GoalScaffold:
     objective: str
     criteria: list[Criterion] = field(default_factory=list)
     verifier: Verifier | None = None
@@ -52,8 +52,8 @@ class MissionContract:
         return []
 
 
-def slugify_dot_contract() -> MissionContract:
-    """Return the mission contract for the dot-preservation slugify goal."""
+def slugify_dot_scaffold() -> GoalScaffold:
+    """Return the goal scaffold for the dot-preservation slugify goal."""
     # TODO: encode the goal:
     # "api.v1 endpoint" should become "api.v1-endpoint".
     # The regression test must be added first, pytest must fail before the fix,
@@ -62,9 +62,9 @@ def slugify_dot_contract() -> MissionContract:
 
 
 if __name__ == "__main__":
-    contract = slugify_dot_contract()
-    errors = contract.validation_errors()
+    scaffold = slugify_dot_scaffold()
+    errors = scaffold.validation_errors()
     if errors:
         print("\n".join(errors))
         raise SystemExit(1)
-    print(contract)
+    print(scaffold)

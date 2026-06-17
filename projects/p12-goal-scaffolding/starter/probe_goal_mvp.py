@@ -46,14 +46,14 @@ def probe_completion_without_evidence() -> Probe:
     )
 
 
-def probe_contract_schema() -> Probe:
+def probe_scaffold_schema() -> Probe:
     # TODO: inspect dataclasses.fields(GoalState). Does it contain criteria,
     # verifier, sensors, actuators, envelope, and evidence?
     return Probe(
-        name="contract_schema",
+        name="scaffold_schema",
         result="todo",
         severity="high",
-        summary="Check whether GoalState stores a full mission contract.",
+        summary="Check whether GoalState stores a full goal scaffold.",
         detail="not implemented",
     )
 
@@ -62,7 +62,7 @@ def main() -> int:
     probes = [
         probe_budget_complete_override(),
         probe_completion_without_evidence(),
-        probe_contract_schema(),
+        probe_scaffold_schema(),
     ]
     print(json.dumps([asdict(probe) for probe in probes], indent=2))
     return 0

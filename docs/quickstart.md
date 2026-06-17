@@ -18,9 +18,10 @@ Read the current repo and write three facts about it into FACTS.txt.
 2. Run `npm install`.
 3. Run `npm run dev`.
 4. Open `http://localhost:8000`.
-5. Configure the model key in settings.
-6. Send the first prompt.
-7. Inspect the trace.
+5. Complete onboarding: choose OpenHands, confirm the backend is connected, and configure the LLM provider, model, and API key.
+6. Start a new chat against the `agent-canvas` workspace.
+7. Send the first prompt.
+8. Inspect the trace.
 
 The quickstart also shows how to call the same server through the Python SDK, which makes the key point visible: Canvas and the SDK are different clients on the same harness runtime.
 
