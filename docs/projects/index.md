@@ -17,6 +17,7 @@ The projects are the runnable heart of the course. Each one changes one harness 
 | [P09: Model Routing Benchmark](/projects/p09-model-routing-benchmark) | Select the most appropriate model |
 | [P10: Indexing Agent History](/projects/p10-history-index) | Add a database/index over conversation traces |
 | [P11: Subagents](/projects/p11-subagents) | When do subagents make sense? |
+| [P12: Goal And Mission Harness](/projects/p12-goal-mission-harness) | Make long-running goals verifiable |
 
 ## How To Work
 

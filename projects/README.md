@@ -1,8 +1,8 @@
 # Projects: Learning Path
 
-Seven cumulative projects plus four advanced extensions. P01-P07 each change one harness lever and produce a config artifact that carries forward. By P07 you'll have a runnable `harness.py` and an agent-trace evaluation record that wires together everything you kept: your trace-reading checklist, model routing, retrieval decision, decomposition plan, memory policy, security profile, sandbox, and critic. P08 asks whether dynamic workflows can reduce orchestration code without hiding too much control inside the model. P09 returns to model routing as a measured benchmark with escalation. P10 indexes unbounded agent history. P11 measures the subagent context boundary.
+Seven cumulative projects plus five advanced extensions. P01-P07 each change one harness lever and produce a config artifact that carries forward. By P07 you'll have a runnable `harness.py` and an agent-trace evaluation record that wires together everything you kept: your trace-reading checklist, model routing, retrieval decision, decomposition plan, memory policy, security profile, sandbox, and critic. P08 asks whether dynamic workflows can reduce orchestration code without hiding too much control inside the model. P09 returns to model routing as a measured benchmark with escalation. P10 indexes unbounded agent history. P11 measures the subagent context boundary. P12 turns long-running goals into mission contracts with criteria, verifiers, budgets, and envelopes.
 
-If you're using this as a first learning path, treat P01-P05 as the core concepts. P06-P07 are the advanced path where safety, verification, and composition start looking like production harness design. P08-P11 are optional until you are comfortable reading traces from multi-step work.
+If you're using this as a first learning path, treat P01-P05 as the core concepts. P06-P07 are the advanced path where safety, verification, and composition start looking like production harness design. P08-P12 are optional until you are comfortable reading traces from multi-step work.
 
 The pattern is behavior first: decide what agent behavior you want, change the smallest harness surface that could affect it, then observe whether the trace changed.
 
@@ -86,10 +86,14 @@ PROJECT EVOLUTION (OpenHands harness)
   P11  Subagents                      → MEASURE THE BOUNDARY
                                        keep: subagent decision rule
                                              + context-isolation benchmark
+       v
+  P12  Goal and mission harness       → MAKE "DONE" PROVABLE
+                                       keep: mission contract
+                                             + verifier/evidence policy
 
   Each project produces a concrete artifact.
   P07 is where the core artifacts merge into one runnable harness.
-  P08-P11 are advanced extensions.
+  P08-P12 are advanced extensions.
 ```
 
 ---
@@ -278,6 +282,14 @@ Prompt: "Find every place VITE_BACKEND_HOST and VITE_BACKEND_BASE_URL are read o
 | A small repo audit | subagents | | | | | |
 | B research | single | | | | | |
 | B research | subagents | | | | | |
+
+## P12: Goal and mission harness
+| Scenario | Goal strategy | Verifier evidence | Budget behavior | Envelope behavior | Pass/fail |
+|---|---|---|---|---|---|
+| true missing dots | caller-side MVP | | | | |
+| false premise dots | caller-side MVP | | | | |
+| deterministic probes | caller-side MVP | | | | |
+| true missing dots | GoalCritic design | | | | |
 ```
 
 Three runs is barely a signal; ten is convincing; thirty is real. Pick a budget and stick to it.
