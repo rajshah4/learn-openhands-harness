@@ -7,7 +7,7 @@ export default defineConfig({
   base: "/learn-openhands-harness/",
   cleanUrls: true,
   themeConfig: {
-    siteTitle: "Learn Harness Engineering with OpenHands",
+    siteTitle: "Learn Harness Engineering",
     nav: [
       { text: "Start", link: "/start-here" },
       { text: "Concepts", link: "/concepts/" },
