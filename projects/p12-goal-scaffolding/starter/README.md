@@ -2,9 +2,17 @@
 
 ## What You Are Building
 
-You are starting from a working `/goal` MVP. Your job is not to make the agent try harder. Your job is to make completion more trustworthy.
+You are starting from the official OpenHands goal loop plus a small repo-local MVP fixture. Your job is not to make the agent try harder. Your job is to make completion more trustworthy.
 
-The repo-local MVP fixture already has:
+The official SDK feature already has:
+
+- a `run_goal(conversation, objective, judge_llm)` driver,
+- a `GoalController`,
+- a separate judge LLM,
+- `GoalContinue` follow-ups,
+- `GoalOutcome(status="complete" | "capped")`.
+
+The repo-local MVP fixture still helps you inspect the simpler pre-landing shape:
 
 - a persistent objective,
 - a continuation loop,
@@ -16,16 +24,18 @@ The missing part is the goal scaffold: criteria, verifier, sensors, actuators, e
 
 ## Your Tasks
 
-1. Read `goal_mvp/state.py`, `goal_mvp/controller.py`, `goal_mvp/tools.py`, and `goal_mvp/prompts.py`.
-2. Run `python test_goal_mvp.py` from the project directory.
-3. Fill in `goal_scaffold.py` so a one-line goal becomes a structured scaffold.
-4. Fill in `probe_goal_mvp.py` with at least three probes:
+1. Read the official [Goal Completion Loop guide](https://docs.openhands.dev/sdk/guides/convo-goal).
+2. Run `uv run --with openhands-sdk --with openhands-tools python probe_official_goal.py` from the project directory.
+3. Read `goal_mvp/state.py`, `goal_mvp/controller.py`, `goal_mvp/tools.py`, and `goal_mvp/prompts.py`.
+4. Run `python test_goal_mvp.py` from the project directory.
+5. Fill in `goal_scaffold.py` so a one-line goal becomes a structured scaffold.
+6. Fill in `probe_goal_mvp.py` with at least three probes:
    - complete after budget exceeded,
    - complete without verifier evidence,
    - goal state missing criteria/verifier/envelope fields.
-5. Run your probes and compare them to `solution/probe_goal_mvp.py`.
-6. Run one live slugify goal against `toy_repos/dot_missing` and one against `toy_repos/dot_present`.
-7. Write the result table in the main README.
+7. Run your probes and compare them to `solution/probe_goal_mvp.py`.
+8. Run one live slugify goal against `toy_repos/dot_missing` and one against `toy_repos/dot_present`.
+9. Write the result table in the main README.
 
 ## Constraints
 

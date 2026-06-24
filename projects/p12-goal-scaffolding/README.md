@@ -2,25 +2,26 @@
 
 ## What Problem Are You Solving?
 
-Long-running agents need a way to keep working after one turn ends. That part is easy to describe as `/goal`: store an objective, keep the conversation active, and let the agent mark the goal complete when it thinks the work is done.
+Long-running agents need a way to keep working after one turn ends. OpenHands now ships that core loop as `run_goal`: send an objective, let the agent work, ask a separate judge LLM whether the transcript proves completion, and either continue with the judge's feedback or return a `GoalOutcome`.
 
-The harder problem is completion. If the only proof of completion is the agent's final story, a goal loop can reward vague criteria, invented evidence, soft budgets, and actions outside the intended envelope.
+That is a real improvement over a plain `conversation.run()`, but it does not remove the harder problem: completion. If the only proof of completion is transcript text judged against a broad objective, a goal loop can still reward vague criteria, invented evidence, soft budgets, and actions outside the intended envelope.
 
-In this lesson, you are not trying to design the perfect `/goal` feature up front. You are trying to make the problem concrete. You will use a small goal-loop fixture, two slugify repos, and a set of probes to answer:
+In this lesson, you are not trying to replace the official `/goal` feature. You are trying to make the remaining harness problem concrete. You will use the official OpenHands goal controller, a small pre-landing goal-loop fixture, two slugify repos, and a set of probes to answer:
 
 **What scaffolding does a harness need before it should trust a long-running goal?**
 
 You will work through two problems:
 
-1. Can a basic goal loop tell when it is actually done?
+1. What does the official goal loop solve, and what does it deliberately leave to the harness?
 2. What scaffold should sit around the goal so completion is harder to fake?
 
 ## Start With These Files
 
-This project is self-contained. The goal MVP is a small SDK-free fixture based on a modified OpenHands SDK experiment, so you can run the core loop without a private checkout.
+This project is self-contained. The official SDK probe verifies the landed OpenHands goal-controller behavior without an API key. The repo-local MVP is a small SDK-free fixture from the pre-landing experiment, kept so you can probe continuation gaps deterministically.
 
 | Purpose | Starter | Reference |
 |---|---|---|
+| Official goal smoke probe | `probe_official_goal.py` | same |
 | Goal scaffold | `starter/goal_scaffold.py` | `solution/goal_scaffold.py` |
 | Goal-loop probes | `starter/probe_goal_mvp.py` | `solution/probe_goal_mvp.py` |
 | Exercise instructions | `starter/README.md` | `solution/README.md` |
@@ -28,10 +29,11 @@ This project is self-contained. The goal MVP is a small SDK-free fixture based o
 | Goal loop smoke tests | `test_goal_mvp.py` | same |
 | Slugify target repos | `toy_repos/dot_missing/`, `toy_repos/dot_present/` | same |
 
-Open the goal-loop fixture first:
+Open the official probe and goal-loop fixture first:
 
 | File | What to look for |
 |---|---|
+| `probe_official_goal.py` | How `GoalController` turns a missing verdict into `GoalContinue`, then a passing verdict into `GoalDone`. |
 | `goal_mvp/state.py` | What state is persisted, and what is missing? |
 | `goal_mvp/controller.py` | When does the loop continue, stop, or hit budget? |
 | `goal_mvp/tools.py` | What does `update_goal complete` require? |
@@ -42,25 +44,27 @@ Read `solution/README.md` after you have run the probes and written your first r
 
 This lesson sits on top of [P06](../p06-safety/): the envelope, the verifier, and the hard stop policy are where "done" meets the safety profile you built there. It shares its measure-don't-assume style with [P09](../p09-model-routing-benchmark/) and [P11](../p11-subagents/), which treat a harness choice as something you probe and benchmark rather than something you trust the model to report.
 
-## Problem 1: Can A Goal Loop Tell When It Is Actually Done?
+## Problem 1: What Does The Official Goal Loop Own?
 
-Start with the smallest useful loop:
+Start with the official loop:
 
 ```text
-objective -> persistent state -> continuation prompt -> update_goal -> stop
+objective -> agent run -> judge_goal -> GoalContinue or GoalOutcome
 ```
 
-This loop can continue work. It can count tokens. It can stop when the agent marks the goal `complete`, `blocked`, or `budget_limited`. Your first problem is to find out where that loop stops being enough.
+This loop solves an important termination problem. A plain `conversation.run()` stops when the agent thinks it is done. `run_goal` stops only after a second judge LLM audits the conversation events and returns `complete=True`, or after the max-iteration cap returns `status="capped"`.
 
-Run the fixture and probes, then answer these questions:
+Run the official probe and the local fixture probes, then answer these questions:
 
-- Can the agent mark complete without verifier evidence?
-- Can the agent mark blocked before the repeated-blocker rule is satisfied?
-- What happens if the token budget is exceeded and the agent marks complete anyway?
-- Does the goal state contain criteria, verifier, sensors, actuators, envelope, and evidence?
-- When a max-turn cap stops the driver, does the final status explain what happened?
+- Does the official controller continue when the judge says something is missing?
+- Does it return a distinct capped state when the loop runs out of audit rounds?
+- What does the judge read: structured verifier records, or rendered transcript text?
+- Where would criteria, sensors, actuators, envelope, evidence ledger, and token budget live?
+- In the local MVP, can the agent mark complete without verifier evidence?
+- In the local MVP, can the agent mark blocked before the repeated-blocker rule is satisfied?
+- In the local MVP, what happens if the token budget is exceeded and the agent marks complete anyway?
 
-The point is not to shame the MVP. The point is to separate continuation from verification.
+The point is not to shame either implementation. The official feature gives OpenHands a real judge-driven completion loop. The lesson is to separate that loop from the scaffolding a production harness still needs around it.
 
 ## Problem 2: What Scaffold Makes Completion Harder To Fake?
 
@@ -108,17 +112,35 @@ OpenHands already exposes most of the surfaces you need to think about. In this 
 
 | Responsibility | OpenHands surface | Student question |
 |---|---|---|
-| Persistent state | `ConversationState.agent_state` or typed conversation state | What should survive a restart? |
-| Continue after stop | Caller-side loop, server idle loop, or iterative refinement | Who decides the goal should keep running? |
-| Completion audit | `CriticBase` and iterative refinement | What can a judge catch, and what should a verifier prove? |
+| Continue after stop | `run_goal(conversation, objective, judge_llm)` | What does the official loop own? |
+| Completion audit | `judge_goal` and a separate judge `LLM` | What can a transcript judge catch, and what should a verifier prove? |
+| Driver control | `GoalController`, `GoalContinue`, `GoalOutcome(status="complete" | "capped")` | Where do you integrate sync, async, server, or UI drivers? |
+| Persistent state | `GoalStatus` events, conversation state, or typed harness state | What should survive a restart? |
+| Inner-run quality | Critic and iterative refinement | What should improve each inner run versus trigger another outer goal iteration? |
 | Evidence | Tool observations, command results, tests, file diffs | Which event proves each criterion? |
 | Sensors | Event stream, workspace diff, command output, metrics | What does the verifier read? |
 | Actuators | Tools, shell commands, edit tools, browser, delegation | What can change the state being verified? |
 | Envelope | Workspace, tool allowlist, hooks, confirmation policy, sandbox | What should be denied before it happens? |
 
-The [OpenHands GoalCritic proposal](https://github.com/OpenHands/software-agent-sdk/issues/3569#issuecomment-4718627868) is useful background after you have attempted the exercise. Do not start by copying it. First decide what the scaffold must know and enforce.
+The official [OpenHands Goal Completion Loop guide](https://docs.openhands.dev/sdk/guides/convo-goal) is now required reading. The older [GoalCritic proposal](https://github.com/OpenHands/software-agent-sdk/issues/3569#issuecomment-4718627868) is useful historical background after you have attempted the exercise. Do not start by copying either one. First decide what the scaffold must know and enforce.
 
 ## Run The Experiments
+
+If you test through Agent Canvas, verify the backend version before treating the run as proof that `/goal` works there:
+
+```bash
+curl -sS http://127.0.0.1:8000/server_info
+curl -sS http://127.0.0.1:8000/openapi.json | python -m json.tool | grep -i goal
+```
+
+On June 24, 2026, the Agent Canvas `main` defaults still pinned `openhands-agent-server==1.28.1`, while the SDK goal loop was available through `openhands-sdk==1.29.2`. A Canvas stack pinned to 1.28.1 can run ordinary conversations, but it will not expose goal paths or goal schemas in `/openapi.json`. In that case, use the standalone SDK probe below, or restart Canvas with a goal-capable Agent Server before using it as live `/goal` evidence.
+
+Run the official SDK control-flow probe. This uses a fake judge LLM, so it does not need an API key and it does not run a live agent:
+
+```bash
+cd projects/p12-goal-scaffolding
+uv run --with openhands-sdk --with openhands-tools python probe_official_goal.py
+```
 
 Run the deterministic goal-loop tests:
 
@@ -171,13 +193,6 @@ final run passes.
 
 Run it once against `dot_missing` and once against `dot_present`.
 
-If you have access to an external modified SDK branch or checkout, you can compare it with the in-repo fixture:
-
-```bash
-GOAL_MVP_REPO=/path/to/goal-mvp-checkout \
-  python projects/p12-goal-scaffolding/solution/probe_goal_mvp.py
-```
-
 Do not put API keys in a runner. Use `LLM_API_KEY` from the shell or `.env`, and rotate any key that was pasted into a shared file.
 
 ## Record The Results
@@ -186,10 +201,11 @@ Record one row per run:
 
 | Scenario | Goal strategy | Expected behavior | Actual behavior | Verifier evidence | Budget behavior | Envelope behavior | Pass/fail |
 |---|---|---|---|---|---|---|---|
+| official controller smoke | `GoalController` + fake judge | | | | | | |
 | true missing dots | caller-side MVP | | | | | | |
 | false premise dots | caller-side MVP | | | | | | |
 | deterministic probes | caller-side MVP | | | | | | |
-| true missing dots | scaffolded goal loop | | | | | | |
+| true missing dots | official `run_goal` + scaffolded prompt | | | | | | |
 
 Then write the scaffold changes you think are necessary:
 
@@ -220,7 +236,8 @@ They should be able to say:
 
 - [OpenHands issue 3569: Proposal: Add /goal command for persistent, auto-continuing objectives](https://github.com/OpenHands/software-agent-sdk/issues/3569)
 - [Goal-Critic option comment](https://github.com/OpenHands/software-agent-sdk/issues/3569#issuecomment-4718627868)
+- [OpenHands SDK goal completion loop guide](https://docs.openhands.dev/sdk/guides/convo-goal)
+- [OpenHands SDK ready-to-run goal example](https://github.com/OpenHands/software-agent-sdk/blob/main/examples/01_standalone_sdk/54_goal_completion_loop.py)
 - [OpenHands SDK iterative refinement guide](https://docs.openhands.dev/sdk/guides/iterative-refinement)
-- Optional external comparison: run `solution/probe_goal_mvp.py` with `GOAL_MVP_REPO=/path/to/goal-mvp-checkout`.
 
 </details>

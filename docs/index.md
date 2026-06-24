@@ -59,11 +59,6 @@ Harness engineering is the work around the model. The model writes code. The har
     <p>Work through P01 to P12. Each project changes one harness lever and asks you to inspect the trace before keeping the policy.</p>
     <p><a href="/learn-openhands-harness/projects/">Open the projects</a></p>
   </div>
-  <div class="course-card">
-    <h3>Copy The Artifacts</h3>
-    <p>Use the library for trace checklists, routing policies, safety profiles, critic rubrics, and result tables you can adapt to your own repos.</p>
-    <p><a href="/learn-openhands-harness/library/">Open the library</a></p>
-  </div>
 </div>
 
 ## What Makes This Course Different?

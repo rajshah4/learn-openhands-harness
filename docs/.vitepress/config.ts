@@ -12,7 +12,6 @@ export default defineConfig({
       { text: "Start", link: "/start-here" },
       { text: "Concepts", link: "/concepts/" },
       { text: "Projects", link: "/projects/" },
-      { text: "Library", link: "/library/" },
       { text: "Videos", link: "/videos" },
       {
         text: "GitHub",
@@ -49,16 +48,6 @@ export default defineConfig({
             { text: "P10: Indexing Agent History", link: "/projects/p10-history-index" },
             { text: "P11: Subagents", link: "/projects/p11-subagents" },
             { text: "P12: Goal Scaffolding", link: "/projects/p12-goal-scaffolding" },
-          ],
-        },
-      ],
-      "/library/": [
-        {
-          text: "Library",
-          items: [
-            { text: "Overview", link: "/library/" },
-            { text: "Copy-Ready Artifacts", link: "/library/artifacts" },
-            { text: "Trace Checklist", link: "/library/trace-checklist" },
           ],
         },
       ],

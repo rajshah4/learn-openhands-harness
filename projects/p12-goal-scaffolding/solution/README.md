@@ -2,25 +2,35 @@
 
 ## What This Solution Shows
 
-The repo-local caller-side MVP proves that `/goal` is not mysterious. You can store a goal in conversation state, inject a continuation prompt, and keep calling `conversation.run()` until the goal is complete, blocked, or budget-limited.
+The official OpenHands SDK now proves that `/goal` is not mysterious. `run_goal` sends an objective, runs the agent, asks a separate judge LLM whether the transcript proves completion, and either sends a follow-up or returns `GoalOutcome(status="complete" | "capped")`.
 
-The live runs and deterministic probes show the sharper lesson: continuation is not verification. A model can satisfy vague completion criteria with a polished story, and even with an honest model the harness may not know whether the final evidence is authoritative.
+The repo-local caller-side MVP remains useful because it exposes the simpler pre-landing loop in deterministic tests: store a goal in conversation state, inject a continuation prompt, and keep calling `conversation.run()` until the goal is complete, blocked, or budget-limited.
+
+The live runs and deterministic probes show the sharper lesson: judged continuation is still not the same thing as system-owned verification. A model can satisfy vague completion criteria with a polished story, and even with an honest model the harness may not know whether the final evidence is authoritative.
 
 The reference solution therefore treats the goal feature as three layers:
 
-1. **Goal loop.** Persist the objective and continue while active.
-2. **Goal critic.** Audit stop attempts and feed back missing work through iterative refinement.
-3. **Goal scaffolding layer.** Own criteria, verifier results, budgets, evidence, and envelope policy.
+1. **Official goal loop.** Use `run_goal` / `GoalController` to continue until a judge confirms completion or the cap is reached.
+2. **Verifier and evidence layer.** Record command output, exit code, file diffs, and event ids as system-owned evidence.
+3. **Goal scaffolding layer.** Own criteria, budgets, stop states, sensors, actuators, and envelope policy.
 
 ## Start With These Files
 
 | File | Why it matters |
 |---|---|
+| `../probe_official_goal.py` | Shows the landed SDK controller continuing, completing, and capping without a real model call. |
 | `goal_scaffold.py` | Shows the state a goal scaffold needs beyond an objective string. |
 | `probe_goal_mvp.py` | Runs deterministic probes against the repo-local goal MVP fixture. |
 | `../../p12-goal-scaffolding/README.md` | Main lesson and live run procedure. |
 
-Use the repo-local fixture as the implementation under test:
+Start with the official SDK controller probe:
+
+```bash
+cd projects/p12-goal-scaffolding
+uv run --with openhands-sdk --with openhands-tools python probe_official_goal.py
+```
+
+Then use the repo-local fixture as the implementation under test:
 
 ```bash
 cd projects/p12-goal-scaffolding
@@ -34,16 +44,11 @@ cd projects/p12-goal-scaffolding
 python solution/probe_goal_mvp.py
 ```
 
-If you have access to an external modified SDK checkout, compare it explicitly:
-
-```bash
-GOAL_MVP_REPO=/path/to/goal-mvp-checkout \
-  python projects/p12-goal-scaffolding/solution/probe_goal_mvp.py
-```
-
 ## Key Design Choices
 
-**Keep the MVP as the baseline.** The MVP is useful because it isolates the smallest loop: `GoalState`, `run_until_goal`, continuation prompt, and `update_goal`.
+**Make the official SDK loop the baseline.** The landed OpenHands feature owns the outer completion loop: objective, judge, follow-up, complete, and capped.
+
+**Keep the MVP as the gap fixture.** The MVP is useful because it isolates the smallest loop: `GoalState`, `run_until_goal`, continuation prompt, and `update_goal`. It makes missing scaffold responsibilities easy to test without an LLM.
 
 **Use deterministic probes before live runs.** Live model behavior is informative, but the basic product semantics should be testable without an LLM. The probe script uses fake conversations to test budget, blocker, terminal-status, and schema behavior.
 
@@ -53,7 +58,7 @@ GOAL_MVP_REPO=/path/to/goal-mvp-checkout \
 
 **Keep envelope enforcement outside prompt text.** If only two paths are allowed, the edit tool or workspace policy should reject other paths. If package installation is disallowed, command policy should reject it before it runs.
 
-**Use GoalCritic for the SDK integration point, not for all truth.** A critic is the right place to intercept finish attempts and continue the run. It is not a substitute for executable checks, budget transitions, and tool policy.
+**Do not turn the judge into the whole verifier.** `judge_goal` reads rendered transcript text. It is useful for deciding whether to continue, but it is not a substitute for executable checks, budget transitions, and tool policy.
 
 ## Reference Probe Findings
 
@@ -73,38 +78,34 @@ The expected probe pattern against the current MVP is:
 
 Those gaps are not an indictment of the MVP. They are the point of the lab. The MVP teaches that the continuation loop is easy enough to prototype. The system-owned goal scaffolding semantics are the hard part.
 
-## GoalCritic Composite
+## Official Goal Loop And The Missing Scaffold
 
-The GoalCritic proposal from the issue comment is the best OpenHands-native direction:
+The official OpenHands direction is now `run_goal` and `GoalController`, not a custom `GoalCritic`:
 
 ```python
-class GoalCritic(CriticBase):
-    def evaluate(self, events, git_patch=None):
-        ...
+from openhands.sdk.conversation.goal import run_goal
 
-    def get_followup_prompt(self, result):
-        ...
+outcome = run_goal(conversation, objective, judge_llm, max_iterations=3)
 ```
 
-Attached to an agent, the critic would judge the attempted finish. If incomplete, iterative refinement feeds the missing criteria back into the same `conversation.run()` call.
+That loop composes with a critic, but it operates one layer outside the critic. The critic governs each inner `conversation.run()`. The goal loop decides whether another run is needed at all.
 
-That gets the continuation mechanism closer to the SDK core, but a production `/goal` still needs a thin system layer around it:
+A production `/goal` still needs a thin system layer around the official loop:
 
-| Need | Why GoalCritic alone is not enough |
+| Need | Why `run_goal` alone is not enough |
 |---|---|
-| Hard token budget | SDK budget is cost-oriented; token budget needs goal-level accounting. |
+| Hard token budget | `max_iterations` caps audits, not goal-level tokens or cost. |
 | Completion evidence | The judge sees transcript text unless verifier events are structured and required. |
-| Envelope | Critic runs after actions; disallowed actions must be denied before they happen. |
-| Fresh goal reset | Iterative-refinement counters must reset when a new goal starts. |
-| Capped status | `max_iterations` needs a distinct state instead of silent finish. |
-| Finish path coverage | Content-only stops and alternate finish paths must still pass through the gate. |
+| Criteria | The objective is a string; criterion-by-criterion state still belongs in the harness. |
+| Envelope | Disallowed actions must be denied before they happen, not judged after the fact. |
+| Fresh verifier run | The harness must know whether tests ran after the latest relevant edit. |
+| False-premise handling | A transcript judge can notice missing evidence, but the scaffold must define what honest evidence is possible. |
 
 The practical shape is:
 
 ```text
 GoalScaffold
-  -> GoalState
-  -> GoalCritic finish gate
+  -> official run_goal / GoalController
   -> Verifier runner
   -> Evidence ledger
   -> Budget/status controller
@@ -126,6 +127,6 @@ Your solution is on the right track if it can answer these questions without rel
 
 ## Valid Variations
 
-You can keep the caller-side loop for a Phase 1 demo if the goal service owns verifier checks and terminal-state transitions. You can move continuation into `GoalCritic` if you want the SDK to own finish interception. You can use both: caller-side or server-side goal state to store the goal scaffold, and `GoalCritic` to turn incomplete finish attempts into continuation.
+Use the official `run_goal` loop as the default continuation mechanism. Keep the caller-side MVP only as a teaching fixture or for environments pinned before SDK v1.29.2. If you add a critic, use it for inner-run quality control, not as the only source of truth for completion.
 
 The design to avoid is prompt-only trust. A prompt can tell the model to audit itself. A harness has to decide what counts as proof.

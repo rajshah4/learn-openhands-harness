@@ -2,7 +2,7 @@
 
 This course is a guided lab. The goal is to change how you think, not just run through the exercises. Do not use an agent to quickly solve every problem. At most, guide the agent to code your ideas. Even then, look carefully at the results and try different combinations. You want a deep understanding of each of these problems.
 
-## The Four Entry Points
+## The Three Entry Points
 
 If you are new to harness engineering, start with the concept path. If you already know the framing, go straight to the OpenHands lab.
 
@@ -11,7 +11,6 @@ If you are new to harness engineering, start with the concept path. If you alrea
 | Concept | You want the thesis before touching code | [Concepts](/concepts/) |
 | Video | You want the narrative walkthrough first | [Videos](/videos) |
 | Lab | You want to run Agent Canvas and inspect traces | [Quickstart](/quickstart) |
-| Reuse | You want copy-ready harness artifacts | [Library](/library/) |
 
 ## The Learning Loop
 
