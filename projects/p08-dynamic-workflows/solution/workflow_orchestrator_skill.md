@@ -39,19 +39,21 @@ Write these files under `.harness_workflow/dynamic/`:
 
 ## Suggested workflow API usage
 
-Use the workflow tool's map/reduce pattern:
+Use the workflow tool's map/reduce pattern. Keep concurrency modest for LLM-heavy work:
 
 ```python
 research = await wf.map_agents(
     items=research_angles,
     prompt="Research this angle with primary sources: {item}",
     subagent_type="web_searcher",
+    max_concurrency=3,
 )
 
 verified = await wf.map_agents(
     items=research,
     prompt="Verify source quality and mark stale-risk claims: {item}",
     subagent_type="fact_checker",
+    max_concurrency=3,
 )
 
 final_report = await wf.reduce_agent(
@@ -60,5 +62,7 @@ final_report = await wf.reduce_agent(
     subagent_type="synthesizer",
 )
 ```
+
+`wf.pipeline(...)` is also available when each item should move through the same stages without waiting for a global barrier. For this lesson, the explicit research map, verification map, and synthesis reduce are easier to inspect in the trace.
 
 The model may choose the research angles, but it may not ignore the artifact contract or verification requirements.

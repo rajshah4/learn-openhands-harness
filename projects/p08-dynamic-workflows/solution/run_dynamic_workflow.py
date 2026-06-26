@@ -1,7 +1,8 @@
 """P08 solution - dynamic deep-research workflow.
 
 Run with:
-    uv run --with openhands-sdk --with openhands-tools python run_dynamic_workflow.py
+    uv run --with 'openhands-sdk>=1.29.2' --with 'openhands-tools>=1.29.2' \
+      python run_dynamic_workflow.py
 
 Cheap verification:
     uv run python run_dynamic_workflow.py --dry-run
@@ -12,7 +13,8 @@ Optional: LLM_MODEL (default anthropic/claude-sonnet-4-5-20250929)
           WORKSPACE_DIR (default current directory)
           P08_MAX_ITERATIONS (default 40 per agent run)
 
-Dynamic mode requires an SDK build that exposes openhands.tools.workflow.WorkflowToolSet.
+Dynamic mode requires openhands-tools>=1.29.2, which exposes
+openhands.tools.workflow.WorkflowToolSet.
 """
 
 from __future__ import annotations
@@ -148,9 +150,9 @@ def require_workflow_imports():
         print(
             "\n".join(
                 [
-                    "Dynamic workflow mode requires an OpenHands SDK build with WorkflowToolSet.",
+                    "Dynamic workflow mode requires OpenHands packages with WorkflowToolSet.",
                     "The starter manual baseline and solution dry run still work.",
-                    "Install a workflow-enabled SDK build, then rerun this solution live.",
+                    "Install openhands-sdk>=1.29.2 and openhands-tools>=1.29.2, then rerun this solution live.",
                     f"Import error: {type(exc).__name__}: {exc}",
                 ]
             ),

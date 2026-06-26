@@ -1,7 +1,8 @@
 """P08 starter - manual deep-research orchestration.
 
 Run with:
-    uv run --with openhands-sdk --with openhands-tools python run_dynamic_workflow.py
+    uv run --with 'openhands-sdk>=1.29.2' --with 'openhands-tools>=1.29.2' \
+      python run_dynamic_workflow.py
 
 Cheap verification:
     uv run python run_dynamic_workflow.py --dry-run

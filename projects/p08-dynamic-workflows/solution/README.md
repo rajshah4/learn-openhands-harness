@@ -29,11 +29,11 @@ The solution keeps hard guarantees in code:
 
 The model gets flexibility only inside those boundaries. The skill tells it when to use a workflow, how many research angles to choose, when to fact-check, how to preserve uncertainty, and which artifacts to write.
 
-The dry run is intentionally useful. Because workflow support may depend on a specific OpenHands SDK build, `--dry-run` still shows the roles, skill path, and parent prompt without requiring live workflow imports.
+The dry run is intentionally useful. Live mode needs `openhands-sdk>=1.29.2` and `openhands-tools>=1.29.2`, where the dynamic workflow tool is part of the released package. `--dry-run` still shows the roles, skill path, and parent prompt without requiring live workflow imports, so students can inspect the harness shape before spending model calls.
 
 ## How OpenHands Fits In
 
-The solution uses OpenHands skills, sub-agent registration, and `WorkflowToolSet`. The parent agent has the workflow tool and the orchestration skill. Child agents are registered as `web_searcher`, `fact_checker`, and `synthesizer`.
+The solution uses OpenHands skills, sub-agent registration, and `WorkflowToolSet` from `openhands.tools.workflow`. The parent agent has the workflow tool and the orchestration skill. Child agents are registered as `web_searcher`, `fact_checker`, and `synthesizer`.
 
 The trace should show the generated fan-out/fan-in plan. If the workflow is not visible enough to debug, it is not a good harness feature.
 

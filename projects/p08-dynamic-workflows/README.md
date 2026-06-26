@@ -41,11 +41,13 @@ The default question is "What is changing about AI coding assistants for softwar
 
 ```bash
 WORKSPACE_DIR=/path/to/repo \
-uv run --with openhands-sdk --with openhands-tools \
+uv run --with 'openhands-sdk>=1.29.2' --with 'openhands-tools>=1.29.2' \
   python run_dynamic_workflow.py "How are coding agents changing release engineering?"
 ```
 
-**SDK status:** as of June 4, 2026, dynamic workflow support lives in [software-agent-sdk PR #3426](https://github.com/OpenHands/software-agent-sdk/pull/3426), not necessarily the released package. The dry runs work today because they avoid live workflow imports. Live dynamic mode needs an SDK build that exposes `openhands.tools.workflow` / `WorkflowToolSet`; without it the solution script exits with a clear message and the dry run still teaches the code-shape comparison.
+Most course scripts default to `AGENT_SERVER=http://127.0.0.1:18000`. If your local Agent Canvas ingress exposes Agent Server on port `8000`, add `AGENT_SERVER=http://127.0.0.1:8000` to the command.
+
+**SDK status:** verified June 26, 2026. [software-agent-sdk PR #3426](https://github.com/OpenHands/software-agent-sdk/pull/3426) was merged on June 6, 2026, and the released `openhands-tools>=1.29.2` package exposes `openhands.tools.workflow.WorkflowToolSet`. The command above asks `uv` for current SDK packages so live dynamic mode can import the workflow tool. If an older environment shadows those packages, the solution script exits with a clear message and the dry run still teaches the code-shape comparison.
 
 ## Record The Results
 
