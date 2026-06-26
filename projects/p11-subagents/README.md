@@ -24,7 +24,7 @@ This project has two scenarios. Start with the starter files, then read the solu
 | Purpose | Starter | Solution |
 |---|---|---|
 | Scenario A: small repo audit | `starter/run_compare.py` | `solution/run_compare.py` |
-| Scenario A: native delegated trace |  | `solution/run_delegate_laminar.py` |
+| Scenario A: native task-tool trace |  | `solution/run_task_laminar.py` |
 | Scenario B: research corpus | `starter/run_scenario_b.py` | `solution/run_scenario_b.py` |
 | Scenario C: monster repo investigation |  | `solution/run_monster_repo.py` |
 | Shared conversation runner and reporting | `subagent_bench.py` | same |
@@ -66,7 +66,7 @@ Scenarios A and B are toy-sized on purpose. Scenario C is the realistic large-re
 You compare:
 
 - **Single context.** One conversation investigates the whole tree and fills in a checklist of benchmark facts.
-- **Delegated subagents.** A parent delegates per-area investigations through native OpenHands delegation, then synthesizes the checklist.
+- **Task-tool subagents.** A parent launches one native OpenHands `task` per investigation area through `TaskToolSet`, then synthesizes the checklist.
 
 
 
@@ -109,12 +109,12 @@ uv run --with openhands-sdk --with openhands-tools \
 
 The reference above is the controlled benchmark. It uses explicit child
 conversations so you can measure each child directly. To see the native
-OpenHands delegation surface and send traces to Laminar, run:
+OpenHands task-tool surface and send traces to Laminar, run:
 
 ```bash
 P11_NATIVE_MODEL=small P11_ONLY_DIMS=docs,secrets \
   uv run --with openhands-sdk --with openhands-tools \
-  python projects/p11-subagents/solution/run_delegate_laminar.py
+  python projects/p11-subagents/solution/run_task_laminar.py
 ```
 
 Then run the full native check:
@@ -122,7 +122,7 @@ Then run the full native check:
 ```bash
 P11_NATIVE_MODEL=small \
   uv run --with openhands-sdk --with openhands-tools \
-  python projects/p11-subagents/solution/run_delegate_laminar.py
+  python projects/p11-subagents/solution/run_task_laminar.py
 ```
 
 If `LMNR_PROJECT_API_KEY` is set in your `.env`, the runner loads it before
@@ -228,7 +228,7 @@ P11_CHILD_MODEL=same P11_PARALLELISM=3 uv run --with openhands-sdk --with openha
 
 ## Run Scenario C On A Large Repo
 
-Scenario C is read-only: the agents may read files but must not run tests, installs, builds, Docker, package managers, or network commands. The runner scores a fixed checklist of facts rather than asking whether the answer feels right, so the single and delegated configs are graded on the same coverage bar.
+Scenario C is read-only: the agents may read files but must not run tests, installs, builds, Docker, package managers, or network commands. The runner scores a fixed checklist of facts rather than asking whether the answer feels right, so the single and task-tool configs are graded on the same coverage bar.
 
 Set it up by cloning the two benchmark repos into one directory and pointing `P11_MONSTER_ROOT` at it:
 
@@ -266,14 +266,14 @@ Fill these from your own runs. Reference numbers live in `solution/README.md`.
 |---|---|---:|---:|---:|---:|:--:|
 | A small repo audit | single | | | | | |
 | A small repo audit | subagents | | | | | |
-| A native delegated trace | single | | | | | |
-| A native delegated trace | delegate tool | | | | | |
+| A native task-tool trace | single | | | | | |
+| A native task-tool trace | task tool | | | | | |
 | B research | single | | | | | |
 | B research | subagents | | | | | |
 | B long-running | single | | | | | |
 | B long-running | subagents | | | | | |
 | C monster repo | single | | | | | |
-| C monster repo | delegate tool | | | | | |
+| C monster repo | task tool | | | | | |
 
 For Scenario B, also record whether synthesis preserved the raw child findings:
 
@@ -299,14 +299,14 @@ If the answer changes as you adjust topics, distractors, model choice, or delay,
 
 This lesson uses explicit `RemoteConversation` children for the controlled benchmark. That is intentional. Manual children make each child run visible: workspace, model, cost, tokens, wall time, compaction, and final text.
 
-OpenHands also supports subagent delegation through its delegate tool, and it supports file-based agents from `.agents/agents/*.md` or `.openhands/agents/*.md`. `solution/run_delegate_laminar.py` is the companion native run: it uses the OpenHands delegation executor and relies on Laminar for the parent and child trace shape.
+OpenHands also supports native subagent work through `TaskToolSet`, exposed to the parent agent as the `task` tool. The task tool can launch registered agent types, including file-based agents from `.agents/agents/*.md` or `.openhands/agents/*.md`. `solution/run_task_laminar.py` is the companion native run: it registers a P11 read-only subagent type, gives the parent `Tool(name=TaskToolSet.name)`, and relies on Laminar for the parent and child trace shape.
 
-P11 keeps both approaches because they answer different questions. The manual benchmark isolates the economics of the context boundary. The native delegated run shows the real OpenHands mechanism you would reach for after the boundary has earned its cost.
+P11 keeps both approaches because they answer different questions. The manual benchmark isolates the economics of the context boundary. The native task-tool run shows the real OpenHands mechanism you would reach for after the boundary has earned its cost.
 
 <details>
 <summary>References</summary>
 
-- [OpenHands SDK: Sub-Agent Delegation](https://docs.openhands.dev/sdk/guides/agent-delegation): `DelegateTool`, spawn, delegate, and consolidated child results.
+- [OpenHands SDK: Sub-Agent Delegation](https://docs.openhands.dev/sdk/guides/agent-delegation): `TaskToolSet`, the `task` tool, and consolidated child results.
 - [OpenHands SDK: File-Based Agents](https://docs.openhands.dev/sdk/guides/agent-file-based): project-level and user-level subagent definitions.
 - [Laminar: Observability for OpenHands Software Agent SDK](https://laminar.sh/docs/tracing/integrations/openhands-sdk): conversation, agent step, tool, token, latency, and cost traces.
 - [`openhands-subagent-patterns`](https://github.com/rajshah4/openhands-subagent-patterns): working oh_conversations, sdk_subagents, and github_control patterns.
