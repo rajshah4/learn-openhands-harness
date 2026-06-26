@@ -1,7 +1,7 @@
-"""P11 solution: Scenario C, native delegation on a monster repo.
+"""P11 solution: Scenario C, native task-tool subagents on a monster repo.
 
 This runner compares one read-only investigation against native OpenHands
-delegation on the local VS Code custom-image benchmark tree.
+task-tool subagents on the local VS Code custom-image benchmark tree.
 
 Run a cheap smoke:
     P11_MONSTER_MODEL=small P11_MONSTER_ONLY_AREAS=benchmark_doc,custom_image \
@@ -22,7 +22,7 @@ Env:
     P11_MONSTER_ROOT            default ~/p11-monster (clone the two benchmark repos there)
     P11_MONSTER_ONLY_AREAS      optional CSV subset
     P11_MONSTER_SINGLE_ONLY=1   run only the single-agent config
-    P11_MONSTER_DELEGATE_ONLY=1 run only the delegate config
+    P11_MONSTER_TASK_ONLY=1     run only the task-tool config
     P11_MONSTER_SHOW_FINAL=1    print final reports
 """
 from __future__ import annotations
@@ -31,7 +31,6 @@ import os
 import sys
 import time
 from pathlib import Path
-from typing import Sequence
 
 
 PROJECT = Path(__file__).resolve().parents[1]
@@ -50,18 +49,11 @@ from openhands.sdk.conversation.response_utils import (  # noqa: E402
     get_agent_final_response,
 )
 from openhands.sdk.subagent import register_agent_if_absent  # noqa: E402
-from openhands.sdk.tool import register_tool  # noqa: E402
-from openhands.sdk.tool.tool import ToolAnnotations, ToolDefinition  # noqa: E402
-from openhands.tools.delegate import (  # noqa: E402
-    DelegateAction,
-    DelegateExecutor,
-    DelegateObservation,
-)
 from openhands.tools.preset.default import get_default_tools  # noqa: E402
+from openhands.tools.task import TaskToolSet  # noqa: E402
 
 
 DEFAULT_ROOT = "~/p11-monster"
-DELEGATE_TOOL_NAME = "delegate"
 MONSTER_AGENT_TYPE = "p11-monster-explorer"
 
 AREAS = [
@@ -112,49 +104,9 @@ CHECKLIST = [
 ]
 
 
-class NativeDelegateTool(ToolDefinition[DelegateAction, DelegateObservation]):
-    """Compatibility wrapper for SDKs that ship the executor without the tool."""
-
-    name = DELEGATE_TOOL_NAME
-
-    @classmethod
-    def create(
-        cls,
-        conv_state,
-        max_children: int = 5,
-    ) -> Sequence["NativeDelegateTool"]:
-        return [
-            cls(
-                description=(
-                    "Spawn subagents and delegate independent read-only "
-                    "investigation tasks to them."
-                ),
-                action_type=DelegateAction,
-                observation_type=DelegateObservation,
-                annotations=ToolAnnotations(
-                    title=DELEGATE_TOOL_NAME,
-                    readOnlyHint=True,
-                    destructiveHint=False,
-                    idempotentHint=False,
-                    openWorldHint=False,
-                ),
-                executor=DelegateExecutor(max_children=max_children),
-            )
-        ]
-
-
-def _register_delegate_tool() -> str:
-    try:
-        from openhands.tools.delegate import DelegateTool  # type: ignore[attr-defined]
-    except ImportError:
-        register_tool(DELEGATE_TOOL_NAME, NativeDelegateTool)
-        return DELEGATE_TOOL_NAME
-
-    register_tool(DelegateTool.name, DelegateTool)
-    return DelegateTool.name
-
-
 def _register_monster_agent_type() -> str:
+    get_default_tools(enable_browser=False)
+
     def create_monster_explorer(llm: LLM) -> Agent:
         skill = Skill(
             name="p11_monster_explorer",
@@ -314,7 +266,7 @@ def _run_conversation(label: str, prompt: str, root: Path, tools: list[Tool]) ->
         visualizer=None,
         tags={
             "project": "p11-subagents",
-            "runner": "monster-repo-native-delegate",
+            "runner": "monster-repo-native-task",
             "label": label,
         },
     )
@@ -365,28 +317,31 @@ def _single_prompt(root: Path, areas: list[tuple[str, str]]) -> str:
     )
 
 
-def _delegate_prompt(root: Path, areas: list[tuple[str, str]], agent_type: str) -> str:
-    ids = ", ".join(key for key, _ in areas)
-    agent_types = "[" + ", ".join(repr(agent_type) for _ in areas) + "]"
-    tasks = "\n".join(
-        (
-            f"- {key}: {desc} Work under {root}. Important paths are "
+def _task_prompt(root: Path, areas: list[tuple[str, str]], agent_type: str) -> str:
+    def task_line(key: str, desc: str) -> str:
+        prompt = (
+            f"{desc} Work under {root}. Important paths are "
             "vscode-benchmark-repo/ and openhands-custom-image/. Use read-only "
             "commands only. Return compact facts with file and line evidence. "
             "Preserve exact values for any expected checklist labels you find: "
             f"{', '.join(label for label, _ in CHECKLIST)}."
         )
-        for key, desc in areas
+        return (
+            f"- description={key!r}, subagent_type={agent_type!r}, "
+            f"prompt={prompt!r}"
+        )
+
+    tasks = "\n".join(
+        task_line(key, desc) for key, desc in areas
     )
     return (
-        "Use the delegate tool for this large-repo investigation. The parent "
+        "Use the task tool for this large-repo investigation. The parent "
         "conversation should not inspect files directly.\n\n"
-        f"1. Spawn subagents with ids: {ids}.\n"
-        f"2. Use agent_types {agent_types} in the same order as the ids.\n"
-        "3. Delegate these exact tasks:\n"
+        "Launch one task for each investigation area. Use these exact task "
+        "arguments:\n"
         f"{tasks}\n\n"
-        "After delegation returns, synthesize one concise report. Preserve exact "
-        "values from the child results.\n\n"
+        "After all task results return, synthesize one concise report. Preserve "
+        "exact values from the child results.\n\n"
         f"{_final_contract()}"
     )
 
@@ -400,14 +355,13 @@ def run_single(root: Path, areas: list[tuple[str, str]]) -> dict:
     )
 
 
-def run_delegate(root: Path, areas: list[tuple[str, str]]) -> dict:
+def run_task(root: Path, areas: list[tuple[str, str]]) -> dict:
     agent_type = _register_monster_agent_type()
-    delegate_tool = _register_delegate_tool()
     return _run_conversation(
-        "monster-delegate",
-        _delegate_prompt(root, areas, agent_type),
+        "monster-task",
+        _task_prompt(root, areas, agent_type),
         root,
-        [Tool(name=delegate_tool, params={"max_children": len(areas)})],
+        [Tool(name=TaskToolSet.name)],
     )
 
 
@@ -422,7 +376,7 @@ def _fmt_row(row: dict) -> str:
 
 def _print_report(rows: list[dict]) -> None:
     print("\n" + "=" * 76)
-    print("P11 Scenario C: monster repo native delegation")
+    print("P11 Scenario C: monster repo native task-tool subagents")
     print("=" * 76)
     print(f"Laminar: {'enabled' if os.environ.get('LMNR_PROJECT_API_KEY') else 'disabled'}")
     print(f"Model: {_resolve_model()}")
@@ -430,10 +384,10 @@ def _print_report(rows: list[dict]) -> None:
         print("\n" + _fmt_row(row))
         print(f"  conversation_id={row['conversation_id']}")
         print(f"  found={', '.join(row['found'])}")
-        delegate_rows = [r for r in row["usage"] if str(r["label"]).startswith("delegate:")]
-        if delegate_rows:
-            print("  delegate usage:")
-            for usage in delegate_rows:
+        task_rows = [r for r in row["usage"] if str(r["label"]).startswith("task:")]
+        if task_rows:
+            print("  task usage:")
+            for usage in task_rows:
                 print(
                     f"    {usage['label']:<24} in={usage['in']:>8,} "
                     f"out={usage['out']:>6,} cost=${usage['cost']:>7.4f}"
@@ -452,12 +406,12 @@ def main() -> None:
     print(f"Areas: {[key for key, _ in areas]}")
 
     rows = []
-    if os.environ.get("P11_MONSTER_DELEGATE_ONLY") != "1":
+    if os.environ.get("P11_MONSTER_TASK_ONLY") != "1":
         print("[monster] single investigation ...")
         rows.append(run_single(root, areas))
     if os.environ.get("P11_MONSTER_SINGLE_ONLY") != "1":
-        print("[monster] native delegate investigation ...")
-        rows.append(run_delegate(root, areas))
+        print("[monster] native task-tool investigation ...")
+        rows.append(run_task(root, areas))
     _print_report(rows)
 
 

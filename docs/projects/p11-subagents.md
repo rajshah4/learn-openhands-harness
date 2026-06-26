@@ -6,7 +6,7 @@ Run the same work two ways — one single conversation vs. isolated child conver
 
 ## Harness Mechanism
 
-Manual `RemoteConversation` children give per-child cost, tokens, wall time, and compaction so the context boundary is measured directly. A companion runner uses native OpenHands delegation (`DelegateTool`) traced in Laminar to show the real product surface. Child model routing, parallelism, and probe delay are knobs for testing why isolation might help.
+Manual `RemoteConversation` children give per-child cost, tokens, wall time, and compaction so the context boundary is measured directly. A companion runner uses native OpenHands `TaskToolSet`, exposed to the parent as the `task` tool, and traces the parent and child conversations in Laminar. Child model routing, parallelism, and probe delay are knobs for testing why isolation might help.
 
 ## Open First
 

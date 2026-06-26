@@ -1,11 +1,11 @@
-"""P11 solution: native OpenHands delegation with Laminar tracing.
+"""P11 solution: native OpenHands task-tool subagents with Laminar tracing.
 
 This runner complements run_compare.py. It keeps Scenario A, but switches
-the subagent run from manual child conversations to the SDK's native delegate tool.
+the subagent run from manual child conversations to the SDK's native task tool.
 
 Run:
     P11_NATIVE_MODEL=small uv run --with openhands-sdk --with openhands-tools \
-      python projects/p11-subagents/solution/run_delegate_laminar.py
+      python projects/p11-subagents/solution/run_task_laminar.py
 
 Env:
     LMNR_PROJECT_API_KEY  optional, read from nearest .env, enables Laminar
@@ -15,7 +15,7 @@ Env:
     P11_NATIVE_MODEL      optional model override, or "small"
     P11_ONLY_DIMS         optional CSV subset, for example "docs,secrets"
     P11_NATIVE_SINGLE_ONLY=1    run only the local single-agent baseline
-    P11_NATIVE_DELEGATE_ONLY=1  run only the native delegate config
+    P11_NATIVE_TASK_ONLY=1      run only the native task-tool config
     P11_NATIVE_SHOW_FINAL=1     print final reports
 """
 from __future__ import annotations
@@ -26,7 +26,6 @@ import sys
 import tempfile
 import time
 from pathlib import Path
-from typing import Sequence
 
 
 PROJECT = Path(__file__).resolve().parents[1]
@@ -46,67 +45,19 @@ from openhands.sdk.conversation.response_utils import (  # noqa: E402
     get_agent_final_response,
 )
 from openhands.sdk.subagent import register_agent_if_absent  # noqa: E402
-from openhands.sdk.tool import register_tool  # noqa: E402
-from openhands.sdk.tool.tool import ToolAnnotations, ToolDefinition  # noqa: E402
-from openhands.tools.delegate import (  # noqa: E402
-    DelegateAction,
-    DelegateExecutor,
-    DelegateObservation,
-)
 from openhands.tools.preset.default import get_default_tools  # noqa: E402
+from openhands.tools.task import TaskToolSet  # noqa: E402
 
 import subagent_bench as bench  # noqa: E402
 
 
 _IGNORE = shutil.ignore_patterns(".git", "__pycache__", ".DS_Store")
-DELEGATE_TOOL_NAME = "delegate"
 P11_AGENT_TYPE = "p11-code-explorer"
 
 
-class NativeDelegateTool(ToolDefinition[DelegateAction, DelegateObservation]):
-    """Compatibility wrapper for SDKs that ship the executor without the tool."""
-
-    name = DELEGATE_TOOL_NAME
-
-    @classmethod
-    def create(
-        cls,
-        conv_state,
-        max_children: int = 5,
-    ) -> Sequence["NativeDelegateTool"]:
-        return [
-            cls(
-                description=(
-                    "Spawn subagents and delegate independent tasks to them. "
-                    "Use command='spawn' with ids and optional agent_types first. "
-                    "Then use command='delegate' with a task per spawned id."
-                ),
-                action_type=DelegateAction,
-                observation_type=DelegateObservation,
-                annotations=ToolAnnotations(
-                    title=DELEGATE_TOOL_NAME,
-                    readOnlyHint=False,
-                    destructiveHint=False,
-                    idempotentHint=False,
-                    openWorldHint=False,
-                ),
-                executor=DelegateExecutor(max_children=max_children),
-            )
-        ]
-
-
-def _register_delegate_tool() -> str:
-    try:
-        from openhands.tools.delegate import DelegateTool  # type: ignore[attr-defined]
-    except ImportError:
-        register_tool(DELEGATE_TOOL_NAME, NativeDelegateTool)
-        return DELEGATE_TOOL_NAME
-
-    register_tool(DelegateTool.name, DelegateTool)
-    return DelegateTool.name
-
-
 def _register_p11_agent_type() -> str:
+    get_default_tools(enable_browser=False)
+
     def create_p11_code_explorer(llm: LLM) -> Agent:
         skill = Skill(
             name="p11_code_explorer",
@@ -129,14 +80,14 @@ def _register_p11_agent_type() -> str:
         factory_func=create_p11_code_explorer,
         description=(
             "Read-only P11 code audit subagent using the subprocess terminal "
-            "backend. It avoids tmux startup inside delegate worker threads."
+            "backend. It avoids tmux startup inside task worker threads."
         ),
     )
     return P11_AGENT_TYPE
 
 
 def _copy_repo(src: Path) -> Path:
-    dst = Path(tempfile.mkdtemp(prefix="p11_native_delegate_")) / "repo"
+    dst = Path(tempfile.mkdtemp(prefix="p11_native_task_")) / "repo"
     shutil.copytree(src, dst, ignore=_IGNORE)
     return dst
 
@@ -257,20 +208,22 @@ def _single_agent_prompt(dims: list[tuple[str, str]]) -> str:
     )
 
 
-def _delegate_prompt(dims: list[tuple[str, str]]) -> str:
-    ids = ", ".join(key for key, _ in dims)
+def _task_prompt(dims: list[tuple[str, str]], agent_type: str) -> str:
     tasks = "\n".join(
-        f"- {key}: {bench._dimension_prompt(key, desc)}" for key, desc in dims
+        (
+            f"- description={key!r}, subagent_type={agent_type!r}, "
+            f"prompt={bench._dimension_prompt(key, desc)!r}"
+        )
+        for key, desc in dims
     )
     return (
-        "Use the delegate tool for this audit. Do not inspect the repository in "
+        "Use the task tool for this audit. Do not inspect the repository in "
         "the parent conversation.\n\n"
-        f"1. Spawn subagents with ids: {ids}.\n"
-        f"2. Use agent_types with {P11_AGENT_TYPE} for every id.\n"
-        "3. Delegate these exact tasks, one per id:\n"
+        "Launch one task for each audit dimension. Use these exact task "
+        "arguments:\n"
         f"{tasks}\n"
-        "4. After the delegate result returns, synthesize a final report grouped "
-        "by dimension. Do not invent findings beyond the delegated results."
+        "After all task results return, synthesize a final report grouped by "
+        "dimension. Do not invent findings beyond the task results."
     )
 
 
@@ -294,7 +247,7 @@ def _run_conversation(label: str, prompt: str, repo_src: Path, tools: list[Tool]
         visualizer=None,
         tags={
             "project": "p11-subagents",
-            "runner": "native-delegate-laminar",
+            "runner": "native-task-laminar",
             "label": label,
         },
     )
@@ -329,19 +282,13 @@ def run_single(repo_src: Path, dims: list[tuple[str, str]]) -> dict:
     )
 
 
-def run_delegate(repo_src: Path, dims: list[tuple[str, str]]) -> dict:
+def run_task(repo_src: Path, dims: list[tuple[str, str]]) -> dict:
     agent_type = _register_p11_agent_type()
-    delegate_tool = _register_delegate_tool()
-    agent_types = "[" + ", ".join(repr(agent_type) for _ in dims) + "]"
-    prompt = _delegate_prompt(dims).replace(
-        f"Use agent_types with {P11_AGENT_TYPE} for every id.",
-        f"Use agent_types {agent_types} in the same order as the ids.",
-    )
     return _run_conversation(
-        "native-delegate",
-        prompt,
+        "native-task",
+        _task_prompt(dims, agent_type),
         repo_src,
-        [Tool(name=delegate_tool, params={"max_children": len(dims)})],
+        [Tool(name=TaskToolSet.name)],
     )
 
 
@@ -356,17 +303,17 @@ def _fmt_row(row: dict) -> str:
 
 def _print_report(rows: list[dict]) -> None:
     print("\n" + "=" * 72)
-    print("P11 native OpenHands delegation with Laminar tracing")
+    print("P11 native OpenHands task-tool subagents with Laminar tracing")
     print("=" * 72)
     print(f"Laminar: {'enabled' if os.environ.get('LMNR_PROJECT_API_KEY') else 'disabled'}")
     print(f"Model: {_resolve_model()}")
     for row in rows:
         print("\n" + _fmt_row(row))
         print(f"  conversation_id={row['conversation_id']}")
-        delegate_rows = [r for r in row["usage"] if str(r["label"]).startswith("delegate:")]
-        if delegate_rows:
-            print("  delegate usage:")
-            for usage in delegate_rows:
+        task_rows = [r for r in row["usage"] if str(r["label"]).startswith("task:")]
+        if task_rows:
+            print("  task usage:")
+            for usage in task_rows:
                 print(
                     f"    {usage['label']:<18} in={usage['in']:>8,} "
                     f"out={usage['out']:>6,} cost=${usage['cost']:>7.4f}"
@@ -385,12 +332,12 @@ def main() -> None:
     print(f"Dimensions: {[key for key, _ in dims]}")
 
     rows = []
-    if os.environ.get("P11_NATIVE_DELEGATE_ONLY") != "1":
+    if os.environ.get("P11_NATIVE_TASK_ONLY") != "1":
         print("[native] single context ...")
         rows.append(run_single(repo_src, dims))
     if os.environ.get("P11_NATIVE_SINGLE_ONLY") != "1":
-        print("[native] delegate tool ...")
-        rows.append(run_delegate(repo_src, dims))
+        print("[native] task tool ...")
+        rows.append(run_task(repo_src, dims))
     _print_report(rows)
 
 

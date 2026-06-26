@@ -16,9 +16,9 @@ Use the walkthrough in this order:
 | File | Why it matters |
 |---|---|
 | `run_compare.py` | Runs the single-context config and the subagent config (five subagent sessions + synthesis) and prints the token/cost/wall comparison. |
-| `run_delegate_laminar.py` | Runs Scenario A through native OpenHands delegation and emits Laminar traces when `LMNR_PROJECT_API_KEY` is set. |
+| `run_task_laminar.py` | Runs Scenario A through native OpenHands `TaskToolSet` and emits Laminar traces when `LMNR_PROJECT_API_KEY` is set. |
 | `run_scenario_b.py` | Runs the breadth-first research comparison and scores fact completeness against `corpus/ground_truth.json`. |
-| `run_monster_repo.py` | Runs native delegated investigation on the local VS Code custom-image benchmark tree. |
+| `run_monster_repo.py` | Runs native task-tool investigation on the local VS Code custom-image benchmark tree. |
 | `../subagent_bench.py` | The engine: the audit dimensions, the local-SDK `run_conversation` (copies the repo to a temp dir per call so runs stay isolated), and the report. |
 | `../sample_repo/` | The audit target, with planted issues across all five dimensions. |
 | `../make_corpus.py` | Generates the Scenario B research packets and objective ground truth. |
@@ -31,9 +31,9 @@ Use the walkthrough in this order:
 
 **Compact returns, then synthesis.** Each subagent returns a few-sentence finding (extracted from `MessageEvent.llm_message`), and a final synthesis conversation combines those findings from a prompt without touching the repo. That is the shape that *should* favor isolation: small results, independent subtasks.
 
-**Manual child conversations remain the controlled benchmark.** OpenHands has SDK subagent orchestration through the delegate tool. The main benchmark still uses explicit child conversations because it needs per-child cost, tokens, wall time, compaction counts, clean copied workspaces, and model routing knobs.
+**Manual child conversations remain the controlled benchmark.** OpenHands has SDK subagent orchestration through `TaskToolSet` and the `task` tool. The main benchmark still uses explicit child conversations because it needs per-child cost, tokens, wall time, compaction counts, clean copied workspaces, and model routing knobs.
 
-**Native delegation is the traceability check.** `run_delegate_laminar.py` uses the SDK delegation executor, registers a P11-specific read-only subagent type, and relies on Laminar to show the parent and child trace shape. This measures the product surface, not the same controlled isolation contract as `run_compare.py`.
+**Native task-tool orchestration is the traceability check.** `run_task_laminar.py` gives the parent `Tool(name=TaskToolSet.name)`, registers a P11-specific read-only subagent type, and relies on Laminar to show the parent and child trace shape. This measures the product surface, not the same controlled isolation contract as `run_compare.py`.
 
 **Child model routing is explicit.** Both reference runners honor `P11_CHILD_MODEL` first, then `LLM_MODEL_SMALL`, for child work only. The single-context baseline and synthesis stay on `LLM_MODEL`. Set `P11_CHILD_MODEL=same` to force children to use `LLM_MODEL`, even when `LLM_MODEL_SMALL` is present in `.env`.
 
@@ -93,7 +93,7 @@ Measured on `sample_repo` with `claude-sonnet-4-5` via the local agent server. D
 
 ## Valid Variations
 
-Run against broader, lower-overlap subtasks and show where the ratio changes. Parallelize the subagent conversations to win on wall-clock even when tokens are a wash. Use a cheaper model for the children and a stronger one for synthesis. Or swap the manual orchestration for OpenHands `DelegateTool` once you no longer need per-child measurement. The backend is not the lesson; the measured crossover is.
+Run against broader, lower-overlap subtasks and show where the ratio changes. Parallelize the subagent conversations to win on wall-clock even when tokens are a wash. Use a cheaper model for the children and a stronger one for synthesis. Or swap the manual orchestration for OpenHands `TaskToolSet` once you no longer need per-child measurement. The backend is not the lesson; the measured crossover is.
 
 Cheaper child-model command:
 
@@ -102,53 +102,53 @@ P11_CHILD_MODEL="$LLM_MODEL_SMALL" uv run --with openhands-sdk --with openhands-
   python projects/p11-subagents/solution/run_compare.py
 ```
 
-## Native OpenHands Delegation With Laminar
+## Native OpenHands Task Tool With Laminar
 
-The native runner answers a different question from the manual benchmark. It asks: what does this look like when the parent agent uses OpenHands delegation and Laminar traces the resulting conversation tree?
+The native runner answers a different question from the manual benchmark. It asks: what does this look like when the parent agent uses OpenHands `TaskToolSet` and Laminar traces the resulting conversation tree?
 
 Run a cheap two-dimension check:
 
 ```bash
 P11_NATIVE_MODEL=small P11_ONLY_DIMS=docs,secrets \
   uv run --with openhands-sdk --with openhands-tools \
-  python projects/p11-subagents/solution/run_delegate_laminar.py
+  python projects/p11-subagents/solution/run_task_laminar.py
 ```
 
-Run the full Scenario A native delegation check:
+Run the full Scenario A native task-tool check:
 
 ```bash
 P11_NATIVE_MODEL=small \
   uv run --with openhands-sdk --with openhands-tools \
-  python projects/p11-subagents/solution/run_delegate_laminar.py
+  python projects/p11-subagents/solution/run_task_laminar.py
 ```
 
 Print the final report when you want to verify synthesis quality:
 
 ```bash
-P11_NATIVE_MODEL=small P11_NATIVE_DELEGATE_ONLY=1 P11_NATIVE_SHOW_FINAL=1 \
+P11_NATIVE_MODEL=small P11_NATIVE_TASK_ONLY=1 P11_NATIVE_SHOW_FINAL=1 \
   uv run --with openhands-sdk --with openhands-tools \
-  python projects/p11-subagents/solution/run_delegate_laminar.py
+  python projects/p11-subagents/solution/run_task_laminar.py
 ```
 
 The runner loads `.env` before importing OpenHands, so `LMNR_PROJECT_API_KEY` enables Laminar automatically. It prints the OpenHands conversation id for each run. Use that id to find the trace in Laminar.
 
-One implementation detail matters. On this macOS run, Laminar's gRPC instrumentation emitted fork warnings that broke tmux-backed terminal startup inside delegate worker threads. The runner registers a P11-specific `p11-code-explorer` subagent that uses the SDK terminal tool in subprocess mode. That keeps native delegation intact while avoiding tmux as the child terminal backend.
+One implementation detail matters. On this macOS run, Laminar's gRPC instrumentation emitted fork warnings that broke tmux-backed terminal startup inside child worker threads. The runner registers a P11-specific `p11-code-explorer` subagent that uses the SDK terminal tool in subprocess mode. That keeps native task-tool orchestration intact while avoiding tmux as the child terminal backend.
 
 Live two-dimension native check with `P11_NATIVE_MODEL=small`:
 
 | Config | Input tokens | Output tokens | Cost | Wall | Quality | Conversation id |
 |---|---:|---:|---:|---:|---:|---|
 | native single | 28,120 | 1,081 | **$0.0202** | 11.2s | 2/5 | `ac55a9ef-81d4-4f59-8164-021d87fc79e9` |
-| native delegate | 102,415 | 3,558 | **$0.0375** | 33.8s | 2/5 | `81f6673b-700d-458e-a32a-9e9603db9eab` |
+| native task tool | 102,415 | 3,558 | **$0.0375** | 33.8s | 2/5 | `81f6673b-700d-458e-a32a-9e9603db9eab` |
 
 Full native checks with `P11_NATIVE_MODEL=small`:
 
 | Config | Input tokens | Output tokens | Cost | Wall | Quality | Conversation id |
 |---|---:|---:|---:|---:|---:|---|
 | native single | 88,152 | 2,521 | **$0.0362** | 28.7s | 5/5 | `9145d275-1195-41db-899b-863ee328b8ad` |
-| native delegate, final shown | 317,132 | 8,298 | **$0.0967** | 83.6s | 5/5 | `539e1634-f39e-4aeb-8085-e5a9e5eb0b97` |
+| native task tool, final shown | 317,132 | 8,298 | **$0.0967** | 83.6s | 5/5 | `539e1634-f39e-4aeb-8085-e5a9e5eb0b97` |
 
-The native delegate run gave useful Laminar visibility and per-child usage rows, but it did not beat the local single-agent baseline on this small repo. It inherited the parent model, used one shared workspace, and paid the fixed child setup cost five times. That is the point of keeping both runners: native delegation shows the real OpenHands mechanism, while the manual benchmark isolates the context-boundary economics.
+The native task-tool run gave useful Laminar visibility and per-child usage rows, but it did not beat the local single-agent baseline on this small repo. It inherited the parent model, used one shared workspace, and paid the fixed child setup cost five times. That is the point of keeping both runners: native task-tool orchestration shows the real OpenHands mechanism, while the manual benchmark isolates the context-boundary economics.
 
 ## Scenario C: Monster Repo Investigation
 
@@ -177,9 +177,9 @@ Live full Scenario C run with `P11_MONSTER_MODEL=small`:
 | Config | Input tokens | Output tokens | Cost | Wall | Checklist score | Conversation id |
 |---|---:|---:|---:|---:|---:|---|
 | monster single | 639,540 | 11,934 | **$0.1538** | 123.7s | 13/15 | `c362b9b8-05f9-4b4c-83f5-8ccbb301badd` |
-| monster delegate | 3,531,082 | 45,620 | **$0.8125** | 468.6s | 15/15 | `2ebf2bb4-146b-4df5-bd0e-ca299712963e` |
+| monster task tool | 3,531,082 | 45,620 | **$0.8125** | 468.6s | 15/15 | `2ebf2bb4-146b-4df5-bd0e-ca299712963e` |
 
-Per child in the native delegate run:
+Per child in the native task-tool run:
 
 | Child | Input tokens | Output tokens | Cost |
 |---|---:|---:|---:|
@@ -189,7 +189,7 @@ Per child in the native delegate run:
 | setup_helpers | 602,995 | 9,609 | $0.1390 |
 | custom_image | 805,816 | 7,965 | $0.1649 |
 
-This is the first P11 task where native delegation bought a measurable final-answer quality gain: 15/15 checklist facts versus 13/15 for the single conversation. It was still not cheap. The delegate run cost 5.28x more and took 3.79x longer on this local run. The result is useful because it separates two claims: large-repo delegation can improve coverage, but it still needs tighter child budgets, narrower areas, or stronger synthesis policy before it is a default.
+This is the first P11 task where native task-tool subagents bought a measurable final-answer quality gain: 15/15 checklist facts versus 13/15 for the single conversation. It was still not cheap. The task-tool run cost 5.28x more and took 3.79x longer on this local run. The result is useful because it separates two claims: large-repo subagent orchestration can improve coverage, but it still needs tighter child budgets, narrower areas, or stronger synthesis policy before it is a default.
 
 The first two-area native smoke also exposed a separate synthesis risk. The children found the facts, but the parent initially compressed away exact labels and scored 7/15. The current runner fixes that with a checklist-table final contract. Treat that as part of the lesson: subagent quality depends on the handoff format, not just on whether child agents read the right files.
 
