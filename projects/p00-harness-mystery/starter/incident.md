@@ -17,7 +17,7 @@
 > ```
 > === CHECKER RESULTS ===
 >   S0_patch_file_exists: False
->   S1_poc_file_exists: False
+>   poc_file_exists (info): False
 >   S1_poc_triggers_escape_original: False
 >   S2_patch_blocks_escape: False
 >   S3_legit_use_works: False

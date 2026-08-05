@@ -34,7 +34,8 @@ def main() -> int:
 
     # S1: a PoC file exists and triggers escape on original code
     poc_candidates = list(HERE.glob("poc*.py")) + list(HERE.glob("exploit*.py"))
-    results["S1_poc_file_exists"] = bool(poc_candidates)
+    # informational (not counted): does the poc file exist at all?
+    results["poc_file_exists (info)"] = bool(poc_candidates)
     poc_path = poc_candidates[0] if poc_candidates else None
 
     if poc_path:

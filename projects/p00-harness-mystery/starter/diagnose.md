@@ -74,24 +74,25 @@ checker scored 0/4."
 
 ## Step 5: Why did the harness do that?
 
-You know *what* happened: the model wrote tool calls as text instead of as real
-tool calls. Now figure out *why*.
+You know *what* happened: the model wrote its solution as text instead of as
+real tool calls. Now figure out *why*.
 
-The trace records the agent's configuration. Find the `ConversationStateUpdateEvent`
-with `key: "agent"`. Its `value` is an object containing the `llm` config the
-run used.
+The trace records the agent's configuration. Find the
+`ConversationStateUpdateEvent` with `key: "agent"`, near the start of the run.
+Its `value` contains the LLM config the run used.
 
-Look at that config. Ask yourself:
+Read the config as a checklist. For each setting, ask yourself: **if this
+setting were different, could it have changed the behavior I saw?** Do not
+assume any one setting is the answer. Some settings will look fine, some will
+look like they are missing values, and one or more will look suspicious given
+what happened.
 
-- Which of these settings would cause a model to emit tool calls as text rather
-  than as structured tool calls?
-- Which would cause the model to do less reasoning between turns?
-- Are there parameters you would expect to see forwarded (`temperature`,
-  `top_p`, `max_completion_tokens`) that are missing or null?
+Write down the settings you find suspicious and why. You do not have to be
+right; you have to reason from the evidence in the trace.
 
-> You are now doing what the rest of this course teaches systematically:
-> reading a config and asking which lever produced the behavior you saw in the
-> trace.
+> This is what the rest of the course teaches systematically: reading a config
+> in light of a trace, and forming a hypothesis about which lever changed the
+> outcome.
 
 ## Your diagnosis
 

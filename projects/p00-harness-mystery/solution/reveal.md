@@ -81,8 +81,19 @@ with three settings flipped:
 |---|---|
 | `native_tool_calling` | `true` |
 | `reasoning_effort` | `high` |
-| `temperature` / `top_p` / `max_completion_tokens` | `0.2` / `0.95` / `32768` |
+| `temperature` / `top_p` | `0.2` / `0.95` |
+| `max_completion_tokens` | not set (provider default) |
 | `drop_params` | `false` |
+
+### A note on the specific numbers
+
+This is a code-writing task, so the repaired run uses a low temperature (0.2)
+and lets `max_completion_tokens` fall through to the provider default. The K3
+CyberGym parallel below reports different numbers (`temperature=1.0`,
+`max_completion_tokens=262144`) because that benchmark spans 920 vulnerabilities
+and needs the model to explore more freely. Neither set of numbers is
+universal. The lesson is that these parameters must be forwarded *explicitly*
+and picked for the task shape, not that any one value is correct.
 
 | | Broken | Repaired |
 |---|---|---|
@@ -114,8 +125,13 @@ bug and published it.
 
 A CyberGym-E2E evaluation ran a discover-prove-fix loop (920 real
 vulnerabilities across 139 open-source projects) against several models. One
-model's first run scored 40.7% at S1 (valid proof-of-concept) and 18.0% at S4
-(patch fixed the specific vulnerability).
+model, Kimi K3, first scored 40.7% at S1 (valid proof-of-concept) and 18.0%
+at S4 (patch fixed the specific vulnerability).
+
+Note the model difference: this module runs GLM-5.2, the K3 parallel ran a
+different model on a different benchmark. The mechanism is what carries over,
+not the numbers. Both are open-weight models routed through OpenHands, both
+were hit by the same class of harness bug.
 
 The model was not weak. The harness was. Three integration bugs:
 
@@ -130,6 +146,11 @@ The model was not weak. The harness was. Three integration bugs:
 
 After fixing all three, S1 rose from 40.7% to 70.0%, S4 from 18.0% to 54.5%,
 and S0 from 87.0% to 96.0%. The model did not change. The harness did.
+
+(A note on the "S0" label: the CyberGym benchmark calls its "did the agent
+produce a valid PoC" gate S0. This module's own checker uses S0 to mean
+"a patch file exists." Same letter, different definitions, because the two
+evaluations were built independently.)
 
 ### Parallel 2: OpenAI ARC-AGI-3
 
@@ -173,7 +194,6 @@ Before publishing or trusting an agent benchmark score:
 - [ ] Compact long context instead of blindly truncating it.
 - [ ] Separate model refusal from API policy rejection and controller failure.
 - [ ] Save intermediate artifacts before long validation loops.
-- [ ] Report attempted, model-valid, and common-valid denominators.
 - [ ] Run a trace audit before interpreting a surprisingly low score as model
       weakness.
 - [ ] Publish the harness changes needed for reproduction.
