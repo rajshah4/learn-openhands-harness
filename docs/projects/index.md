@@ -6,7 +6,7 @@ The projects are the runnable heart of the course. Each one changes one harness 
 
 | Project | Focus |
 |---|---|
-| [P00: The Harness Mystery](/projects/p00-harness-mystery) | Debug a 0/4 run: a colleague wired up a new model and it scored nothing — figure out why |
+| [P00: The Harness Mystery](/projects/p00-harness-mystery) | Debug a failed run, can you figure out what went wrong? |
 | [P01: Agent Trace](/projects/p01-agent-trace) | Read the agent loop from its event trace |
 | [P02: Model Routing](/projects/p02-model-routing) | Right-size the model to the task |
 | [P03: Retrieval](/projects/p03-retrieval) | Decide when search tools earn their slot |

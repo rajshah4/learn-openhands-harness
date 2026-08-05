@@ -3,8 +3,8 @@
 ## What You Do
 
 A colleague wired up a new model and ran the discover-prove-fix benchmark. It
-scored 0/4: no PoC, no patch, nothing saved. But the model's response contains
-a correct solution. Read the trace and figure out what happened.
+failed: no PoC, no patch, nothing saved. But the model's response contains
+a correct solution. Read the trace and figure out what went wrong.
 
 ## Harness Mechanism
 
