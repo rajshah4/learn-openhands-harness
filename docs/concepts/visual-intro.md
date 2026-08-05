@@ -66,8 +66,8 @@ Then move to [P01: Agent Trace](/projects/p01-agent-trace) and practice reading 
 
 ## References
 
-- [Harness Engineering blog post](https://rajivshah.com/blog/harness-engineering.html) — the longer argument behind the course
-- [Harness engineering experiments repo](https://github.com/rajshah4/harness-engineering) — runnable measurements for retrieval, memory, loops, tools, and architecture
+- [Harness Engineering blog post](https://rajivshah.com/blog/harness-engineering.html): the longer argument behind the course
+- [Harness engineering experiments repo](https://github.com/rajshah4/harness-engineering): runnable measurements for retrieval, memory, loops, tools, and architecture
 - [Google Research: ReAct](https://research.google/blog/react-synergizing-reasoning-and-acting-in-language-models/)
 - [Anthropic: Building effective agents](https://www.anthropic.com/engineering/building-effective-agents)
 - [OpenAI: Harness engineering](https://openai.com/index/harness-engineering/)

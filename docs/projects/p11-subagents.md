@@ -2,7 +2,7 @@
 
 ## What You Do
 
-Run the same work two ways — one single conversation vs. isolated child conversations plus a synthesis step — and measure quality, tokens, cost, wall time, and compaction. Decide, with numbers, whether a branch earned its own context window. Three task shapes stress the boundary: a small repo audit, a breadth-first research corpus, and a large-repo investigation.
+Run the same work two ways: one single conversation vs. isolated child conversations plus a synthesis step, and measure quality, tokens, cost, wall time, and compaction. Decide, with numbers, whether a branch earned its own context window. Three task shapes stress the boundary: a small repo audit, a breadth-first research corpus, and a large-repo investigation.
 
 ## Harness Mechanism
 
@@ -19,4 +19,4 @@ Manual `RemoteConversation` children give per-child cost, tokens, wall time, and
 
 A "when to use subagents" decision rule, grounded in your own table: what kind of task earns a separate context, what kind does not, and which cheaper alternative you would try first.
 
-The reusable artifact is not the child-agent code. It is the habit of treating the context boundary as a harness decision that needs evidence — one you settle with your own numbers rather than a prior belief about whether subagents help.
+The reusable artifact is not the child-agent code. It is the habit of treating the context boundary as a harness decision that needs evidence, one you settle with your own numbers rather than a prior belief about whether subagents help.
