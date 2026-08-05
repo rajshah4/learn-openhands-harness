@@ -45,6 +45,10 @@ copy a clean repo before measuring.
 PROJECT EVOLUTION (OpenHands harness)
 =====================================
 
+  P00  The harness mystery           → WHY THIS COURSE EXISTS
+       |                               keep: one paragraph on why the
+       |                                     harness is part of the model
+       v
   P01  Canvas + agent trace          → SEE THE LOOP
        |                               keep: a baseline trace
        |                                     + trace-reading checklist
@@ -206,6 +210,14 @@ Keep a `results.md` next to your fork:
 Repo: agent-canvas @ <SHA>
 Model: anthropic/claude-sonnet-4-5-20250929 (unless noted)
 Prompt: "Find every place VITE_BACKEND_HOST and VITE_BACKEND_BASE_URL are read or set..."
+
+## P00: The harness mystery
+| Question | Your answer |
+|---|---|
+| How many tool calls did the broken run make? | |
+| Where did the model put the PoC and patch? | |
+| What setting caused the 0/4 score? | |
+| Why does this course exist? (one paragraph) | |
 
 ## P01: Canvas + agent trace
 | Trace field | Value |
