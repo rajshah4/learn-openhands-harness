@@ -36,6 +36,7 @@ export default defineConfig({
           text: "Projects",
           items: [
             { text: "Overview", link: "/projects/" },
+            { text: "P00: The Harness Mystery", link: "/projects/p00-harness-mystery" },
             { text: "P01: Agent Trace", link: "/projects/p01-agent-trace" },
             { text: "P02: Model Routing", link: "/projects/p02-model-routing" },
             { text: "P03: Retrieval", link: "/projects/p03-retrieval" },
