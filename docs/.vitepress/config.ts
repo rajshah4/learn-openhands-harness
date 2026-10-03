@@ -12,6 +12,7 @@ export default defineConfig({
       { text: "Start", link: "/start-here" },
       { text: "Concepts", link: "/concepts/" },
       { text: "Projects", link: "/projects/" },
+      { text: "Workshop", link: "/workshops/odsc-2026/" },
       { text: "Videos", link: "/videos" },
       {
         text: "GitHub",
@@ -49,6 +50,24 @@ export default defineConfig({
             { text: "P10: Indexing Agent History", link: "/projects/p10-history-index" },
             { text: "P11: Subagents", link: "/projects/p11-subagents" },
             { text: "P12: Goal Scaffolding", link: "/projects/p12-goal-scaffolding" },
+          ],
+        },
+      ],
+      "/workshops/": [
+        {
+          text: "ODSC 2026 Workshop",
+          items: [
+            { text: "Overview", link: "/workshops/odsc-2026/" },
+            { text: "Get Started", link: "/workshops/odsc-2026/setup" },
+            { text: "Exercise Prompts", link: "/workshops/odsc-2026/prompts" },
+            { text: "Exercise 1: Compare Harnesses", link: "/workshops/odsc-2026/exercises/00-working-harness" },
+            { text: "Exercise 2: Build a Super-Agent?", link: "/workshops/odsc-2026/exercises/01-add-harness-capability" },
+            { text: "Exercise 3: Context Budget", link: "/workshops/odsc-2026/exercises/02-place-context" },
+            { text: "Exercise 4: Route Models?", link: "/workshops/odsc-2026/exercises/03-model-routing" },
+            { text: "Exercise 5: Let It Run?", link: "/workshops/odsc-2026/exercises/04-let-it-run" },
+            { text: "Exercise 6: Multi-Agent?", link: "/workshops/odsc-2026/exercises/05-multi-agent" },
+            { text: "Optional Long Project", link: "/workshops/odsc-2026/long-project" },
+            { text: "Decision Worksheet", link: "/workshops/odsc-2026/worksheet" },
           ],
         },
       ],
