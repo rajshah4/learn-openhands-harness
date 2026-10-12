@@ -54,4 +54,3 @@ attempt budget. The task's label did not justify escalation by itself. The
 security review did justify stronger pre-routing because its output had to
 cover six independent security requirements, and the cheap model omitted the
 timing-safe comparison requirement in every trial.
-

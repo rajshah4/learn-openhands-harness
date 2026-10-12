@@ -49,7 +49,7 @@ newer accepted records rather than blindly copying obsolete design.
 
 Current notes used 39% fewer median processed tokens than no notes. Most input
 was cached, so this is not a 39% cost saving. Time ranges overlap. No correctness
-advantage was observed. The package imports the exact current starter, supplied
+advantage was observed. The package imports the current starter (trailing blank lines normalized), supplied
 notes, task, and independent checker; it does not measure native memory loading.
 
 ## Exercise 4

@@ -12,4 +12,3 @@ def test_page_number_validation_is_preserved() -> None:
     with pytest.raises(ValueError):
         paginate(["a"], page=0, per_page=1)
     assert page_numbers(5, 2) == [1, 2, 3]
-

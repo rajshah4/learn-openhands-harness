@@ -36,4 +36,3 @@ faster and used 72% fewer processed tokens. It removed the trace's 8–11
 one-file-at-a-time retrieval calls by returning PR metadata, file summaries,
 selected patches, commit summaries, validation evidence, and citable URLs in
 one bounded result.
-
