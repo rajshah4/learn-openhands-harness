@@ -12,6 +12,10 @@ By the end you'll have a `harness.py` you built yourself, with model routing, re
 
 ---
 
+## Six workshop labs
+
+For the ODSC exercises, start with [the workshop guide](docs/workshops/odsc-2026/index.md) or [the portable lab package](workshops/odsc-2026/labs/README.md). Each lab includes preparation, a complete task, independent checks or a citation rubric, and a saved-result route.
+
 ## How to use this tutorial
 
 Use this as a guided lab, not an autonomous agent task. The goal is to learn

@@ -1,144 +1,78 @@
-# Exercise 6: What You Want Is a Multi-Agent System?
+# Exercise 6: Compare one agent with a validator
 
-Another agent adds another context window, another tool loop, and another path
-through the problem. It also adds setup, tokens, handoffs, and coordination.
-This exercise tests whether a hard problem contains enough independent work to
-earn those costs.
+## What Problem Are You Solving?
 
-## The Claim
+Repair a shared counter so 50 concurrent jobs produce 50 without serializing simulated work. Compare one generalist with a repair owner followed by one fresh validator. This is sequential validation.
 
-> Hard problems need multiple agents. Parallel workers and specialized critics
-> will outperform one general agent.
+1. Predict what changes before running or reading results.
+2. Run one controlled comparison, or inspect the saved receipts.
+3. Record evidence and a decision in the [worksheet](/workshops/odsc-2026/worksheet).
 
-Anthropic reported that its multi-agent research system outperformed a single
-agent by 90.2% on an internal research evaluation. It also reported that token
-use explained 80% of performance variance and that multi-agent systems used
-about fifteen times as many tokens as ordinary chat. Research often contains
-many independent searches. Anthropic warns that coding tasks usually contain
-fewer independent branches. See [How we built our multi-agent research
-system](https://www.anthropic.com/engineering/multi-agent-research-system).
+## Start With These Files
 
-The first question is whether multiple agents improved the strategy or simply
-spent more compute.
+Follow [setup](/workshops/odsc-2026/setup) first. The portable package is `workshops/odsc-2026/labs/` in the course checkout. Its `starters/` hold only student inputs; `prompts/` hold full tasks; `checks/` and `evidence/` stay outside the agent workspace.
 
-## Why Sixteen Agents Chased One Bug
+Use OpenHands with its native task/delegation tool enabled for the validator lane. A second browser chat without a recorded child return is a different workflow. If delegation is unavailable, run the single-agent lane and inspect the saved comparison.
 
-Anthropic's C compiler experiment ran sixteen agents in parallel. At first,
-they encountered the same compiler failure, chased the same bug, and risked
-overwriting one another. The task was difficult, but the next useful action was
-still one shared action.
-
-Parallel work became useful after the harness used GCC as a known-good oracle
-to isolate different failing file sets. Each agent then owned a distinct
-failure surface. See [Building a C compiler with a team of parallel
-Claudes](https://www.anthropic.com/engineering/building-c-compiler).
-
-Difficulty did not create parallelism. The harness had to find separable work
-and objective feedback.
-
-## Spend Three Agent Cards
-
-Your pair receives three agent cards and one shared compute budget. Allocate
-them across two problems.
-
-### Problem A: Coupled repair
-
-An async defect spans one shared execution path. Every new finding changes what
-the next step should inspect. Workers need the same repository state and are
-likely to edit the same files.
-
-### Problem B: Independent investigation
-
-The Incident Operations Center needs separate evidence about persistence and
-restart behavior, browser workflows, and concurrency recovery. These branches
-can inspect isolated workspaces and return findings to one owner.
-
-Choose one architecture for each problem:
-
-1. **One generalist:** one context, plan, implementation, and verifier loop.
-2. **Worker and validator:** one agent implements while a fresh agent evaluates
-   the validation contract from Exercise 5.
-3. **Parallel specialists:** isolated workers investigate independent branches
-   and return evidence to a synthesis owner.
-
-| Decision | Coupled repair | Independent investigation |
-|---|---|---|
-| Architecture | | |
-| Independent branches | | |
-| State every worker needs | | |
-| Files workers may change | | |
-| Handoff required | | |
-| Synthesis owner | | |
-| Total compute budget | | |
-
-## Match the Compute
-
-If the single agent receives 60,000 tokens, the multi-agent system does not
-receive 60,000 tokens per agent. Predict what happens when every architecture
-receives the same total model-call or token budget.
-
-| Architecture | Verified result | Wall time | Total calls | Total tokens | Duplicate work | Conflicts | Synthesis cost |
-|---|---:|---:|---:|---:|---:|---:|---:|
-| One generalist | | | | | | | |
-| Worker and validator | | | | | | | |
-| Parallel specialists | | | | | | | |
-
-Agent Canvas makes the hidden work visible. Inspect parent and child traces,
-repeated repository orientation, overlapping files, messages, returned
-evidence, and work the parent repeats after a weak handoff.
-
-## Does the Validator Need to Be an Agent?
-
-Exercise 5 established the need for an independent completion standard. A
-test, static check, browser script, external evaluator, or person may enforce
-that standard more cheaply than another model.
-
-Another agent earns the validator role when judgment is difficult to encode
-and the evaluator has a separate goal, fresh context, authority to reject the
-work, and a bounded output contract. Copying the implementer's context into a
-new model and asking whether the work looks good provides little independence.
-
-## Inspect the Handoff
-
-A useful child return tells the parent:
-
-- What it checked
-- Evidence it found
-- Files it changed, if any
-- Remaining uncertainty
-- Its recommended next action
-
-A transcript dump makes the parent repeat the investigation. A conclusion
-without evidence makes the result hard to trust.
-
-## Write a Delegation Policy
-
-```text
-Another agent earns its cost when:
-
-The work can be separated because:
-
-Keep one agent when:
-
-Use an independent agent as validator when:
-
-Use code or another deterministic gate when:
-
-Each child owns:
-
-Each child returns:
-
-Agents may share:
-
-Agents must not share:
-
-The synthesis owner is:
-
-The total compute budget is:
-
-Stop parallel work when:
+```bash
+.workshop-venv/bin/python workshops/odsc-2026/labs/lab.py prepare w6-single --workspace .workshop-runs/w6-single
+.workshop-venv/bin/python workshops/odsc-2026/labs/lab.py prepare w6-validator --workspace .workshop-runs/w6-validator
 ```
 
-Multi-agent systems make separable work parallel and can give independent
-judgments fresh context. Tightly coupled work often turns the extra agents into
-coordination work.
+Use the same model and fresh conversation for both. Choose a shared total budget before running. A prompt is not budget enforcement: only call the comparison matched-budget if your gateway/controller actually limits the combined parent and child requests. Otherwise record actual expenditure and mark the cap unenforced.
+
+## Start With The Baseline
+
+Write your prediction before opening [saved results](/workshops/odsc-2026/results#exercise-6). An offline learner can inspect those receipts without model access and complete the same decision worksheet. Receipts provide selected measurements and goal events; full behavioral traces are not yet packaged for every lane.
+
+## Run It And Collect Metrics
+
+Use the prompt printed by `prepare`; it substitutes your absolute interpreter path. The copies below make the task readable on the website. Replace the interpreter placeholder if copying directly. Use only the prepared workspace for editing.
+
+### w6-single
+
+```text
+Debug the async race in toyapp/async_jobs.py. Fifty concurrent jobs must reliably produce 50. Simulated async work must remain concurrent rather than being serialized behind one long lock.
+
+Do not modify tests. Work only inside the current repository. Before finishing, run /absolute/path/to/.workshop-venv/bin/python -m pytest -q, inspect the final git status and diff, and report files changed, checks run, and remaining uncertainty. Do not install dependencies or make git commits.
+
+Use one agent. Do not delegate or call a subagent tool. Complete the objective and verify the result.
+```
+
+### w6-validator
+
+```text
+Debug the async race in toyapp/async_jobs.py. Fifty concurrent jobs must reliably produce 50. Simulated async work must remain concurrent rather than being serialized behind one long lock.
+
+Do not modify tests. Work only inside the current repository. Before finishing, run /absolute/path/to/.workshop-venv/bin/python -m pytest -q, inspect the final git status and diff, and report files changed, checks run, and remaining uncertainty. Do not install dependencies or make git commits.
+
+First repair and check the task yourself. Then invoke your harness's native task/delegation tool exactly once for a fresh independent validator of the current result. Do not delegate implementation. If no native delegation tool is available, report that limitation and stop this comparison lane.
+The validator must inspect and test only. Pass these requirements explicitly to it: do not edit source or tests, create output files, revert source, or redirect shell output. Run Python with PYTHONDONTWRITEBYTECODE=1 and pytest -p no:cacheprovider. Use subprocess.run with capture_output=True for repeated checks and print results. Return at most 250 words containing commands/results, uncertainty, and PASS/REJECT. Count words before returning.
+Do not modify files while the validator runs. After its return, address rejected requirements and report initial and final verdicts. The parent owns the final synthesis.
+```
+
+
+## Check The Result
+
+After the agent stops, run this command yourself from the course checkout. For other lanes replace both the case and workspace. Preserve the checker outside the editing workspace.
+
+```bash
+.workshop-venv/bin/python workshops/odsc-2026/labs/lab.py check w6-single --workspace .workshop-runs/w6-single
+```
+
+Exit 0 means the packaged checks passed; exit 1 prints the unmet requirement. Run the workspace's full tests as well. The checker checks scope and independent behavior. In the security lane it only screens finding coverage; a person must validate every claim and proposed fix.
+
+What did the fresh context add? Did the child return usable commands and results? Who owns synthesis? What could be checked more cheaply with deterministic code?
+
+## Record The Results
+
+| Lane | Independent result | Model | Calls | Total provider tokens | Time | Evidence and uncertainty |
+|---|---|---|---|---|---|---|
+| Baseline | | | | | | |
+| Changed harness policy | | | | | | |
+
+Record unknown usage as unknown. Include parent and child calls and judge calls where applicable. Keep processed tokens, cache reads, fresh input, and billed cost separate. Repeat trials before claiming performance gains.
+
+## What Students Should Leave With
+
+One policy you can explain with observed evidence, plus the condition that would change your decision. Complete the [worksheet](/workshops/odsc-2026/worksheet) and compare your reasoning with the [facilitator notes](/workshops/odsc-2026/facilitator).

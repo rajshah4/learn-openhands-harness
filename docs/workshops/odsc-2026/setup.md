@@ -56,17 +56,54 @@ Configure the provider and model in each agent before starting the comparison. S
 
 Start a new conversation after changing the agent. For a controlled comparison, use the same model and a separate copy of the starting workspace for each harness.
 
-## Open the exercises
+## Prepare the local lab package
 
-Go to [Exercise prompts](/workshops/odsc-2026/prompts) for direct links to every exercise's prompts and templates. Each exercise explains the starting files, configuration, and checks; use the copy button on its code blocks to copy a prompt into Canvas.
+Install Python 3.11 or newer and Git, then clone the course. Run these commands
+from the checkout root on macOS or Linux:
 
-The [course repository](https://github.com/rajshah4/learn-openhands-harness) contains the starter projects. Download or clone it when an exercise needs local files, open the specified workspace in Canvas, and prepare its test dependencies before running the prompt.
-
-To check your setup, open a tutorial workspace and ask:
-
-```text
-Read README.md in the current workspace using a tool.
-Summarize what it teaches. Do not change any files.
+```bash
+git clone https://github.com/rajshah4/learn-openhands-harness.git
+cd learn-openhands-harness
+python3 -m venv .workshop-venv
+.workshop-venv/bin/python -m pip install -r workshops/odsc-2026/labs/requirements.txt
+.workshop-venv/bin/python workshops/odsc-2026/labs/lab.py list
+.workshop-venv/bin/python workshops/odsc-2026/labs/lab.py prepare w1 --workspace .workshop-runs/w1-openhands
 ```
 
-Check that the conversation finishes, the trace shows a file-reading or terminal action, and the answer matches the file. Then start [Exercise 1](/workshops/odsc-2026/exercises/00-working-harness).
+On Windows use WSL for this workshop's shell commands and ACP agents.
+The helper prints the workspace and full prompt with your interpreter path.
+Open that workspace in Canvas and paste the prompt. Prepare a different path
+for each lane. Preparation refuses existing directories, so retries preserve
+previous work. Set `PYTHONPATH=src` for the slugify workspace; its printed
+prompt includes this instruction. The other packages import from their root.
+
+Keep the course checkout's checker, saved results, and facilitator key outside
+the agent's editing workspace. After a run, execute the checker yourself:
+
+```bash
+.workshop-venv/bin/python workshops/odsc-2026/labs/lab.py check w1 --workspace .workshop-runs/w1-openhands
+```
+
+The untouched pagination starter should fail. That is the planted defect,
+not an installation error. Exercise 3 starts with passing regression tests but
+fails the new-feature checker. Exercise 5's original tests pass while its dot
+assertion fails. Check the exercise page for its expected baseline.
+
+## Check your agent before timing
+
+Ask it to read `README.md` in the prepared workspace without changing files.
+Verify the trace contains a real read and an accurate answer. Then use a new
+conversation for the timed task. Record the Canvas, Agent Server, and agent
+versions, resolved model, enabled tools, automatic memory/skills, and limits.
+Provider or tool authentication failures are setup failures, not model results.
+
+## Choose your route
+
+Open [Exercise prompts](/workshops/odsc-2026/prompts). Each exercise has a
+preparation command, complete prompt, independent check or citation rubric,
+and decision worksheet. If live model access, MCP, goals, or delegation is
+unavailable, use [saved results](/workshops/odsc-2026/results) and label your
+work as an evidence audit. Saved measurements are not predictions for your model.
+
+See [release readiness](/workshops/odsc-2026/readiness) for the remaining
+classroom rehearsal and publication checks.

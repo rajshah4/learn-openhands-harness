@@ -1,118 +1,79 @@
-# Exercise 2: Do You Need an MCP?
+# Exercise 2: Design the tool surface
 
-The usual move is to connect an MCP server when an agent needs another
-system. We will start there. Then we will remove the MCP server and see what
-the agent can do through the terminal and the same system's API.
+## What Problem Are You Solving?
 
-Keep the model, prompt, workspace, system instructions, and verifier fixed.
-Change only how the agent reaches GitHub.
+Hold the PR explanation task and model fixed. Compare four GitHub operations, twelve operations, and one evidence-bundle tool. More operations do not automatically produce better evidence.
 
-## Start With GitHub MCP
+1. Predict what changes before running or reading results.
+2. Run one controlled comparison, or inspect the saved receipts.
+3. Record evidence and a decision in the [worksheet](/workshops/odsc-2026/worksheet).
 
-Give the agent this task:
+## Start With These Files
 
-```text
-Inspect OpenHands/OpenHands pull request #16860. Explain what changed,
-identify the important files, and report what validation was added. Cite
-GitHub evidence for every claim.
+Follow [setup](/workshops/odsc-2026/setup) first. The portable package is `workshops/odsc-2026/labs/` in the course checkout. Its `starters/` hold only student inputs; `prompts/` hold full tasks; `checks/` and `evidence/` stay outside the agent workspace.
+
+Prepare an empty scratch workspace:
+
+```bash
+.workshop-venv/bin/python workshops/odsc-2026/labs/lab.py prepare w2 --workspace .workshop-runs/w2-primitive
 ```
 
-The first configuration includes the Agent Canvas baseline tools plus GitHub
-MCP:
+In Canvas's MCP settings, add a local stdio server. Use the absolute path to `.workshop-venv/bin/python` as the command and the absolute path to `workshops/odsc-2026/labs/tools/github_mcp_server.py` as its single argument. Set `WORKSHOP_MCP_MODE` in the server environment to `primitive`, `broad`, or `task-shaped`. Start a fresh conversation and workspace after changing lanes. Keep the native baseline tools unchanged and record the actual resolved list.
 
-- `terminal`
-- `file_editor`
-- `task_tracker`
-- GitHub MCP tools
+| Mode | GitHub operations exposed |
+|---|---:|
+| `primitive` | 4 |
+| `broad` | 12 |
+| `task-shaped` | 1 |
 
-Before the run, inspect the available GitHub operations. With a neighbor,
-predict the first operation, how many GitHub tools the agent will use, and
-which evidence it must collect. Then run the task and follow the trace from
-the first tool choice through the final citations.
+The packaged server performs public GitHub GET requests without a token. Preflight with the command below before timing. It uses GitHub's unauthenticated quota; HTTP 403/429 is a setup failure, not a tool-quality result. If quota is exhausted, use the saved comparison.
 
-MCP should look useful. It gives the agent named GitHub operations, typed
-parameters, structured results, and an established authentication path. The
-question is what the harness paid for those benefits.
-
-Record how many GitHub tools were visible, how many the agent used, whether it
-made selection or parameter errors, and how much data came back. When
-provider-reported usage is available, record the initial input and total input
-tokens. Tool definitions and tool results both consume context, but at
-different points in the run.
-
-## Wait, the Terminal Was Already There
-
-Start a fresh conversation and remove GitHub MCP. Keep the prompt and all
-other conditions unchanged. Leave the GitHub CLI installed and authenticated.
-Do not tell the agent which command to run.
-
-The terminal appears to be one tool, but it exposes Git, repository search,
-test runners, package managers, command-line applications, and HTTP APIs. For
-this task, the agent can discover GitHub through commands such as `gh help`
-and `gh api`. It can also filter the response before returning it to the
-model.
-
-Before the second run, predict whether the agent will find the API, how much
-time it will spend discovering commands, and whether its final evidence will
-be better or worse. Then compare the two traces.
-
-| Measurement | GitHub MCP | Terminal and API |
-|---|---:|---:|
-| Authentication passed preflight | | |
-| Model-visible tool definitions | | |
-| Initial input tokens | | |
-| Model calls | | |
-| Tool calls | | |
-| Failed calls | | |
-| Time to first useful evidence | | |
-| Wall time | | |
-| Evidence correct | | |
-| Citations complete | | |
-
-Do not assume either lane should win. MCP may reduce command discovery and
-parameter mistakes. The terminal may provide the same capability through one
-compact, composable interface. Similar final answers would shift the decision
-to reliability, security, context, and maintenance rather than raw
-capability.
-
-## Decide What Earns a Tool
-
-Complete the rules from the evidence:
-
-```text
-Use the terminal or API when:
-
-Add an MCP connection when:
-
-Load an MCP tool by default when:
-
-Make an MCP tool discoverable on demand when:
-
-Block or require approval when:
-
-The evidence that would change our choice is:
+```bash
+.workshop-venv/bin/python workshops/odsc-2026/labs/preflight_github.py
 ```
 
-The terminal is not a small capability surface merely because the model sees
-one schema. It gives the agent a large implicit action space. MCP can make one
-part of that space easier to discover, safer, and more reliable, but it also
-adds definitions, permissions, and another integration to maintain.
+Optional terminal lane: remove MCP, keep `gh` installed and authenticated, and use the same prompt. Check `gh api repos/OpenHands/OpenHands/pulls/16860` first. Do not compare a failed authentication lane with working retrieval.
 
-## Retrieval Beyond the Workshop
+## Start With The Baseline
 
-This live comparison uses GitHub retrieval because the result is easy to
-inspect and verify. The same design choice appears inside a codebase.
+Write your prediction before opening [saved results](/workshops/odsc-2026/results#exercise-2). An offline learner can inspect those receipts without model access and complete the same decision worksheet. Receipts provide selected measurements and goal events; full behavioral traces are not yet packaged for every lane.
 
-The full [P03 Retrieval lesson](/projects/p03-retrieval) compares lexical
-search through the terminal with a dedicated `search_code` MCP tool. Exact
-symbols often favor `rg`; conceptual questions create a better test for
-specialized search. The optional GitNexus example goes further by retrieving
-code relationships for architecture and change-impact questions. Students can
-run those longer comparisons after the workshop.
+## Run It And Collect Metrics
 
-## Check the Tool Configuration
+Use the prompt printed by `prepare`; it substitutes your absolute interpreter path. The copies below make the task readable on the website. Replace the interpreter placeholder if copying directly. Use only the prepared workspace for editing.
 
-Before a new run, check GitHub MCP and terminal API authentication separately.
-Record the Agent Canvas and Agent Server versions, which MCP definitions reach
-the native OpenHands model, and which token fields are available in the trace.
-An authentication failure does not tell us which tool design is better.
+### w2
+
+```text
+Inspect OpenHands/OpenHands pull request #16860 using public GitHub evidence.
+Write five short bullets, targeting 200 words and never exceeding 280 words.
+Include the allow-list change; two important implementation files selected from
+src/utils/skill-enablement.ts, src/hooks/use-skill-enablement.ts,
+src/hooks/use-migrate-enabled-skills.ts, src/api/agent-server-adapter.ts;
+the test runner; the new test files; and remaining uncertainty.
+Provide the PR link and at least two direct file or commit links attached to
+supported claims. Do not modify any files. Count words before finishing.
+Explicitly attribute Vitest, lint, and translation results to the upstream PR
+report. State whether you personally ran any tests. Your final answer must
+contain the complete explanation, not a reference to hidden analysis.
+```
+
+
+## Check The Result
+
+Exercise 2 has no automatic semantic checker. Use this six-part rubric: allow-list behavior, two implementation files explained accurately, test runner identified, new tests identified, citations support claims, and uncertainty/test attribution stated. A score is evidence coverage, not complete correctness. Have a partner review the cited code and reject misleading claims.
+
+Open two citations and verify the claims. Did the agent execute tests, or read upstream reports? Which necessary evidence was omitted by the bundle selection?
+
+## Record The Results
+
+| Lane | Independent result | Model | Calls | Total provider tokens | Time | Evidence and uncertainty |
+|---|---|---|---|---|---|---|
+| Baseline | | | | | | |
+| Changed harness policy | | | | | | |
+
+Record unknown usage as unknown. Include parent and child calls and judge calls where applicable. Keep processed tokens, cache reads, fresh input, and billed cost separate. Repeat trials before claiming performance gains.
+
+## What Students Should Leave With
+
+One policy you can explain with observed evidence, plus the condition that would change your decision. Complete the [worksheet](/workshops/odsc-2026/worksheet) and compare your reasoning with the [facilitator notes](/workshops/odsc-2026/facilitator).

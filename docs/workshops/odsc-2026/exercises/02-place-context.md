@@ -1,164 +1,72 @@
-# Exercise 3: What Should the Agent Remember?
+# Exercise 3: Can memory save work?
 
-The easy advice is to add an `AGENTS.md`, install useful skills, and let the
-agent save what it learns. Each addition sounds helpful on its own. The agent
-then carries those instructions into later tasks, including the redundant,
-stale, and wrong ones.
+## What Problem Are You Solving?
 
-This exercise treats persistent context as a budget. Every saved line must earn
-its place.
+Add next-page browsing to a catalog while preserving direct page-number browsing and report exports. Hold the starter and task fixed; supply no notes, older notes, or current notes. The repository history is simulated and clearly labeled.
 
-## The Claim
+1. Predict what changes before running or reading results.
+2. Run one controlled comparison, or inspect the saved receipts.
+3. Record evidence and a decision in the [worksheet](/workshops/odsc-2026/worksheet).
 
-> Agents improve when we keep giving them more instructions, skills, and
-> memory.
+## Start With These Files
 
-Predict whether that claim will hold for the task in this exercise. Also
-predict which kind of saved context is most likely to help and which is most
-likely to cause a mistake.
+Follow [setup](/workshops/odsc-2026/setup) first. The portable package is `workshops/odsc-2026/labs/` in the course checkout. Its `starters/` hold only student inputs; `prompts/` hold full tasks; `checks/` and `evidence/` stay outside the agent workspace.
 
-## Inherited Context
+Prepare identical starters for three lanes:
 
-Your team inherits three artifacts from an earlier agent:
-
-- A generated `AGENTS.md` that explains the repository in roughly 600 words
-- A 400-word testing skill with a long checklist
-- A `MEMORY.md` containing stable facts, current task state, guesses, and old
-  external information
-
-The agent can inspect the repository and retrieve information on its own. You
-cannot keep everything. With a neighbor, build a smaller context package:
-
-- At most five lines in `AGENTS.md`
-- One short skill
-- At most three entries in `MEMORY.md`
-
-For each item you remove, decide whether to retrieve it when needed, save it in
-a task checkpoint, enforce it outside the model, or delete it.
-
-## Decide Where Each Item Belongs
-
-| Information | Your decision | Why? |
-|---|---|---|
-| Run focused tests with `uv run pytest`. | | |
-| Never edit `src/generated`; change the schema and run the generator. | | |
-| The current edit still fails the pagination boundary verifier. | | |
-| Before a release, complete a seven-step package and changelog procedure. | | |
-| The user prefers concise final answers without emojis. | | |
-| Pull request #16860 is currently open. | | |
-| The last agent guessed that all routes use one pagination helper. | | |
-| Run the entire test suite after every file edit. | | |
-| Generated files must never be committed by hand. | | |
-| Two hundred lines of successful package-install output. | | |
-| The current objective, changed files, remaining test, and next action. | | |
-| A GitHub access token copied into the conversation. | | |
-
-Use these destinations:
-
-1. **`AGENTS.md`:** short, verified guidance needed on most repository tasks.
-2. **Skill:** a procedure that loads only for a matching task.
-3. **`MEMORY.md`:** a stable, verified learning worth carrying into later
-   conversations.
-4. **Task checkpoint:** state needed to resume one unfinished task.
-5. **Retrieve later:** changing information or detail that is cheap to fetch.
-6. **Enforce outside the model:** a rule that a hook, permission boundary, test,
-   or CI check should guarantee.
-7. **Delete:** redundant output, secrets, guesses, and clutter.
-
-Some items have more than one defensible destination. Scope, lifetime,
-confidence, sensitivity, and loading cost should drive the choice.
-
-## Compare Three Agents
-
-A fresh agent receives the same follow-up task in the same repository:
-
-```text
-Add cursor-based pagination without breaking the existing page-number API.
-Preserve the repository conventions and prove both paths work.
+```bash
+.workshop-venv/bin/python workshops/odsc-2026/labs/lab.py prepare w3-none --workspace .workshop-runs/w3-none
+.workshop-venv/bin/python workshops/odsc-2026/labs/lab.py prepare w3-older --workspace .workshop-runs/w3-older
+.workshop-venv/bin/python workshops/odsc-2026/labs/lab.py prepare w3-current --workspace .workshop-runs/w3-current
 ```
 
-The instructor will run or reveal three configurations:
+Each command prints the task preceded by that lane's notes, if any. Paste the complete printed text. All lanes can inspect current accepted records. Older notes say to follow newer decisions. Disable automatic memory and unrelated skills if your harness permits; otherwise record them and call this an exploratory comparison. This supplies notes explicitly and does not test a product's memory loading.
 
-1. **No saved guidance:** let the agent inspect and rediscover everything.
-2. **Save everything:** load the full `AGENTS.md`, skill, and `MEMORY.md`,
-   including one stale claim.
-3. **Curated context:** load the class's short `AGENTS.md`, focused skill, and
-   verified memories. Retrieve changing facts when needed.
+## Start With The Baseline
 
-Before seeing the traces, choose the configuration you expect to produce the
-best verified result. Predict its first useful action and the saved item most
-likely to change its behavior.
+Write your prediction before opening [saved results](/workshops/odsc-2026/results#exercise-3). An offline learner can inspect those receipts without model access and complete the same decision worksheet. Receipts provide selected measurements and goal events; full behavioral traces are not yet packaged for every lane.
 
-| Measurement | No guidance | Save everything | Curated context |
-|---|---:|---:|---:|
-| Initial input tokens | | | |
-| Time to first useful action | | | |
-| Repeated searches | | | |
-| Model calls | | | |
-| Unnecessary actions | | | |
-| Stale assumptions followed | | | |
-| External verifier result | | | |
+## Run It And Collect Metrics
 
-The curated package does not win merely because it is shorter. It wins only if
-it changes the work for the better. If the bare agent cheaply discovers a fact,
-remove it. If a skill turns a sensible checklist into mandatory work on every
-task, narrow it or delete it. If a memory is no longer true, it is worse than
-forgetting.
+Use the prompt printed by `prepare`; it substitutes your absolute interpreter path. The copies below make the task readable on the website. Replace the interpreter placeholder if copying directly. Use only the prepared workspace for editing.
 
-## Memory Requires Judgment
-
-Save a memory when it is verified, stable, difficult to derive, and likely to
-matter again. Do not save current task status, a plausible diagnosis, a branch
-name, a changing external fact, or information the agent can cheaply retrieve.
-Never save secrets.
-
-Product names differ. Claude Code uses an auto-memory entry point named
-`MEMORY.md`; other harnesses store persistent memory elsewhere. The design
-question is the same because persistent content can enter many future model
-calls. Claude Code loads the first 200 lines or 25 KB of its memory index at
-the start of every conversation and recommends keeping always-on instructions
-concise. See [How Claude remembers your project](https://code.claude.com/docs/en/memory).
-
-## Treat Instructions Like Code
-
-Anthropic recommends reviewing and pruning `CLAUDE.md` and testing whether a
-change shifts behavior. Its April 2026 Claude Code postmortem shows why. One
-system-prompt instruction intended to reduce verbosity caused a 3% drop on a
-broader evaluation and was reverted. Anthropic now runs per-model evaluations
-and line-level ablations for system-prompt changes. See [An update on recent
-Claude Code quality reports](https://www.anthropic.com/engineering/april-23-postmortem).
-
-The research is deliberately uncomfortable. An [AGENTS.md
-study](https://arxiv.org/abs/2602.11988) found that generated context files did
-not significantly improve task success and increased cost. Developer-written
-files did better than generated files. [SkillsBench](https://arxiv.org/abs/2602.12670)
-found large average gains from curated skills, but focused skill bundles beat
-larger ones. A follow-up analysis found hundreds of skill-induced functional
-and efficiency failures. See [Agent Skills Can Be
-Harmful](https://arxiv.org/abs/2608.11888).
-
-The useful policy is neither “save nothing” nor “save everything.” Measure what
-the agent does after each addition.
-
-## Write Your Context Policy
+### w3
 
 ```text
-A line earns a place in AGENTS.md when:
+This package is a small catalog: browse() supports direct page-number access,
+and report exports already resume across multiple windows.
 
-A procedure becomes a skill when:
+Add next-page catalog browsing: callers should be able to get a page, then use
+its next_cursor to get the next one. Keep direct page-number browsing and report
+exports working. Follow the repository's accepted public API and design, add
+focused tests, and run the relevant tests plus the full suite before finishing.
 
-A fact earns persistent memory when:
-
-Keep state in a task checkpoint when:
-
-Retrieve information again when:
-
-Enforce a rule outside the model when:
-
-Delete saved context when:
-
-We will review and prune these artifacts when:
+Inspect your final diff and report files changed, checks run, and uncertainty.
+Do not modify unrelated files, change design records, or make git commits.
 ```
 
-The next exercise changes another expensive default: which model handles each
-task.
+
+## Check The Result
+
+After the agent stops, run this command yourself from the course checkout. For other lanes replace both the case and workspace. Preserve the checker outside the editing workspace.
+
+```bash
+.workshop-venv/bin/python workshops/odsc-2026/labs/lab.py check w3-current --workspace .workshop-runs/w3-current
+```
+
+Exit 0 means the packaged checks passed; exit 1 prints the unmet requirement. Run the workspace's full tests as well. The checker checks scope and independent behavior. In the security lane it only screens finding coverage; a person must validate every claim and proposed fix.
+
+Which record supersedes the older note? Did the agent preserve both existing callers and reuse the shared token protocol? Did the notes reduce rediscovery without changing correctness?
+
+## Record The Results
+
+| Lane | Independent result | Model | Calls | Total provider tokens | Time | Evidence and uncertainty |
+|---|---|---|---|---|---|---|
+| Baseline | | | | | | |
+| Changed harness policy | | | | | | |
+
+Record unknown usage as unknown. Include parent and child calls and judge calls where applicable. Keep processed tokens, cache reads, fresh input, and billed cost separate. Repeat trials before claiming performance gains.
+
+## What Students Should Leave With
+
+One policy you can explain with observed evidence, plus the condition that would change your decision. Complete the [worksheet](/workshops/odsc-2026/worksheet) and compare your reasoning with the [facilitator notes](/workshops/odsc-2026/facilitator).

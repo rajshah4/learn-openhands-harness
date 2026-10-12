@@ -2,6 +2,21 @@
 
 Use one row for each workshop exercise. The goal is not to collect every possible feature. The goal is to justify each component with evidence.
 
+## Run identity
+
+```text
+Exercise and lane:
+Live run or saved-evidence audit:
+Workspace:
+Date and software versions:
+Resolved model and reasoning:
+Enabled tools, memory, and skills:
+Limits enforced by the harness:
+Limits requested only in the prompt:
+Provider usage source, or unknown:
+Independent checker command and exit status:
+```
+
 ## Claim Verdict
 
 Complete this after every evidence reveal:

@@ -1,67 +1,88 @@
-# Exercise 4: Use the Strongest Model for Everything?
+# Exercise 4: Route models
 
-The safest model policy appears to be simple: use the strongest model with high
-reasoning for every task. This exercise tests whether a router can preserve the
-verified result while spending less time and money.
+## What Problem Are You Solving?
 
-Routing only works when the harness can recognize failure. A cheap model that
-returns a plausible wrong answer is not a saving.
+Choose a model for four different tasks: rename, pagination, an async race, and an authentication review. Compare verified results, spend, and latency before designing a routing rule.
 
-## Route Four Tasks
+1. Predict what changes before running or reading results.
+2. Run one controlled comparison, or inspect the saved receipts.
+3. Record evidence and a decision in the [worksheet](/workshops/odsc-2026/worksheet).
 
-Choose an initial model tier, reasoning level, verifier, and escalation signal
-for each task.
+## Start With These Files
 
-| Task | Initial model | Reasoning | Verifier | Escalate when |
-|---|---|---|---|---|
-| Rename one symbol in one file | | | | |
-| Repair a pagination boundary | | | | |
-| Debug an async race | | | | |
-| Review authentication middleware | | | | |
+Follow [setup](/workshops/odsc-2026/setup) first. The portable package is `workshops/odsc-2026/labs/` in the course checkout. Its `starters/` hold only student inputs; `prompts/` hold full tasks; `checks/` and `evidence/` stay outside the agent workspace.
 
-Discuss one disagreement with a neighbor. A task can deserve a stronger model
-because it is difficult, because mistakes are costly, or because correctness
-is hard to verify. Those are different reasons.
+Pick an economical and a stronger model available to your account. Record exact model identifiers and reasoning settings. A free-model practice run is valid, but does not reproduce the historical cost comparison.
 
-## Compare Three Policies
+```bash
+.workshop-venv/bin/python workshops/odsc-2026/labs/lab.py prepare w4-rename --workspace .workshop-runs/w4-cheap-rename
+.workshop-venv/bin/python workshops/odsc-2026/labs/lab.py prepare w4-pagination --workspace .workshop-runs/w4-cheap-pagination
+.workshop-venv/bin/python workshops/odsc-2026/labs/lab.py prepare w4-async --workspace .workshop-runs/w4-cheap-async
+.workshop-venv/bin/python workshops/odsc-2026/labs/lab.py prepare w4-security --workspace .workshop-runs/w4-cheap-security
+```
 
-The instructor will reveal results for:
+Repeat with new directory names for the stronger model. For the static rule, choose the route before starting. For verify-then-escalate, use another fresh starter, run the economical model, check externally, and return a failed requirement to the stronger model only when needed. Record both attempts' spend. This new verifier-driven practice differs from the historical LLM-judge cascade.
 
-1. Strongest model and high reasoning for every task
-2. One economical model for every task
-3. Economical first, followed by verification and evidence-based escalation
+## Start With The Baseline
 
-Predict which policy has the lowest cost per verified result. Also predict the
-task where cheap-first is most likely to fail silently.
+Write your prediction before opening [saved results](/workshops/odsc-2026/results#exercise-4). An offline learner can inspect those receipts without model access and complete the same decision worksheet. Receipts provide selected measurements and goal events; full behavioral traces are not yet packaged for every lane.
 
-| Policy | Verified tasks | Escalations | Missed failures | Wall time | Provider cost |
-|---|---:|---:|---:|---:|---:|
-| Strongest for all | | | | | |
-| Economical for all | | | | | |
-| Verify and route | | | | | |
+## Run It And Collect Metrics
 
-## Inspect the Routing Decision
+Use the prompt printed by `prepare`; it substitutes your absolute interpreter path. The copies below make the task readable on the website. Replace the interpreter placeholder if copying directly. Use only the prepared workspace for editing.
 
-For one escalated task, find:
-
-1. The evidence available before escalation
-2. The reason the first attempt was rejected
-3. What changed in the second attempt
-4. Whether the stronger model fixed the problem
-5. Whether a different harness change would have been cheaper
-
-## Write a Routing Policy
+### w4-rename
 
 ```text
-Start with an economical model when:
+Rename raw_items to source_items in toyapp/pagination.py. Keep behavior unchanged. Edit only that source file.
 
-Start with the strongest model when:
-
-Increase reasoning when:
-
-Switch models when:
-
-Stop rather than escalate when:
-
-No result ships unless:
+Do not modify tests. Work only inside the current repository. Before finishing, run /absolute/path/to/.workshop-venv/bin/python -m pytest -q, inspect the final git status and diff, and report files changed, checks run, and remaining uncertainty. Do not install dependencies or make git commits.
 ```
+
+### w4-pagination
+
+```text
+Fix the off-by-one bug in toyapp/pagination.py. The pagination tests describe the correct behavior.
+
+Do not modify tests. Work only inside the current repository. Before finishing, run /absolute/path/to/.workshop-venv/bin/python -m pytest -q, inspect the final git status and diff, and report files changed, checks run, and remaining uncertainty. Do not install dependencies or make git commits.
+```
+
+### w4-async
+
+```text
+Debug the async race in toyapp/async_jobs.py. Fifty concurrent jobs must reliably produce 50. Simulated async work must remain concurrent rather than being serialized behind one long lock.
+
+Do not modify tests. Work only inside the current repository. Before finishing, run /absolute/path/to/.workshop-venv/bin/python -m pytest -q, inspect the final git status and diff, and report files changed, checks run, and remaining uncertainty. Do not install dependencies or make git commits.
+```
+
+### w4-security
+
+```text
+Review toyapp/auth.py for security issues. Write SECURITY_REVIEW.md with specific findings, affected code, consequences, and concrete fixes. Do not edit source files or tests. Inspect the final diff and report evidence and uncertainty. Do not make git commits.
+```
+
+
+## Check The Result
+
+After the agent stops, run this command yourself from the course checkout. For other lanes replace both the case and workspace. Preserve the checker outside the editing workspace.
+
+```bash
+.workshop-venv/bin/python workshops/odsc-2026/labs/lab.py check w4-pagination --workspace .workshop-runs/w4-cheap-pagination
+```
+
+Exit 0 means the packaged checks passed; exit 1 prints the unmet requirement. Run the workspace's full tests as well. The checker checks scope and independent behavior. In the security lane it only screens finding coverage; a person must validate every claim and proposed fix.
+
+Which task can fail silently? What rejected requirement earns escalation? Which model route would you choose for new held-out tasks, and how would you evaluate it?
+
+## Record The Results
+
+| Lane | Independent result | Model | Calls | Total provider tokens | Time | Evidence and uncertainty |
+|---|---|---|---|---|---|---|
+| Baseline | | | | | | |
+| Changed harness policy | | | | | | |
+
+Record unknown usage as unknown. Include parent and child calls and judge calls where applicable. Keep processed tokens, cache reads, fresh input, and billed cost separate. Repeat trials before claiming performance gains.
+
+## What Students Should Leave With
+
+One policy you can explain with observed evidence, plus the condition that would change your decision. Complete the [worksheet](/workshops/odsc-2026/worksheet) and compare your reasoning with the [facilitator notes](/workshops/odsc-2026/facilitator).

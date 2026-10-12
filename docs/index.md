@@ -81,3 +81,7 @@ The goal is not to memorize APIs. The goal is deeper understanding, so on your n
 2. Run the [Quickstart](/quickstart).
 3. Take the [Harness Tour](/harness-tour).
 4. Start [P01: Agent Trace](/projects/p01-agent-trace).
+
+## Six workshop labs
+
+Start the [ODSC workshop](/workshops/odsc-2026/) for complete prompts, fresh workspaces, independent checks, and saved results across six harness decisions.

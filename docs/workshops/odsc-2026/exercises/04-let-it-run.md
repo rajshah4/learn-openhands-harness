@@ -1,135 +1,65 @@
-# Exercise 5: Let It Run Until It Figures It Out?
+# Exercise 5: Define completion and stopping
 
-A capable agent can plan, edit, test, and recover from errors. The popular
-move is to give it a goal, keep it in a loop, and allow enough time to finish.
-This exercise tests who decides that the goal has actually been reached.
+## What Problem Are You Solving?
 
-## The Claim
+Repair a slug function whose existing tests pass while the requested dot behavior fails. Define completion independently, then inspect how a native goal controller continues and stops.
 
-> Give a capable agent a goal and enough time. It can manage the work and
-> decide when it is done.
+1. Predict what changes before running or reading results.
+2. Run one controlled comparison, or inspect the saved receipts.
+3. Record evidence and a decision in the [worksheet](/workshops/odsc-2026/worksheet).
 
-Long-running work separates four decisions that a short prompt can hide:
+## Start With These Files
 
-1. **Goal:** the outcome that must remain active across turns and interruptions.
-2. **Plan:** the agent's current approach, which should change when evidence
-   contradicts it.
-3. **Validation contract:** independent evidence that establishes completion.
-4. **Autonomy policy:** when the harness continues, replans, escalates, or
-   stops.
+Follow [setup](/workshops/odsc-2026/setup) first. The portable package is `workshops/odsc-2026/labs/` in the course checkout. Its `starters/` hold only student inputs; `prompts/` hold full tasks; `checks/` and `evidence/` stay outside the agent workspace.
 
-## Factory's Uncomfortable Result
+Prepare the missing-dot starter:
 
-Factory compared a single coding agent with a system that established an
-independent completion measure before implementation. In one GDAL recreation,
-the single agent wrote 17,000 lines of C++, reproduced 36% of the reference
-behavior, and stopped because it believed it was done. It had not exhausted
-its time or budget. The system run with the same model reached 90%.
-
-The system used far more time and compute, and Factory reported one run per
-cell rather than repeated averages. The result still exposes the failure we
-care about: more available compute cannot help an agent that has already
-decided to stop. Read [What it Takes for Coding Agents to Complete Large
-Software Tasks](https://factory.ai/news/what-it-takes-for-coding-agents-to-complete-large-software-tasks).
-
-## Write the Goal
-
-The Incident Operations Center task asks an agent to add persistence,
-concurrency, recovery, APIs, and a browser workflow to an existing application.
-Choose what should remain active after compaction or a fresh session:
-
-```text
-A. Improve the incident application.
-
-B. Implement the requested persistence and recovery features.
-
-C. Deliver the requested incident system, preserve its existing behavior,
-   satisfy the agreed acceptance contract, and stay inside the workspace and
-   approval boundary.
+```bash
+.workshop-venv/bin/python workshops/odsc-2026/labs/lab.py prepare w5 --workspace .workshop-runs/w5-repair
 ```
 
-The durable goal should describe the outcome and constraints. The plan belongs
-in the checkpoint because implementation discoveries may invalidate it.
+The five existing tests pass. The independent dot assertion fails. Run an ordinary repair first; the preparation output gives the interpreter path. Its prompt asks for a new regression test before the source fix.
 
-## Define Done Before Seeing the Work
+For native goal practice, use a second fresh starter and an idle conversation on an Agent Server that supports `POST /api/conversations/{id}/goal`. Confirm the endpoint in your server's `/openapi.json`. The archived probe used Agent Server 1.49.6. Post `objective` from `prompts/w5-goal.txt` with `max_iterations: 2` through your authenticated server client. A detailed ordinary chat prompt does not activate the native loop. Keep the inner agent step limit separate. Inspect goal state events after termination and run the external checker.
 
-Choose six checks for the validation contract. You will not see the agent's
-implementation first.
+If that endpoint is unavailable, complete the ordinary repair and audit the packaged native receipts. The [official SDK guide](https://docs.openhands.dev/sdk/guides/convo-goal) also documents `run_goal` for a standalone conversation. Do not infer native activation from the wording of a prompt.
 
-- [ ] Existing regression tests pass
-- [ ] Incidents survive a process restart
-- [ ] Repeated alerts are deduplicated
-- [ ] Stale concurrent updates are rejected
-- [ ] Escalation leases recover after failure
-- [ ] Import and export round-trip correctly
-- [ ] HTTP behavior works through the public API
-- [ ] The browser workflow works at mobile width
-- [ ] The agent reports that every requested file was changed
-- [ ] The implementation contains at least 1,000 new lines
+## Start With The Baseline
 
-The last two are easy to measure but do not establish the outcome. After pairs
-commit to their checks, the instructor reveals the full eight-part external
-verifier.
+Write your prediction before opening [saved results](/workshops/odsc-2026/results#exercise-5). An offline learner can inspect those receipts without model access and complete the same decision worksheet. Receipts provide selected measurements and goal events; full behavioral traces are not yet packaged for every lane.
 
-## The Agent Says It Is Done
+## Run It And Collect Metrics
 
-Inspect the prepared OpenHands trace. The agent completed its plan and its own
-tests pass, but the external verifier reports seven of eight requirements. The
-browser workflow still has a defect.
+Use the prompt printed by `prepare`; it substitutes your absolute interpreter path. The copies below make the task readable on the website. Replace the interpreter placeholder if copying directly. Use only the prepared workspace for editing.
 
-Choose the next harness action:
-
-1. Accept completion because the agent completed its plan.
-2. Give it another twenty calls with no new information.
-3. Return the failed gate as evidence and require a changed plan.
-4. Escalate immediately to another model or a person.
-
-The failed gate changes the agent's understanding of the remaining work.
-Additional turns alone do not.
-
-## Should the Loop Continue Again?
-
-After one repair attempt, decide whether another continuation is justified:
-
-| Evidence | Continue | Replan | Escalate | Stop |
-|---|---|---|---|---|
-| Workspace changed and the gate improved | | | | |
-| Workspace changed but the same gate still fails | | | | |
-| The same gate failed and the workspace did not change | | | | |
-| The call budget is exhausted | | | | |
-| The agent requests an out-of-scope action | | | | |
-
-Prime Agent implements this separation directly. A persistent goal stores the
-objective and its budget across turns. Autonomous mode decides whether to add
-another continuation based on quality gates and turn, token, or wall-clock
-limits. It also avoids rerunning the same failed gate when the workspace has
-not changed. See [Prime Agent's long-running agent
-documentation](https://github.com/PrimeIntellect-ai/prime-agent/blob/main/packages/coding-agent/docs/long-running-agents.md).
-
-## Write the Long-Running Contract
+### w5
 
 ```text
-Goal:
-
-Completion requires:
-
-Progress requires new evidence such as:
-
-Continue when:
-
-Change strategy when:
-
-Reverify after:
-
-Escalate when:
-
-Stop when:
-
-Maximum turns, time, tokens, or cost:
-
-State that must survive compaction:
+Add support for preserving dots in slugify: "api.v1 endpoint" must become "api.v1-endpoint". Inspect implementation and tests first. Add a regression test, run /absolute/path/to/.workshop-venv/bin/python -m pytest -q and show the failing output and exit status before changing implementation. Then fix only src/slugify.py, rerun the tests, and run a separate exact-output assertion. Preserve existing behavior and tests. Inspect the diff and report the commands, results, and uncertainty. Stop honestly incomplete if checks still fail after two repair attempts. Do not install dependencies or make git commits.
 ```
 
-A long-running harness needs more than a bigger loop. It must preserve the
-goal, keep the completion standard independent of the implementation, and
-decide whether another turn has earned its cost.
+
+## Check The Result
+
+After the agent stops, run this command yourself from the course checkout. For other lanes replace both the case and workspace. Preserve the checker outside the editing workspace.
+
+```bash
+.workshop-venv/bin/python workshops/odsc-2026/labs/lab.py check w5 --workspace .workshop-runs/w5-repair
+```
+
+Exit 0 means the packaged checks passed; exit 1 prints the unmet requirement. Run the workspace's full tests as well. The checker checks scope and independent behavior. In the security lane it only screens finding coverage; a person must validate every claim and proposed fix.
+
+When original tests pass but the objective check fails, who should reject completion? What new evidence earns another attempt? What should happen when edits are prohibited?
+
+## Record The Results
+
+| Lane | Independent result | Model | Calls | Total provider tokens | Time | Evidence and uncertainty |
+|---|---|---|---|---|---|---|
+| Baseline | | | | | | |
+| Changed harness policy | | | | | | |
+
+Record unknown usage as unknown. Include parent and child calls and judge calls where applicable. Keep processed tokens, cache reads, fresh input, and billed cost separate. Repeat trials before claiming performance gains.
+
+## What Students Should Leave With
+
+One policy you can explain with observed evidence, plus the condition that would change your decision. Complete the [worksheet](/workshops/odsc-2026/worksheet) and compare your reasoning with the [facilitator notes](/workshops/odsc-2026/facilitator).
