@@ -77,7 +77,7 @@ for each lane. Preparation refuses existing directories, so retries preserve
 previous work. Set `PYTHONPATH=src` for the slugify workspace; its printed
 prompt includes this instruction. The other packages import from their root.
 
-Keep the course checkout's checker, saved results, and facilitator key outside
+Keep the course checkout's checker and saved results outside
 the agent's editing workspace. After a run, execute the checker yourself:
 
 ```bash
