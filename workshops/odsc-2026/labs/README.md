@@ -35,5 +35,4 @@ call budget. Live calls are made by your chosen agent and can incur charges.
 
 These focused fixtures are portable adaptations. Recorded result receipts used
 the historical settings and sometimes larger fixtures. They do not predict
-new run times, token totals, or model quality. See SOURCE-MANIFEST.json and the
-facilitator notes for provenance and limitations.
+new run times, token totals, or model quality. See SOURCE-MANIFEST.json for provenance and limitations.

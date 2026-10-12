@@ -104,6 +104,3 @@ preparation command, complete prompt, independent check or citation rubric,
 and decision worksheet. If live model access, MCP, goals, or delegation is
 unavailable, use [saved results](/workshops/odsc-2026/results) and label your
 work as an evidence audit. Saved measurements are not predictions for your model.
-
-See [release readiness](/workshops/odsc-2026/readiness) for the remaining
-classroom rehearsal and publication checks.

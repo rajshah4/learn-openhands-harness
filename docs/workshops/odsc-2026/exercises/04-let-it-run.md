@@ -26,7 +26,7 @@ If that endpoint is unavailable, complete the ordinary repair and audit the pack
 
 ## Start With The Baseline
 
-Write your prediction before opening [saved results](/workshops/odsc-2026/results#exercise-5). An offline learner can inspect those receipts without model access and complete the same decision worksheet. Receipts provide selected measurements and goal events; full behavioral traces are not yet packaged for every lane.
+Write your prediction before opening [saved results](/workshops/odsc-2026/results#exercise-5). An offline learner can inspect those receipts without model access and complete the same decision worksheet. Receipts provide selected measurements and goal events.
 
 ## Run It And Collect Metrics
 
@@ -62,4 +62,4 @@ Record unknown usage as unknown. Include parent and child calls and judge calls 
 
 ## What Students Should Leave With
 
-One policy you can explain with observed evidence, plus the condition that would change your decision. Complete the [worksheet](/workshops/odsc-2026/worksheet) and compare your reasoning with the [facilitator notes](/workshops/odsc-2026/facilitator).
+One policy you can explain with observed evidence, plus the condition that would change your decision. Complete the [worksheet](/workshops/odsc-2026/worksheet) and compare your reasoning with the [saved evidence](/workshops/odsc-2026/results).

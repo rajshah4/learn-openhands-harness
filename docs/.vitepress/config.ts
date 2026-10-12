@@ -69,8 +69,6 @@ export default defineConfig({
             { text: "Optional Long Project", link: "/workshops/odsc-2026/long-project" },
             { text: "Decision Worksheet", link: "/workshops/odsc-2026/worksheet" },
             { text: "Saved Results", link: "/workshops/odsc-2026/results" },
-            { text: "Facilitator Notes", link: "/workshops/odsc-2026/facilitator" },
-            { text: "Release Readiness", link: "/workshops/odsc-2026/readiness" },
           ],
         },
       ],
