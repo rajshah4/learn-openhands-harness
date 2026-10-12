@@ -8,7 +8,9 @@ import importlib
 import json
 import os
 from pathlib import Path
+import shlex
 import shutil
+import re
 import subprocess
 import sys
 import time
@@ -25,6 +27,7 @@ CASES = {
     'w4-async': ('async', 'w4-async', None),
     'w4-security': ('security', 'w4-security', None),
     'w5': ('goals', 'w5', None),
+    'w5-goal': ('goals', 'w5-goal', None),
     'w6-single': ('async', 'w6-single', None),
     'w6-validator': ('async', 'w6-validator', None),
 }
@@ -41,13 +44,13 @@ def hash_file(path):
 def prompt(case):
     _, name, guidance = CASES[case]
     text = (ROOT / 'prompts' / f'{name}.txt').read_text()
-    text = text.replace('{python}', json.dumps(sys.executable))
-    if case == 'w5':
-        text += '\nFor imports and tests set PYTHONPATH=src in this workspace.\n'
+    text = text.replace('{python}', shlex.quote(sys.executable))
     if guidance:
-        notes = (ROOT / 'guidance' / f'{guidance}.md').read_text()
+        notes = (ROOT / 'guidance' / f'{guidance}.md').read_text().replace('python3 -m pytest', shlex.quote(sys.executable) + ' -m pytest')
         if notes.strip():
             text = 'Supplied project notes (verify against newer accepted records):\n\n' + notes + '\n\nTask:\n' + text
+    if case == 'w5-goal':
+        text = '/goal --max 2 ' + text
     return text
 
 def prepare(case, workspace):
@@ -55,6 +58,9 @@ def prepare(case, workspace):
         raise ValueError('Workspace already exists. Choose a new path; preparation never overwrites work.')
     if workspace == ROOT or ROOT in workspace.parents:
         raise ValueError('Choose a workspace outside the lab package.')
+    checkout = ROOT.parents[2]
+    if checkout in workspace.parents:
+        print('Tip: use a workspace outside the course checkout, such as ../odsc-runs/my-run.', file=sys.stderr)
     fixture, _, _ = CASES[case]
     if fixture:
         shutil.copytree(ROOT / 'starters' / fixture, workspace)
@@ -84,14 +90,15 @@ def scope(case, workspace):
     changed = {k for k in baseline.keys() | current.keys()
                if k not in baseline or k not in current or hash_file(baseline[k]) != hash_file(current[k])}
     forbidden = changed - allowed - {'.gitignore'}
-    if forbidden: raise AssertionError('Out-of-scope changes: ' + ', '.join(sorted(forbidden)))
-    return sorted(changed)
+    return sorted(changed), sorted(forbidden)
 
-def check(case, workspace):
+def check(case, workspace, strict_scope=False):
     if not workspace.is_dir(): raise ValueError('Workspace does not exist.')
     if CASES[case][0] is None:
         raise ValueError('Exercise 2 requires the human evidence rubric, not a code checker.')
-    changed = scope(case, workspace)
+    changed, unexpected = scope(case, workspace)
+    if strict_scope and unexpected:
+        raise AssertionError('Unexpected file edits: ' + ', '.join(unexpected))
     fixture = CASES[case][0]
     env = dict(os.environ, PYTHONDONTWRITEBYTECODE='1')
     if fixture == 'memory':
@@ -107,26 +114,46 @@ def check(case, workspace):
                     seen = []
                     for page in range(1, max(1, (n + size - 1) // size) + 1):
                         result = p.paginate(items, page, size)
-                        assert result.items == items[(page - 1)*size:page*size]
+                        assert result.items == items[(page - 1)*size:page*size], f'Pagination omitted or changed items on page {page}, per_page={size}, input={items!r}.'
                         seen.extend(result.items)
-                    assert seen == items and items == before
+                    assert seen == items and items == before, 'Pagination lost, duplicated, or mutated input items.'
             for page, size in [(0,1),(1,0)]:
                 try: p.paginate([1],page,size)
                 except ValueError: pass
                 else: raise AssertionError('Invalid bounds accepted.')
             if fixture == 'rename':
                 names = {n.id for n in ast.walk(ast.parse((workspace/'toyapp/pagination.py').read_text())) if isinstance(n,ast.Name)}
-                assert 'source_items' in names and 'raw_items' not in names
+                assert 'source_items' in names and 'raw_items' not in names, 'Rename is not complete: use source_items and remove raw_items.'
         elif fixture == 'async':
             import asyncio
             a = importlib.import_module('toyapp.async_jobs')
-            # Repeated correctness plus relative concurrency at a larger work delay.
-            for _ in range(20): assert a.run_batch_sync(50) == 50
+            for attempt in range(20):
+                actual = a.run_batch_sync(50)
+                assert actual == 50, f'Counter lost updates: expected 50, got {actual}, attempt {attempt + 1}.'
             a.WORK_DELAY_SECONDS = 0.02
-            start = time.monotonic()
-            assert asyncio.run(a.run_batch(30)) == 30
-            elapsed = time.monotonic() - start
-            assert elapsed < 0.30, f'Work serialized or host overloaded: {elapsed:.3f}s. Retry on an idle host.'
+            original_sleep = a.asyncio.sleep
+            probe = {'delayed_calls': 0, 'active': 0, 'max_active': 0}
+            async def observed_sleep(delay, *args, **kwargs):
+                if delay > 0:
+                    probe['delayed_calls'] += 1
+                    probe['active'] += 1
+                    probe['max_active'] = max(probe['max_active'], probe['active'])
+                    try:
+                        return await original_sleep(delay, *args, **kwargs)
+                    finally:
+                        probe['active'] -= 1
+                return await original_sleep(delay, *args, **kwargs)
+            a.asyncio.sleep = observed_sleep
+            try:
+                start = time.monotonic()
+                actual = asyncio.run(a.run_batch(30))
+                elapsed = time.monotonic() - start
+            finally:
+                a.asyncio.sleep = original_sleep
+            assert actual == 30, f'Counter expected 30, got {actual}.'
+            assert probe['delayed_calls'] >= 30, 'The simulated work delay was removed. Keep the work and repair the shared update.'
+            assert probe['max_active'] > 1, 'The simulated jobs ran one at a time. Keep the work concurrent.'
+            assert 0.02 <= elapsed < 0.30, f'Work delay or concurrency needs inspection ({elapsed:.3f}s). Retry on an idle host if it was overloaded.'
         elif fixture == 'goals':
             s = importlib.import_module('slugify').slugify
             for given, wanted in [('api.v1 endpoint','api.v1-endpoint'),('Hello World!','hello-world'),
@@ -135,19 +162,25 @@ def check(case, workspace):
                 assert s(given) == wanted, f'{given!r}: wanted {wanted!r}, got {s(given)!r}'
         elif fixture == 'security':
             report = (workspace/'SECURITY_REVIEW.md').read_text().lower()
-            groups = {'debug-header bypass':['x-debug-user','bypass'], 'Bearer parsing':['bearer','replace'],
-                      'timing-safe comparison':['timing','compare_digest'], 'hardcoded tokens':['hardcoded','token'],
-                      'health prefix':['health','prefix'], 'remediation':['fix']}
-            missing = [k for k, terms in groups.items() if not all(t in report for t in terms)]
-            assert not missing, 'Missing rubric terms: ' + ', '.join(missing)
-            print('Coverage screen only. A human must verify each finding and fix against source.')
-    print(json.dumps({'case':case,'passed':True,'changed_files':changed},indent=2))
+            groups = {
+                'debug-header bypass': r'x-debug-user',
+                'Bearer parsing': r'\bbearer\b',
+                'timing-safe comparison (historical rubric)': r'compare_digest|constant[ -]time|timing[ -]safe',
+                'hardcoded tokens': r'hard[ -]?coded|embedded.*token',
+                'health prefix': r'\bhealth\b|/health',
+                'proposed fix': r'\b(?:fix(?:es)?|remediation|recommend(?:ation|ations|ed)?|mitigat(?:e|ion))\b',
+            }
+            missing = [k for k, pattern in groups.items() if not re.search(pattern, report)]
+            print('Optional topic coverage: ' + (', '.join(missing) + ' not mentioned.' if missing else 'all example topics mentioned.'))
+            print('Read the explanation and proposed fix against source. Topic coverage is not a security verdict.')
+    print(json.dumps({'case':case,'passed':None if fixture == 'security' else True,'changed_files':changed,'scope_notes':unexpected},indent=2))
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('action',choices=['list','prepare','prompt','check'])
     parser.add_argument('case',choices=list(CASES),nargs='?')
     parser.add_argument('--workspace',type=Path)
+    parser.add_argument('--strict-scope',action='store_true',help='Optionally reject edits outside the supplied fixture scope.')
     args=parser.parse_args()
     try:
         if args.action=='list': print('\n'.join(CASES));return 0
@@ -156,10 +189,10 @@ def main():
         if not args.workspace: parser.error('--workspace is required')
         workspace=args.workspace.expanduser().resolve()
         if args.action=='prepare': prepare(args.case,workspace)
-        else: check(args.case,workspace)
+        else: check(args.case,workspace,args.strict_scope)
         return 0
-    except (AssertionError, ValueError, OSError, ImportError, subprocess.CalledProcessError) as exc:
-        print(json.dumps({'passed':False,'detail':str(exc)},indent=2),file=sys.stderr)
+    except Exception as exc:
+        print(json.dumps({'passed':False,'detail':f'{type(exc).__name__}: {exc or 'Inspect the implementation and test output.'}'},indent=2),file=sys.stderr)
         return 1
 
 if __name__=='__main__': sys.exit(main())

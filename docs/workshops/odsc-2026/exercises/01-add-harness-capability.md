@@ -5,7 +5,7 @@
 Hold the PR explanation task and model fixed. Compare four GitHub operations, twelve operations, and one evidence-bundle tool. More operations do not automatically produce better evidence.
 
 1. Predict what changes before running or reading results.
-2. Run one controlled comparison, or inspect the saved receipts.
+2. Try a harness choice and inspect the trace, or use the saved examples.
 3. Record evidence and a decision in the [worksheet](/workshops/odsc-2026/worksheet).
 
 ## Start With These Files
@@ -15,10 +15,10 @@ Follow [setup](/workshops/odsc-2026/setup) first. The portable package is `works
 Prepare an empty scratch workspace:
 
 ```bash
-.workshop-venv/bin/python workshops/odsc-2026/labs/lab.py prepare w2 --workspace .workshop-runs/w2-primitive
+.workshop-venv/bin/python workshops/odsc-2026/labs/lab.py prepare w2 --workspace ../odsc-runs/w2-primitive
 ```
 
-In Canvas's MCP settings, add a local stdio server. Use the absolute path to `.workshop-venv/bin/python` as the command and the absolute path to `workshops/odsc-2026/labs/tools/github_mcp_server.py` as its single argument. Set `WORKSHOP_MCP_MODE` in the server environment to `primitive`, `broad`, or `task-shaped`. Start a fresh conversation and workspace after changing lanes. Keep the native baseline tools unchanged and record the actual resolved list.
+In Canvas, open **Customize → MCP Servers** and add a local stdio server. Use the absolute path to `.workshop-venv/bin/python` as the command and the absolute path to `workshops/odsc-2026/labs/tools/github_mcp_server.py` as its single argument. Set `WORKSHOP_MCP_MODE` in the server environment to `primitive`, `broad`, or `task-shaped`. Start a fresh conversation and workspace after changing lanes. Keep the native baseline tools unchanged and record the actual resolved list.
 
 | Mode | GitHub operations exposed |
 |---|---:|
@@ -26,7 +26,7 @@ In Canvas's MCP settings, add a local stdio server. Use the absolute path to `.w
 | `broad` | 12 |
 | `task-shaped` | 1 |
 
-The packaged server performs public GitHub GET requests without a token. Preflight with the command below before timing. It uses GitHub's unauthenticated quota; HTTP 403/429 is a setup failure, not a tool-quality result. If quota is exhausted, use the saved comparison.
+The packaged server performs read-only public GitHub requests. It works without a token; if shared Wi-Fi exhausts the public quota, optionally set `GITHUB_TOKEN` in the server environment to a token with access only to the public repository. Keep it out of prompts and files. Preflight with the command below before timing. It uses GitHub's unauthenticated quota; HTTP 403/429 is a setup failure, not a tool-quality result. If quota is exhausted, use the saved comparison.
 
 ```bash
 .workshop-venv/bin/python workshops/odsc-2026/labs/preflight_github.py
@@ -34,11 +34,17 @@ The packaged server performs public GitHub GET requests without a token. Preflig
 
 Optional terminal lane: remove MCP, keep `gh` installed and authenticated, and use the same prompt. Check `gh api repos/OpenHands/OpenHands/pulls/16860` first. Do not compare a failed authentication lane with working retrieval.
 
+## Try A Variation
+
+Try the four-operation GitHub server first. Switch to the evidence bundle, then the broad server, in fresh conversations. Which interface makes the evidence easier to find? Open a citation and check it yourself.
+
+Change the task to an unfamiliar PR or ask for a small file the bundle missed. Notice when the compact tool helps and when you need a primitive read. Review the answer yourself if you are working alone.
+
 ## Start With The Baseline
 
-Write your prediction before opening [saved results](/workshops/odsc-2026/results#exercise-2). An offline learner can inspect those receipts without model access and complete the same decision worksheet. Receipts provide selected measurements and goal events.
+Write your prediction before opening [saved results](/workshops/odsc-2026/results#exercise-2). An offline learner can inspect those receipts without model access and complete the same decision worksheet. The saved examples show what happened in earlier runs.
 
-## Run It And Collect Metrics
+## Run It And Explore
 
 Use the prompt printed by `prepare`; it substitutes your absolute interpreter path. The copies below make the task readable on the website. Replace the interpreter placeholder if copying directly. Use only the prepared workspace for editing.
 
@@ -59,20 +65,21 @@ contain the complete explanation, not a reference to hidden analysis.
 ```
 
 
-## Check The Result
+## Optional Checks
 
-Exercise 2 has no automatic semantic checker. Use this six-part rubric: allow-list behavior, two implementation files explained accurately, test runner identified, new tests identified, citations support claims, and uncertainty/test attribution stated. A score is evidence coverage, not complete correctness. Have a partner review the cited code and reject misleading claims.
+Exercise 2 has no automatic semantic checker. Use this six-part rubric: allow-list behavior, two implementation files explained accurately, test runner identified, new tests identified, citations support claims, and uncertainty/test attribution stated. A score is evidence coverage, not complete correctness. Review the cited code yourself, or compare notes with a partner. Trace one claim back to its source and distinguish reported checks from commands the agent executed.
 
 Open two citations and verify the claims. Did the agent execute tests, or read upstream reports? Which necessary evidence was omitted by the bundle selection?
 
-## Record The Results
+## Record What You Notice
 
-| Lane | Independent result | Model | Calls | Total provider tokens | Time | Evidence and uncertainty |
-|---|---|---|---|---|---|---|
-| Baseline | | | | | | |
-| Changed harness policy | | | | | | |
+| Run | What changed? | What did the agent do differently? | What did I learn? |
+|---|---|---|---|
+| Four GitHub operations | | | |
+| Evidence bundle | | | |
+| Twelve operations (optional) | | | |
 
-Record unknown usage as unknown. Include parent and child calls and judge calls where applicable. Keep processed tokens, cache reads, fresh input, and billed cost separate. Repeat trials before claiming performance gains.
+Time, calls, and provider usage are optional. Record unavailable numbers as unknown. Repeated runs are useful if you want to make a performance claim.
 
 ## What Students Should Leave With
 

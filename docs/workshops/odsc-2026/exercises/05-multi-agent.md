@@ -5,27 +5,41 @@
 Repair a shared counter so 50 concurrent jobs produce 50 without serializing simulated work. Compare one generalist with a repair owner followed by one fresh validator. This is sequential validation.
 
 1. Predict what changes before running or reading results.
-2. Run one controlled comparison, or inspect the saved receipts.
+2. Try a harness choice and inspect the trace, or use the saved examples.
 3. Record evidence and a decision in the [worksheet](/workshops/odsc-2026/worksheet).
 
 ## Start With These Files
 
 Follow [setup](/workshops/odsc-2026/setup) first. The portable package is `workshops/odsc-2026/labs/` in the course checkout. Its `starters/` hold only student inputs; `prompts/` hold full tasks; `checks/` and `evidence/` stay outside the agent workspace.
 
-Use OpenHands with its native task/delegation tool enabled for the validator lane. A second browser chat without a recorded child return is a different workflow. If delegation is unavailable, run the single-agent lane and inspect the saved comparison.
+Before the validator run, open a fresh conversation with your OpenHands profile and ask:
 
-```bash
-.workshop-venv/bin/python workshops/odsc-2026/labs/lab.py prepare w6-single --workspace .workshop-runs/w6-single
-.workshop-venv/bin/python workshops/odsc-2026/labs/lab.py prepare w6-validator --workspace .workshop-runs/w6-validator
+```text
+List the tool names available to you without calling them or changing files. Is there a native task or delegation tool that can return a child result?
 ```
 
-Use the same model and fresh conversation for both. Choose a shared total budget before running. A prompt is not budget enforcement: only call the comparison matched-budget if your gateway/controller actually limits the combined parent and child requests. Otherwise record actual expenditure and mark the cap unenforced.
+Inspect the response and your profile's tool configuration. Start another fresh conversation for the exercise. Confirm that the run contains an actual child tool call and returned result before describing it as native delegation.
+
+If your profile has no delegation tool, use two conversations: let the first repair the task, then open the same workspace in a fresh conversation and ask for read-only validation. Give it the file, required behavior, test command, and a brief return format. Bring its findings back to the repair owner. This lets you explore fresh context; label it manual validation rather than native delegation.
+
+```bash
+.workshop-venv/bin/python workshops/odsc-2026/labs/lab.py prepare w6-single --workspace ../odsc-runs/w6-single
+.workshop-venv/bin/python workshops/odsc-2026/labs/lab.py prepare w6-validator --workspace ../odsc-runs/w6-validator
+```
+
+Use the same model if you want to focus on the effect of adding a context. If you record usage, include the owner and validator. The historical matched-budget comparison is a separate example; no gateway needs to be set up for this practice.
+
+## Try A Variation
+
+Try the single-agent repair first. Then add a fresh validator, using native delegation or the two-conversation fallback below. Compare what the second context notices and what the owner has to explain again.
+
+Change the validator's brief: ask it to check concurrency, then ask it to critique the evidence. Notice how the handoff changes. You are exploring the cost and usefulness of another context, so a full orchestration system is optional.
 
 ## Start With The Baseline
 
-Write your prediction before opening [saved results](/workshops/odsc-2026/results#exercise-6). An offline learner can inspect those receipts without model access and complete the same decision worksheet. Receipts provide selected measurements and goal events.
+Write your prediction before opening [saved results](/workshops/odsc-2026/results#exercise-6). An offline learner can inspect those receipts without model access and complete the same decision worksheet. The saved examples show what happened in earlier runs.
 
-## Run It And Collect Metrics
+## Run It And Explore
 
 Use the prompt printed by `prepare`; it substitutes your absolute interpreter path. The copies below make the task readable on the website. Replace the interpreter placeholder if copying directly. Use only the prepared workspace for editing.
 
@@ -52,26 +66,26 @@ Do not modify files while the validator runs. After its return, address rejected
 ```
 
 
-## Check The Result
+## Optional Checks
 
 After the agent stops, run this command yourself from the course checkout. For other lanes replace both the case and workspace. Preserve the checker outside the editing workspace.
 
 ```bash
-.workshop-venv/bin/python workshops/odsc-2026/labs/lab.py check w6-single --workspace .workshop-runs/w6-single
+.workshop-venv/bin/python workshops/odsc-2026/labs/lab.py check w6-single --workspace ../odsc-runs/w6-single
 ```
 
-Exit 0 means the packaged checks passed; exit 1 prints the unmet requirement. Run the workspace's full tests as well. The checker checks scope and independent behavior. In the security lane it only screens finding coverage; a person must validate every claim and proposed fix.
+Use this check as feedback on your experiment. Exit 0 means the example's behavior checks passed; exit 1 explains what needs inspection. Unexpected file edits appear as notes. Add `--strict-scope` if you want to reproduce the supplied editing scope. The check is optional; inspect the agent's actual test output and final diff either way.
 
 What did the fresh context add? Did the child return usable commands and results? Who owns synthesis? What could be checked more cheaply with deterministic code?
 
-## Record The Results
+## Record What You Notice
 
-| Lane | Independent result | Model | Calls | Total provider tokens | Time | Evidence and uncertainty |
-|---|---|---|---|---|---|---|
-| Baseline | | | | | | |
-| Changed harness policy | | | | | | |
+| Run | What changed? | What did the agent do differently? | What did I learn? |
+|---|---|---|---|
+| One agent | | | |
+| Owner plus validator | | | |
 
-Record unknown usage as unknown. Include parent and child calls and judge calls where applicable. Keep processed tokens, cache reads, fresh input, and billed cost separate. Repeat trials before claiming performance gains.
+Time, calls, and provider usage are optional. Record unavailable numbers as unknown. Repeated runs are useful if you want to make a performance claim.
 
 ## What Students Should Leave With
 

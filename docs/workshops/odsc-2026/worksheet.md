@@ -17,23 +17,18 @@ Provider usage source, or unknown:
 Independent checker command and exit status:
 ```
 
-## Claim Verdict
-
-Complete this after every evidence reveal:
+## What changed?
 
 ```text
-Claim:
+The harness choice I tried:
 
-Our verdict:
-[ ] Supported in this test
-[ ] Supported with a narrower condition
-[ ] Not supported in this test
+What I expected:
 
-The evidence:
+What I noticed in the trace:
 
-The boundary of this test:
+What the optional check told me:
 
-What we would test next:
+What I would change for another run:
 ```
 
 | Decision | Our choice | Evidence we expect | Cost or new failure mode | Escalation trigger |

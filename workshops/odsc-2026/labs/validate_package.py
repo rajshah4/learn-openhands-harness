@@ -10,6 +10,7 @@ import tempfile
 ROOT=Path(__file__).resolve().parent
 
 def command(*args,expected=0):
+    if args and args[0] == 'check': args = (*args, '--strict-scope')
     result=subprocess.run([sys.executable,str(ROOT/'lab.py'),*args],capture_output=True,text=True,env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1'))
     assert result.returncode==expected,result.stdout+result.stderr
 
@@ -19,7 +20,7 @@ def patch(path,old,new):
 def main():
     counts=0
     with tempfile.TemporaryDirectory(prefix='workshop-calibration-') as tmp:
-        for case in ['w1','w3-none','w3-older','w3-current','w4-rename','w4-pagination','w4-async','w4-security','w5','w6-single','w6-validator']:
+        for case in ['w1','w3-none','w3-older','w3-current','w4-rename','w4-pagination','w4-async','w4-security','w5','w5-goal','w6-single','w6-validator']:
             workspace=Path(tmp)/case
             command('prepare',case,'--workspace',str(workspace));counts+=1
             command('prepare',case,'--workspace',str(workspace),expected=1);counts+=1
@@ -54,16 +55,16 @@ def browse_next(items, cursor=None, per_page=20):
                 patch(workspace/'toyapp/async_jobs.py','''        current = self.value
         await asyncio.sleep(0)
         self.value = current + 1''','''        self.value += 1''')
-            elif case=='w5':patch(workspace/'src/slugify.py',r'[^\w\s-]',r'[^\w\s.-]')
+            elif case in ['w5','w5-goal']:patch(workspace/'src/slugify.py',r'[^\w\s-]',r'[^\w\s.-]')
             elif case=='w4-security':
                 # Demonstrates why coverage requires a separate human semantic review.
                 (workspace/'SECURITY_REVIEW.md').write_text('x-debug-user bypass bearer replace timing compare_digest hardcoded token health prefix fix')
             command('check',case,'--workspace',str(workspace));counts+=1
             if case!='w4-security':
-                env=dict(os.environ,PYTHONPATH=str(workspace/'src' if case=='w5' else workspace),PYTHONDONTWRITEBYTECODE='1')
+                env=dict(os.environ,PYTHONPATH=str(workspace/'src' if case in ['w5','w5-goal'] else workspace),PYTHONDONTWRITEBYTECODE='1')
                 tests=subprocess.run([sys.executable,'-m','pytest','-q','-p','no:cacheprovider'],cwd=workspace,env=env,capture_output=True,text=True)
                 assert tests.returncode==0,tests.stdout+tests.stderr;counts+=1
-            if case!='w5':
+            if case not in ['w5','w5-goal']:
                 (workspace/'toyapp/__init__.py').unlink()
                 command('check',case,'--workspace',str(workspace),expected=1);counts+=1
         workspace=Path(tmp)/'serialized'
@@ -77,6 +78,32 @@ def browse_next(items, cursor=None, per_page=20):
             await asyncio.sleep(WORK_DELAY_SECONDS)
             self.value += 1''')
         command('check','w6-single','--workspace',str(workspace),expected=1);counts+=1
+        for label, implementation in [
+            ('removed-delay', '        self.value += 1'),
+            ('hardcoded-serial', '        async with self.lock:\n            await asyncio.sleep(0.005)\n            self.value += 1'),
+        ]:
+            w=Path(tmp)/label
+            command('prepare','w6-single','--workspace',str(w))
+            p=w/'toyapp/async_jobs.py'
+            if label=='hardcoded-serial': patch(p,'self.value = 0','self.value = 0\n        self.lock = asyncio.Lock()')
+            patch(p,"""        await asyncio.sleep(WORK_DELAY_SECONDS)
+        current = self.value
+        await asyncio.sleep(0)
+        self.value = current + 1""",implementation)
+            command('check','w6-single','--workspace',str(w),expected=1);counts+=1
+        # Scope notes support exploration; optional strict scope remains available.
+        w=Path(tmp)/'scope-notes'
+        command('prepare','w1','--workspace',str(w))
+        patch(w/'toyapp/pagination.py','end = start + per_page - 1','end = start + per_page')
+        (w/'notes.txt').write_text('Learning notes')
+        result=subprocess.run([sys.executable,str(ROOT/'lab.py'),'check','w1','--workspace',str(w)],capture_output=True,text=True)
+        assert result.returncode==0 and 'notes.txt' in result.stdout;counts+=1
+        command('check','w1','--workspace',str(w),expected=1);counts+=1
+        for case in ['w3-none','w3-older','w3-current','w5','w5-goal']:
+            result=subprocess.run([sys.executable,str(ROOT/'lab.py'),'prompt',case],capture_output=True,text=True)
+            assert result.returncode==0 and sys.executable in result.stdout and '{python}' not in result.stdout
+            if case=='w5-goal': assert result.stdout.startswith('/goal --max 2 ')
+            counts+=1
         for p in (ROOT/'prompts').glob('*.txt'):
             assert '/Users/' not in p.read_text() and '/home/ubuntu/' not in p.read_text()
         counts+=1

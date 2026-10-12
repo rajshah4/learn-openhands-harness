@@ -1,7 +1,10 @@
 # Engineering the Harness: six practical labs
 
 Use this path for the ODSC workshop or work through it independently. Each lab
-asks you to predict, run or inspect, verify, and make one harness decision.
+gives you a small task to try, a harness choice to change, and a trace to inspect.
+Try memory notes, different tools, another model, a goal, or a fresh validator.
+Use the optional checks to understand the result, and adapt the scenario once
+you have seen how it works.
 Start with [setup](/workshops/odsc-2026/setup), then open the
 [prompt index](/workshops/odsc-2026/prompts). You can complete the evidence route
 without installing an agent or making a model call.
@@ -15,8 +18,8 @@ without installing an agent or making a model call.
 | [5. Goals and stopping](/workshops/odsc-2026/exercises/04-let-it-run) | Fix dot preservation and inspect goal audits | Regression checks plus independent exact output |
 | [6. Delegation](/workshops/odsc-2026/exercises/05-multi-agent) | Compare one repair owner with owner plus validator | Repeated counter checks, concurrency, and child handoff |
 
-The live path uses fresh student workspaces, complete prompts, and external
-checks. The evidence path uses selected saved receipts and the same
+The live path uses fresh student workspaces and complete prompts, with optional
+checks for feedback. The evidence path uses selected saved receipts and the same
 [worksheet](/workshops/odsc-2026/worksheet). Some capabilities depend on your
 agent version; use the evidence route when native goals or delegation are absent.
 

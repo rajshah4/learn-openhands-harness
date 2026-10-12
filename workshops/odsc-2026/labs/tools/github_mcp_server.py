@@ -27,19 +27,26 @@ mcp = FastMCP(
 
 
 def github_get(path: str) -> object:
+    headers = {
+        "Accept": "application/vnd.github+json",
+        "User-Agent": USER_AGENT,
+        "X-GitHub-Api-Version": "2022-11-28",
+    }
+    token = os.environ.get("GITHUB_TOKEN")
+    if token:
+        headers["Authorization"] = f"Bearer {token}"
     request = urllib.request.Request(
         f"{API_ROOT}{path}",
-        headers={
-            "Accept": "application/vnd.github+json",
-            "User-Agent": USER_AGENT,
-            "X-GitHub-Api-Version": "2022-11-28",
-        },
+        headers=headers,
     )
     try:
         with urllib.request.urlopen(request, timeout=30) as response:
             return json.loads(response.read().decode("utf-8"))
     except urllib.error.HTTPError as error:
-        detail = error.read().decode("utf-8", errors="replace")[:1000]
+        detail = error.read().decode("utf-8", errors="replace")
+        if token:
+            detail = detail.replace(token, "[redacted]")
+        detail = detail[:1000]
         raise RuntimeError(f"GitHub API returned HTTP {error.code}: {detail}") from error
 
 

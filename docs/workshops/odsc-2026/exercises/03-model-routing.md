@@ -5,7 +5,7 @@
 Choose a model for four different tasks: rename, pagination, an async race, and an authentication review. Compare verified results, spend, and latency before designing a routing rule.
 
 1. Predict what changes before running or reading results.
-2. Run one controlled comparison, or inspect the saved receipts.
+2. Try a harness choice and inspect the trace, or use the saved examples.
 3. Record evidence and a decision in the [worksheet](/workshops/odsc-2026/worksheet).
 
 ## Start With These Files
@@ -15,19 +15,25 @@ Follow [setup](/workshops/odsc-2026/setup) first. The portable package is `works
 Pick an economical and a stronger model available to your account. Record exact model identifiers and reasoning settings. A free-model practice run is valid, but does not reproduce the historical cost comparison.
 
 ```bash
-.workshop-venv/bin/python workshops/odsc-2026/labs/lab.py prepare w4-rename --workspace .workshop-runs/w4-cheap-rename
-.workshop-venv/bin/python workshops/odsc-2026/labs/lab.py prepare w4-pagination --workspace .workshop-runs/w4-cheap-pagination
-.workshop-venv/bin/python workshops/odsc-2026/labs/lab.py prepare w4-async --workspace .workshop-runs/w4-cheap-async
-.workshop-venv/bin/python workshops/odsc-2026/labs/lab.py prepare w4-security --workspace .workshop-runs/w4-cheap-security
+.workshop-venv/bin/python workshops/odsc-2026/labs/lab.py prepare w4-rename --workspace ../odsc-runs/w4-cheap-rename
+.workshop-venv/bin/python workshops/odsc-2026/labs/lab.py prepare w4-pagination --workspace ../odsc-runs/w4-cheap-pagination
+.workshop-venv/bin/python workshops/odsc-2026/labs/lab.py prepare w4-async --workspace ../odsc-runs/w4-cheap-async
+.workshop-venv/bin/python workshops/odsc-2026/labs/lab.py prepare w4-security --workspace ../odsc-runs/w4-cheap-security
 ```
 
 Repeat with new directory names for the stronger model. For the static rule, choose the route before starting. For verify-then-escalate, use another fresh starter, run the economical model, check externally, and return a failed requirement to the stronger model only when needed. Record both attempts' spend. This new verifier-driven practice differs from the historical LLM-judge cascade.
 
+## Try A Variation
+
+Choose two models available to you. Try the rename or pagination task on both before tackling the async repair or security explanation. Record what you noticed about the answer and the work required.
+
+Write a simple rule for when you would start with each model. Try it on another task. You can also return a failed check to a stronger model and inspect what it changes. Usage and timing are optional observations; no router needs to be implemented for this exercise.
+
 ## Start With The Baseline
 
-Write your prediction before opening [saved results](/workshops/odsc-2026/results#exercise-4). An offline learner can inspect those receipts without model access and complete the same decision worksheet. Receipts provide selected measurements and goal events.
+Write your prediction before opening [saved results](/workshops/odsc-2026/results#exercise-4). An offline learner can inspect those receipts without model access and complete the same decision worksheet. The saved examples show what happened in earlier runs.
 
-## Run It And Collect Metrics
+## Run It And Explore
 
 Use the prompt printed by `prepare`; it substitutes your absolute interpreter path. The copies below make the task readable on the website. Replace the interpreter placeholder if copying directly. Use only the prepared workspace for editing.
 
@@ -62,26 +68,29 @@ Review toyapp/auth.py for security issues. Write SECURITY_REVIEW.md with specifi
 ```
 
 
-## Check The Result
+## Optional Checks
 
 After the agent stops, run this command yourself from the course checkout. For other lanes replace both the case and workspace. Preserve the checker outside the editing workspace.
 
 ```bash
-.workshop-venv/bin/python workshops/odsc-2026/labs/lab.py check w4-pagination --workspace .workshop-runs/w4-cheap-pagination
+.workshop-venv/bin/python workshops/odsc-2026/labs/lab.py check w4-pagination --workspace ../odsc-runs/w4-cheap-pagination
 ```
 
-Exit 0 means the packaged checks passed; exit 1 prints the unmet requirement. Run the workspace's full tests as well. The checker checks scope and independent behavior. In the security lane it only screens finding coverage; a person must validate every claim and proposed fix.
+Use this check as feedback on your experiment. Exit 0 means the example's behavior checks passed; exit 1 explains what needs inspection. Unexpected file edits appear as notes. Add `--strict-scope` if you want to reproduce the supplied editing scope. The check is optional; inspect the agent's actual test output and final diff either way.
 
 Which task can fail silently? What rejected requirement earns escalation? Which model route would you choose for new held-out tasks, and how would you evaluate it?
 
-## Record The Results
+The security-review check lists example topics mentioned in the report. It does not judge whether a finding is correct. Read the explanation and proposed fix against the middleware; different wording and different conclusions are part of the discussion.
 
-| Lane | Independent result | Model | Calls | Total provider tokens | Time | Evidence and uncertainty |
-|---|---|---|---|---|---|---|
-| Baseline | | | | | | |
-| Changed harness policy | | | | | | |
+## Record What You Notice
 
-Record unknown usage as unknown. Include parent and child calls and judge calls where applicable. Keep processed tokens, cache reads, fresh input, and billed cost separate. Repeat trials before claiming performance gains.
+| Run | What changed? | What did the agent do differently? | What did I learn? |
+|---|---|---|---|
+| Economical model | | | |
+| Stronger model | | | |
+| My routing rule | | | |
+
+Time, calls, and provider usage are optional. Record unavailable numbers as unknown. Repeated runs are useful if you want to make a performance claim.
 
 ## What Students Should Leave With
 

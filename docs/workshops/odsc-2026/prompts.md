@@ -9,11 +9,11 @@ checkout after [setup](/workshops/odsc-2026/setup).
 | 2. Tool design | `w2` | [PR explanation and MCP modes](/workshops/odsc-2026/exercises/01-add-harness-capability) |
 | 3. Memory | `w3-none`, `w3-older`, `w3-current` | [Next-page browsing](/workshops/odsc-2026/exercises/02-place-context) |
 | 4. Routing | `w4-rename`, `w4-pagination`, `w4-async`, `w4-security` | [Four runnable tasks](/workshops/odsc-2026/exercises/03-model-routing) |
-| 5. Goals | `w5` | [Ordinary repair and native-goal objective](/workshops/odsc-2026/exercises/04-let-it-run) |
+| 5. Goals | `w5`, `w5-goal` | [Ordinary repair and native-goal objective](/workshops/odsc-2026/exercises/04-let-it-run) |
 | 6. Delegation | `w6-single`, `w6-validator` | [Two architecture prompts](/workshops/odsc-2026/exercises/05-multi-agent) |
 
 ```bash
-.workshop-venv/bin/python workshops/odsc-2026/labs/lab.py prepare w3-current --workspace .workshop-runs/my-memory-run
+.workshop-venv/bin/python workshops/odsc-2026/labs/lab.py prepare w3-current --workspace ../odsc-runs/my-memory-run
 ```
 
 This prints the complete task and that lane's supplied notes with your Python

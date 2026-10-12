@@ -8,7 +8,7 @@ Use Agent Canvas to run the exercises and inspect the agent's work. This tutoria
 npm install -g @openhands/agent-canvas
 ```
 
-Launch it with `agent-canvas` and open the URL printed in your terminal. Follow the [Agent Canvas installation docs](https://github.com/OpenHands/docs/blob/main/openhands/usage/agent-canvas/setup.mdx) for prerequisites, platform instructions, and other installation options.
+Launch it with `agent-canvas` and open the URL printed in your terminal. Use this local npm installation for the workshop so the printed Python paths are available to the agent. The Docker option needs its own Python environment and paths. Follow the [Agent Canvas installation docs](https://github.com/OpenHands/docs/blob/main/openhands/usage/agent-canvas/setup.mdx) for prerequisites, platform instructions, and other installation options.
 
 ## Get model access
 
@@ -29,7 +29,7 @@ Keep keys in settings, not in prompts or exercise files.
 
 ## Add OpenCode and Pi through ACP
 
-The harness-comparison exercises use OpenHands, OpenCode, and Pi. ACP (Agent Client Protocol) lets Canvas communicate with these other coding agents.
+OpenHands is enough to start every exercise. Adding OpenCode or Pi is optional for exploring another harness. ACP (Agent Client Protocol) lets Canvas communicate with these other coding agents.
 
 Install them on the machine running your Canvas backend. For a local setup, this is your laptop.
 
@@ -67,12 +67,14 @@ cd learn-openhands-harness
 python3 -m venv .workshop-venv
 .workshop-venv/bin/python -m pip install -r workshops/odsc-2026/labs/requirements.txt
 .workshop-venv/bin/python workshops/odsc-2026/labs/lab.py list
-.workshop-venv/bin/python workshops/odsc-2026/labs/lab.py prepare w1 --workspace .workshop-runs/w1-openhands
+.workshop-venv/bin/python workshops/odsc-2026/labs/lab.py prepare w1 --workspace ../odsc-runs/w1-openhands
 ```
+
+Check `python3 --version` before creating the environment. It must report 3.11 or newer; if your machine has an older default, use your installed `python3.11` or newer interpreter in the `-m venv` command.
 
 On Windows use WSL for this workshop's shell commands and ACP agents.
 The helper prints the workspace and full prompt with your interpreter path.
-Open that workspace in Canvas and paste the prompt. Prepare a different path
+In Canvas, choose **Open Workspace**, select the printed directory, start a new conversation, and paste the prompt. Prepare a different path
 for each lane. Preparation refuses existing directories, so retries preserve
 previous work. Set `PYTHONPATH=src` for the slugify workspace; its printed
 prompt includes this instruction. The other packages import from their root.
@@ -81,7 +83,7 @@ Keep the course checkout's checker and saved results outside
 the agent's editing workspace. After a run, execute the checker yourself:
 
 ```bash
-.workshop-venv/bin/python workshops/odsc-2026/labs/lab.py check w1 --workspace .workshop-runs/w1-openhands
+.workshop-venv/bin/python workshops/odsc-2026/labs/lab.py check w1 --workspace ../odsc-runs/w1-openhands
 ```
 
 The untouched pagination starter should fail. That is the planted defect,
@@ -89,18 +91,18 @@ not an installation error. Exercise 3 starts with passing regression tests but
 fails the new-feature checker. Exercise 5's original tests pass while its dot
 assertion fails. Check the exercise page for its expected baseline.
 
-## Check your agent before timing
+## Check your agent before starting
 
 Ask it to read `README.md` in the prepared workspace without changing files.
 Verify the trace contains a real read and an accurate answer. Then use a new
-conversation for the timed task. Record the Canvas, Agent Server, and agent
+conversation for the exercise. If you want to compare runs, record the Canvas, Agent Server, and agent
 versions, resolved model, enabled tools, automatic memory/skills, and limits.
 Provider or tool authentication failures are setup failures, not model results.
 
 ## Choose your route
 
 Open [Exercise prompts](/workshops/odsc-2026/prompts). Each exercise has a
-preparation command, complete prompt, independent check or citation rubric,
+preparation command, complete prompt, optional check or citation checklist,
 and decision worksheet. If live model access, MCP, goals, or delegation is
 unavailable, use [saved results](/workshops/odsc-2026/results) and label your
-work as an evidence audit. Saved measurements are not predictions for your model.
+work as an evidence audit. Use the small scenarios to explore memory, tools, routing, goals, and another context. You can adapt the task to your own interests after trying the supplied prompt. Saved measurements are not predictions for your model.

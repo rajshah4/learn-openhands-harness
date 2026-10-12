@@ -7,13 +7,24 @@ and fixture sizes differ. Missing usage is unknown. Sources are preserved in
 
 ## Exercise 1
 
-October 3, 2026, DeepSeek V4.1 Flash, one pagination run per harness. All three
+<details>
+<summary>Open the recorded example after trying the exercise</summary>
+
+October 3, 2026, one classroom pagination run per harness. The OpenHands usage
+receipt resolves to DeepSeek V4.1 Flash; the ACP usage receipts do not establish
+a complete resolved-model record in this package. Legacy GLM labels in the
+archived paths are case names, not evidence of the model used. All three
 passed. OpenHands recorded 3 tool requests, Pi 9, and OpenCode 5. A request can
 bundle commands. Only OpenHands has complete cumulative usage; Pi has none and
 OpenCode's reported usage scope is unestablished. Do not compare their token
 totals or infer a general speed ranking. Inspect `evidence/w1.json` and the [action excerpts](/workshops/odsc-2026/inspection).
 
+</details>
+
 ## Exercise 2
+
+<details>
+<summary>Open the recorded example after trying the exercise</summary>
 
 The source excerpt is `evidence/w2-report.md`.
 
@@ -33,7 +44,12 @@ important smaller files or later pages. Retain a fallback to primitive reads.
 The classroom attribution task is a separate October prompt, not a matched
 September trial. `tools/github_mcp_server.py` preserves the real collection code.
 
+</details>
+
 ## Exercise 3
+
+<details>
+<summary>Open the recorded example after trying the exercise</summary>
 
 The full per-trial report is `evidence/w3-report.md`.
 
@@ -52,7 +68,12 @@ was cached, so this is not a 39% cost saving. Time ranges overlap. No correctnes
 advantage was observed. The package imports the current starter (trailing blank lines normalized), supplied
 notes, task, and independent checker; it does not measure native memory loading.
 
+</details>
+
 ## Exercise 4
+
+<details>
+<summary>Open the recorded example after trying the exercise</summary>
 
 The source excerpt is `evidence/w4-report.md`.
 
@@ -66,12 +87,20 @@ stronger: Opus 4.8. These are historical model labels, not setup requirements.
 | Risk-aware static | 12/12 | $0.517 | 205.7 |
 | Adaptive cascade | 11/12 | $0.628 | 210.9 |
 
-Cheap-only missed the timing-safe comparison finding in all security reviews.
+The historical rubric required a timing-safe comparison discussion, which
+cheap-only omitted in these security reviews. Treat that as a rubric criterion:
+when exploring the source yourself, discuss whether the proposed fix applies
+to this middleware rather than judging quality by keyword presence.
 The static route was selected on this task set; transfer is untested. The
 cascade used an LLM judge and different attempt budgets. The portable
 verify-then-escalate practice is a new design to evaluate, not a proven result.
 
+</details>
+
 ## Exercise 5
+
+<details>
+<summary>Open the recorded example after trying the exercise</summary>
 
 October 9 native probes used Flash and an outer cap of two audits. Repair
 allowed: complete at audit one; original tests and independent dot assertion
@@ -85,7 +114,12 @@ laptop. Judge verdicts and independently executed assertions are separate.
 Neither probe demonstrates improvement over ordinary repair, enforceable file
 boundaries, or restart persistence.
 
+</details>
+
 ## Exercise 6
+
+<details>
+<summary>Open the recorded example after trying the exercise</summary>
 
 October 2 matched-ceiling pair, Flash, one observation per condition. Both
 had byte-identical historical starters and a combined 30-model-call ceiling.
@@ -101,3 +135,6 @@ repair and returned 142 words. No parallel implementation or correctness gain
 was observed. `evidence/w6.json` preserves measurements and starter hashes,
 including a separate parallel-specialist observation; keep it outside this pair.
 The portable focused async fixture differs from the larger historical starter.
+Its validator brief uses a 250-word return limit; the historical pair used 350.
+
+</details>
