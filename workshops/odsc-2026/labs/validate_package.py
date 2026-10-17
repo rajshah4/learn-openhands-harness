@@ -99,10 +99,17 @@ def browse_next(items, cursor=None, per_page=20):
         result=subprocess.run([sys.executable,str(ROOT/'lab.py'),'check','w1','--workspace',str(w)],capture_output=True,text=True)
         assert result.returncode==0 and 'notes.txt' in result.stdout;counts+=1
         command('check','w1','--workspace',str(w),expected=1);counts+=1
-        for case in ['w3-none','w3-older','w3-current','w5','w5-goal']:
+        capped=Path(tmp)/'blocked-goal'
+        command('prepare','w5-goal-capped','--workspace',str(capped));counts+=1
+        command('check','w5-goal-capped','--workspace',str(capped),expected=1);counts+=1
+        tests=subprocess.run([sys.executable,'-m','pytest','-q','-p','no:cacheprovider'],cwd=capped,
+            env=dict(os.environ,PYTHONPATH=str(capped/'src'),PYTHONDONTWRITEBYTECODE='1'),capture_output=True,text=True)
+        assert tests.returncode==0 and '5 passed' in tests.stdout;counts+=1
+        assert not subprocess.check_output(['git','status','--short'],cwd=capped,text=True).strip();counts+=1
+        for case in ['w3-none','w3-older','w3-current','w5','w5-goal','w5-goal-capped']:
             result=subprocess.run([sys.executable,str(ROOT/'lab.py'),'prompt',case],capture_output=True,text=True)
             assert result.returncode==0 and sys.executable in result.stdout and '{python}' not in result.stdout
-            if case=='w5-goal': assert result.stdout.startswith('/goal --max 2 ')
+            if case.startswith('w5-goal'): assert result.stdout.startswith('/goal --max 2 ')
             counts+=1
         for p in (ROOT/'prompts').glob('*.txt'):
             assert '/Users/' not in p.read_text() and '/home/ubuntu/' not in p.read_text()

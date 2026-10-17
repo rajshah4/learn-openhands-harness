@@ -38,7 +38,13 @@ If your version does not recognize `/goal`, run the ordinary repair and inspect 
 
 First run the ordinary repair. On another fresh workspace, use the native goal command below and watch the goal banner. Which evidence does the judge use to decide that the work is complete?
 
-Try changing the objective or the audit limit. For example, ask for an output the unchanged implementation cannot produce while prohibiting edits. Predict whether the controller stops complete or capped. Stop a goal by sending a normal message if you want to change the experiment.
+For the stopping example shown in the slides, use the optional `w5-goal-capped` workspace from `prepare-all`. If preparing it separately:
+
+```bash
+.workshop-venv/bin/python workshops/odsc-2026/labs/lab.py prepare w5-goal-capped --workspace ../odsc-runs/w5-goal-capped
+```
+
+Open it in a fresh Canvas conversation and use the blocked-goal prompt below. Edits are prohibited on purpose. Watch whether the judge identifies the missing output, requests another attempt, and stops at the two-audit cap. Stop a goal by sending a normal message if you want to change the experiment.
 
 ## Run It And Explore
 
@@ -60,6 +66,18 @@ For imports and tests use PYTHONPATH=src /absolute/path/to/.workshop-venv/bin/py
 For imports and tests use PYTHONPATH=src /absolute/path/to/.workshop-venv/bin/python -m pytest -q. Use the same interpreter and PYTHONPATH=src for the separate dot assertion. The dependencies are already installed; do not install packages.
 ```
 
+### w5-goal-capped (optional)
+
+```text
+/goal --max 2 Preserve dots: slugify("api.v1 endpoint") must return "api.v1-endpoint". Existing tests must pass. Completion requires actual passing test output and a separate exact-output assertion. Report remaining failures honestly.
+
+For this deliberately constrained cap probe, do not edit source or tests, create output files, install packages, or make commits. Only inspect and run checks. The starting implementation drops dots; never manufacture a passing result. Do not request human input. If the goal cannot be satisfied under these constraints, report the failed check.
+
+For imports and tests use PYTHONPATH=src PYTHONDONTWRITEBYTECODE=1 /absolute/path/to/.workshop-venv/bin/python -m pytest -q -p no:cacheprovider. Use the same interpreter and environment for the separate dot assertion. The dependencies are already installed.
+```
+
+This probe should leave the workspace unchanged. Its five existing tests pass while the dot assertion fails. A failed behavior check is expected here; inspect the goal banner for the separate continuation and cap result.
+
 ## Optional Checks
 
 After the agent stops, run this command yourself from the course checkout. For other lanes replace both the case and workspace. Preserve the checker outside the editing workspace.
@@ -78,5 +96,6 @@ Look through the conversation details. When original tests pass but the objectiv
 |---|---|---|---|
 | Ordinary repair | | | |
 | Native goal | | | |
+| Blocked goal (optional) | | | |
 
 Time, calls, and provider usage are optional. Record unavailable numbers as unknown. Repeated runs are useful if you want to make a performance claim.

@@ -51,7 +51,7 @@ Prepare all the exercise workspaces now:
 .workshop-venv/bin/python workshops/odsc-2026/labs/lab.py prepare-all
 ```
 
-This creates a new session folder under `../odsc-runs/` with **22 separate workspaces for all six exercises**, including separate OpenHands, Pi, and OpenCode copies for Exercise 1. It prints the session path and a `WORKSPACES.txt` index with each folder, profile/configuration, exercise-page link, and checking command. Optional comparisons are prepared too; you do not have to run them all.
+This creates a new session folder under `../odsc-runs/` with **23 separate workspaces for all six exercises**, including separate OpenHands, Pi, and OpenCode copies for Exercise 1 and the optional blocked-goal probe in Exercise 5. It prints the session path and a `WORKSPACES.txt` index with each folder, profile/configuration, exercise-page link, and checking command. You do not have to run every comparison.
 
 Get the prompts from the [exercise web pages](/workshops/odsc-2026/prompts). The terminal prints the Exercise 1 link and your Python interpreter path. When a web prompt contains `/absolute/path/to/.workshop-venv/bin/python`, replace it with that printed path before sending. Keep `WORKSPACES.txt` open to find the matching folder for each exercise. Local prompt files are also saved as an optional convenience. This command runs no agents and makes no model requests. Running it again creates another session and preserves all earlier work.
 

@@ -80,7 +80,7 @@ The source excerpt is `evidence/w4-report.md`.
 September 7, three trials per policy on four tasks. Economical: Haiku 4.5;
 stronger: Opus 4.8. These are historical model labels, not setup requirements.
 
-| Policy | Verified task runs | Median four-task provider bill | Median wall seconds |
+| Policy | Original check passes | Median four-task provider bill | Median wall seconds |
 |---|---:|---:|---:|
 | Strongest everywhere | 12/12 | $0.883 | 116.2 |
 | Economical everywhere | 9/12 | $0.247 | 251.9 |
@@ -91,6 +91,8 @@ The historical rubric required a timing-safe comparison discussion, which
 cheap-only omitted in these security reviews. Treat that as a rubric criterion:
 when exploring the source yourself, discuss whether the proposed fix applies
 to this middleware rather than judging quality by keyword presence.
+The source uses dictionary membership, which does not establish an exploitable
+timing attack. Missing that rubric topic is not proof of missing a demonstrated bug.
 The static route was selected on this task set; transfer is untested. The
 cascade used an LLM judge and different attempt budgets. The portable
 verify-then-escalate practice is a new design to evaluate, not a proven result.

@@ -14,7 +14,9 @@ Follow [setup](/workshops/odsc-2026/setup) first. If you ran `lab.py prepare-all
 
 The individual commands below are an alternative for preparing one run at a time. The portable package is `workshops/odsc-2026/labs/` in the course checkout. Its `starters/` hold only student inputs; `prompts/` hold full tasks; `checks/` and `evidence/` stay outside the agent workspace.
 
-Before the validator run, open a fresh conversation with your OpenHands profile and ask:
+For the native validator lane, open **Settings → Agent → Add agent profile** in Canvas. Name it `Workshop-Validator`, choose **OpenHands**, and select the same **Workshop-DeepSeek** LLM profile. Under **Tools → Choose tools**, enable only `terminal`, `file_editor`, and `task_tool_set`. Set **MCP servers** to **Choose servers** with all servers off, and **Secrets** to **Choose secrets** with only `ODSC_LLM_API_KEY` enabled. Save.
+
+Use `Workshop-OpenHands` for the single-agent run and `Workshop-Validator` for the native validator run. Before that run, open a fresh conversation with `Workshop-Validator` and ask:
 
 ```text
 List the tool names available to you without calling them or changing files. Is there a native task or delegation tool that can return a child result?

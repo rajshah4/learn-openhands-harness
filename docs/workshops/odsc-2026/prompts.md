@@ -9,7 +9,7 @@ checkout after [setup](/workshops/odsc-2026/setup).
 | 2. Tool design | [PR explanation and MCP modes](/workshops/odsc-2026/exercises/01-add-harness-capability) |
 | 3. Memory | [Next-page browsing](/workshops/odsc-2026/exercises/02-place-context) |
 | 4. Routing | [Four runnable tasks](/workshops/odsc-2026/exercises/03-model-routing) |
-| 5. Goals | [Ordinary repair and native-goal objective](/workshops/odsc-2026/exercises/04-let-it-run) |
+| 5. Goals | [Ordinary repair, native goal, and blocked-goal probe](/workshops/odsc-2026/exercises/04-let-it-run) |
 | 6. Delegation | [Two architecture prompts](/workshops/odsc-2026/exercises/05-multi-agent) |
 
 Open your exercise page above, follow its configuration steps, and copy the task prompt into a new Canvas conversation. Use the matching workspace listed in your session's `WORKSPACES.txt`.

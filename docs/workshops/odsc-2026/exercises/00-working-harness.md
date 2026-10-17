@@ -30,6 +30,8 @@ Start with whichever harness you already have running. Inspect its first read, e
 
 Try asking for a plan before editing, or change the enabled tools. Watch how the agent gets from the prompt to a checked repair. If you want a fair performance comparison, keep the model and task fixed; if you use different models, record that difference.
 
+The slides' batched reads, separate reads, and extra checks describe particular recordings. Your harnesses can choose different sequences. Inspect what happened in your run.
+
 ## Run It And Explore
 
 Copy the task prompt below. Replace its Python interpreter placeholder with the path printed by `prepare-all`. The optional local prompt files already include that path. Use only the prepared workspace for editing.

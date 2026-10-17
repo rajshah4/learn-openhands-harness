@@ -31,6 +31,7 @@ CASES = {
     'w4-security': ('security', 'w4-security', None),
     'w5': ('goals', 'w5', None),
     'w5-goal': ('goals', 'w5-goal', None),
+    'w5-goal-capped': ('goals', 'w5-goal-capped', None),
     'w6-single': ('async', 'w6-single', None),
     'w6-validator': ('async', 'w6-validator', None),
 }
@@ -49,8 +50,9 @@ WORKSPACES = [
       for tier in ('cheap', 'stronger') for task in ('rename', 'pagination', 'async', 'security')],
     ('w5', 'w5-repair', 'Workshop-OpenHands; ordinary conversation'),
     ('w5-goal', 'w5-goal', 'Workshop-OpenHands; native goal mode'),
+    ('w5-goal-capped', 'w5-goal-capped', 'Workshop-OpenHands; optional blocked goal, two-audit cap'),
     ('w6-single', 'w6-single', 'Workshop-OpenHands; one repair owner'),
-    ('w6-validator', 'w6-validator', 'Workshop-OpenHands; owner plus validator'),
+    ('w6-validator', 'w6-validator', 'Workshop-Validator; owner plus native validator'),
 ]
 PROMPT_INDEX = 'https://rajshah4.github.io/learn-openhands-harness/workshops/odsc-2026/prompts'
 EXERCISE_PAGES = dict(zip(('w1', 'w2', 'w3', 'w4', 'w5', 'w6'), (
@@ -77,7 +79,7 @@ def prompt(case):
         notes = (ROOT / 'guidance' / f'{guidance}.md').read_text().replace('python3 -m pytest', shlex.quote(sys.executable) + ' -m pytest')
         if notes.strip():
             text = 'Supplied project notes (verify against newer accepted records):\n\n' + notes + '\n\nTask:\n' + text
-    if case == 'w5-goal':
+    if case in ('w5-goal', 'w5-goal-capped'):
         text = '/goal --max 2 ' + text
     return text
 
@@ -142,6 +144,8 @@ def prepare_all(parent):
                                   '--workspace', str(workspace)])
             record['check_command'] = command
             lines.append('  After the run, check: ' + command)
+            if case == 'w5-goal-capped':
+                lines.append('  Expected: unchanged files and a failed dot check; inspect Canvas for continuation and the two-audit cap.')
         lines.append('')
     (session / 'workspaces.json').write_text(json.dumps(records, indent=2) + '\n')
     index = session / 'WORKSPACES.txt'
@@ -246,7 +250,6 @@ def check(case, workspace, strict_scope=False):
             groups = {
                 'debug-header bypass': r'x-debug-user',
                 'Bearer parsing': r'\bbearer\b',
-                'timing-safe comparison (historical rubric)': r'compare_digest|constant[ -]time|timing[ -]safe',
                 'hardcoded tokens': r'hard[ -]?coded|embedded.*token',
                 'health prefix': r'\bhealth\b|/health',
                 'proposed fix': r'\b(?:fix(?:es)?|remediation|recommend(?:ation|ations|ed)?|mitigat(?:e|ion))\b',
@@ -254,6 +257,7 @@ def check(case, workspace, strict_scope=False):
             missing = [k for k, pattern in groups.items() if not re.search(pattern, report)]
             print('Optional topic coverage: ' + (', '.join(missing) + ' not mentioned.' if missing else 'all example topics mentioned.'))
             print('Read the explanation and proposed fix against source. Topic coverage is not a security verdict.')
+            print('A dict membership test does not establish a timing attack. Discuss timing-safe comparison only where the proposed design needs it.')
     print(json.dumps({'case':case,'passed':None if fixture == 'security' else True,'changed_files':changed,'scope_notes':unexpected},indent=2))
 
 def main():

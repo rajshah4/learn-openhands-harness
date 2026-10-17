@@ -16,6 +16,8 @@ The individual commands below are an alternative for preparing one run at a time
 
 Pick an economical and a stronger model available to your account. Record exact model identifiers and reasoning settings.
 
+Flash and Pro are one option with the workshop gateway. The slides' Haiku/Opus results are a separate recorded experiment; you do not need those models to do this exercise.
+
 ```bash
 .workshop-venv/bin/python workshops/odsc-2026/labs/lab.py prepare w4-rename --workspace ../odsc-runs/w4-cheap-rename
 .workshop-venv/bin/python workshops/odsc-2026/labs/lab.py prepare w4-pagination --workspace ../odsc-runs/w4-cheap-pagination
@@ -30,6 +32,8 @@ Repeat with new directory names for the stronger model. For the static rule, cho
 Choose two models available to you. Try the rename or pagination task on both before tackling the async repair or security explanation. Record what you noticed about the answer and the work required.
 
 Write a simple rule for when you would start with each model. Try it on another task. You can also return a failed check to a stronger model and inspect what it changes. Usage and timing are optional observations; no router needs to be implemented for this exercise.
+
+Both models may pass. Compare the supporting evidence and work required, then name a concrete failure that would trigger escalation. A harder task label alone is not a failure signal.
 
 ## Run It And Explore
 
@@ -82,6 +86,8 @@ Use this check as feedback on your experiment. Exit 0 means the example's behavi
 Look through the conversation details. Which task can fail silently? What rejected requirement earns escalation? Which model route would you choose for new held-out tasks, and how would you evaluate it?
 
 The security-review check lists example topics mentioned in the report. It does not judge whether a finding is correct. Read the explanation and proposed fix against the middleware; different wording and different conclusions are part of the discussion.
+
+The historical rubric included timing-safe comparison. Here authentication uses dictionary membership, which does not demonstrate an exploitable timing attack. Distinguish confirmed bugs from hardening suggestions and claims that depend on a router or deployment you have not inspected.
 
 ## Record What You Notice
 
