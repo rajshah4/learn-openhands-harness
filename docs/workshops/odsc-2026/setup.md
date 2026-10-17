@@ -2,108 +2,210 @@
 
 The workshop uses Agent Canvas because it's open source and flexible. You can also try some of these exercises in another harness.
 
-Use the free models available through OpenHands Cloud or connect your own provider keys and models. The choice is yours.
+For the workshop, use **DeepSeek Flash through OpenHands** in all three harnesses: OpenHands, Pi, and OpenCode. You need one OpenHands **LLM API Key**. You do not need separate Anthropic, OpenAI, or DeepSeek keys. You will save the key and create the three profiles in the Canvas UI. One preparation command writes the provider files needed by Pi and OpenCode; you do not need to edit JSON.
 
-## Install Agent Canvas
+## 1. Check your prerequisites
 
-```bash
-npm install -g @openhands/agent-canvas
-```
-
-Run `agent-canvas` in your terminal, then open the URL it prints. Use this local npm installation for the workshop so the Python paths printed by the lab helper are available to the agent. Follow the [Agent Canvas installation docs](https://github.com/OpenHands/docs/blob/main/openhands/usage/agent-canvas/setup.mdx) for prerequisites, platform instructions, and other installation options.
-
-## Get model access
-
-### OpenHands Cloud models
-
-1. Sign in to [OpenHands Cloud](https://app.all-hands.dev).
-2. Open **Settings → API Keys** and copy your **LLM API Key**, not a Cloud API Key.
-3. In Agent Canvas, open **Settings → LLM**, choose **OpenHands**, paste the key, and select a model marked **Free**.
-4. Save the configuration and select it for your OpenHands agent profile.
-
-No separate provider key is needed for this path. Free-model availability and limits can change; choose a currently available free model. See the [OpenHands model-access docs](https://github.com/OpenHands/docs/blob/main/openhands/usage/llms/openhands-llms.mdx).
-
-### Your own provider and model
-
-Choose your provider in Canvas, enter its API key, and select a model that supports tool use. You can use Anthropic, OpenAI, or another supported provider. For an OpenAI-compatible service, also enter its documented base URL. Your provider's usage charges apply.
-
-Keep keys in settings, not in prompts or exercise files.
-
-## Add other harnesses through ACP (optional)
-
-OpenHands is enough to start every exercise. Adding OpenCode or Pi is optional for exploring another harness. ACP (Agent Client Protocol) lets Canvas communicate with these other coding agents.
-
-Install them on the machine running your Canvas backend. For a local setup, this is your laptop.
-
-**OpenCode:**
+On macOS or Linux, open a terminal and run:
 
 ```bash
-npm install -g opencode-ai
+node --version
+npm --version
+python3 --version
+git --version
 ```
 
-**Pi and its ACP adapter:**
+Use Node.js 22.19 or newer, Python 3.11 or newer, and Git. If a command is missing, install [Node.js](https://nodejs.org/en/download), [Python](https://www.python.org/downloads/), or [Git](https://git-scm.com/downloads) before continuing. On Windows, use WSL and run all commands inside WSL.
+
+## 2. Install and launch Canvas
+
+Install the tested versions of Canvas and the two additional harnesses:
 
 ```bash
-npm install -g @earendil-works/pi-coding-agent pi-acp
+npm install -g @openhands/agent-canvas@1.27.1 @earendil-works/pi-coding-agent@0.83.0 pi-acp@0.0.33 opencode-ai@1.18.23
+agent-canvas
 ```
 
-In Canvas's agent settings, select **ACP**, then a matching preset or **Custom**, and use the appropriate launch command:
+Open the URL printed in your terminal. Leave Canvas running and open a **second terminal** for the remaining commands.
 
-| Agent | ACP launch command |
-|---|---|
-| OpenCode | `opencode acp` |
-| Pi | `pi-acp` |
+Use the local npm installation for this workshop. Canvas and the lab's Python environment need access to the same local files. The [Canvas installation docs](https://github.com/OpenHands/docs/blob/main/openhands/usage/agent-canvas/setup.mdx) cover other installation options.
 
-Configure the provider and model in each agent before starting the comparison. Saving an OpenHands model profile in Canvas does not automatically configure these external agents; using the OpenHands Cloud LLM key may require a custom provider configuration in each CLI. Follow the [Canvas ACP docs](https://github.com/OpenHands/docs/blob/main/openhands/usage/agent-canvas/acp-agents.mdx), [OpenCode provider docs](https://opencode.ai/docs/providers/), and [Pi provider instructions](https://www.npmjs.com/package/@earendil-works/pi-coding-agent). The [OpenCode ACP guide](https://opencode.ai/docs/acp/) and [Pi ACP adapter guide](https://github.com/svkozak/pi-acp) describe their launch requirements.
+## 3. Download the workshop materials
 
-Start a new conversation after changing the agent so you can explore how each harness works.
-
-## Prepare the local lab package
-
-Install Python 3.11 or newer and Git. On macOS or Linux, open a terminal and run:
+In your second terminal, choose a folder for the course and run:
 
 ```bash
 git clone https://github.com/rajshah4/learn-openhands-harness.git
 cd learn-openhands-harness
 python3 -m venv .workshop-venv
 .workshop-venv/bin/python -m pip install -r workshops/odsc-2026/labs/requirements.txt
-.workshop-venv/bin/python workshops/odsc-2026/labs/lab.py list
+```
+
+If you already have a current course checkout, open a terminal in that folder and skip the clone. If `python3 --version` reported an older version, use your installed Python 3.11 or newer interpreter in the `-m venv` command.
+
+Run the remaining commands from the `learn-openhands-harness` folder.
+
+## 4. Prepare the Pi and OpenCode connection files
+
+In your course terminal, run:
+
+```bash
+.workshop-venv/bin/python workshops/odsc-2026/labs/setup_canvas.py files
+```
+
+This writes provider settings in `~/.openhands/odsc-2026/` and prints **two Command lines**, one for Pi and one for OpenCode. Keep that terminal open so you can copy them into Canvas in step 6. Each command contains paths for your machine; copy the entire printed line.
+
+This step asks for no key and makes no changes to Canvas. The files contain secret references, not credential values.
+
+## 5. Add your key and model in Canvas
+
+Sign in to [OpenHands Cloud](https://app.all-hands.dev). Open **Settings → API Keys** and copy your **LLM API Key**. A Cloud API Key is a different credential and will not work here.
+
+### Save the key for Pi and OpenCode
+
+In your **local Canvas browser tab**:
+
+1. Open **Settings → Secrets → Add a new secret**.
+2. Set **Name** to `ODSC_LLM_API_KEY` exactly.
+3. Paste your OpenHands LLM key into **Value**.
+4. Click **Add secret**.
+
+Keep the key out of prompts and exercise files. You will reuse this same key in the OpenHands LLM profile below; you do not need another provider account.
+
+### Create the OpenHands LLM profile
+
+1. Open **Settings → LLM → Add LLM Profile**.
+2. Set **Profile Name** to `Workshop-DeepSeek`.
+3. Select the **Basic** tab.
+4. Set **LLM Provider** to **OpenHands**.
+5. Set **LLM Model** to `deepseek-v4-flash`. Select that exact entry.
+6. Leave **Provider connection** as **None** and paste the same LLM key into **API Key**.
+7. Click **Save**.
+
+If your model picker does not list Flash, use the **Advanced** tab: set **Custom Model** to `openhands/deepseek-v4-flash`, **Base URL** to `https://llm-proxy.app.all-hands.dev/v1`, and **API Key** to your OpenHands LLM key. Do not substitute another model silently.
+
+Check your account's current model access and pricing before running. See [OpenHands model access](https://github.com/OpenHands/docs/blob/main/openhands/usage/llms/openhands-llms.mdx).
+
+## 6. Create the three agent profiles in Canvas
+
+An **LLM profile** describes a model connection. An **agent profile** chooses the harness. OpenHands uses the LLM profile you just saved. Pi and OpenCode use their own provider files plus the saved secret.
+
+### OpenHands
+
+Open **Settings → Agent → Add agent profile** and fill in:
+
+| Field | Value |
+|---|---|
+| Profile Name | `Workshop-OpenHands` |
+| Agent | **OpenHands** |
+| LLM profile | **Workshop-DeepSeek** |
+| Tools | Choose tools; leave only **terminal** and **file_editor** enabled for the first comparison |
+
+For this initial setup, set **MCP servers** to **Choose servers** and turn every server off. Under **Secrets**, select **Choose secrets** and enable only `ODSC_LLM_API_KEY`. Click **Save**.
+
+### Pi
+
+Click **Add agent profile** again and fill in:
+
+| Field | Value |
+|---|---|
+| Profile Name | `Workshop-Pi` |
+| Agent | **ACP (external subprocess)** |
+| Preset | **Custom** |
+| Command | Paste the complete **Workshop-Pi Command** printed in step 4 |
+| Model | `openhands/deepseek-v4-flash` |
+
+Under **Secrets**, select **Choose secrets** and turn on only `ODSC_LLM_API_KEY`. Set **MCP servers** to **Choose servers** and turn every server off. Click **Save**.
+
+Use **Custom** here so Canvas launches Pi with the supplied OpenHands provider configuration. Typing a model name into an ordinary Pi preset is not enough. You do not need Pi's Anthropic key or `PI_AUTH_JSON` for this setup.
+
+### OpenCode
+
+Click **Add agent profile** once more:
+
+| Field | Value |
+|---|---|
+| Profile Name | `Workshop-OpenCode` |
+| Agent | **ACP (external subprocess)** |
+| Preset | **Custom** |
+| Command | Paste the complete **Workshop-OpenCode Command** printed in step 4 |
+| Model | `openhands/deepseek-v4-flash` |
+
+Under **Secrets**, select **Choose secrets** and turn on only `ODSC_LLM_API_KEY`. Set **MCP servers** to **Choose servers** and turn every server off. Click **Save**.
+
+ACP (Agent Client Protocol) lets Canvas communicate with these external agents. Each makes its own model requests. All three profiles now point to the same OpenHands-hosted Flash model. Start a new conversation after changing profiles.
+
+## 7. Check all three harnesses
+
+Run this before starting the exercises:
+
+```bash
+.workshop-venv/bin/python workshops/odsc-2026/labs/setup_canvas.py verify
+```
+
+This runs the small pagination repair in three separate fresh workspaces using the profiles you saved in the UI. It checks the resolved model, then independently runs pytest and checks the repaired behavior and allowed file changes. It prints a Canvas conversation link for each run. Look for:
+
+```text
+PASS Workshop-OpenHands
+PASS Workshop-Pi
+PASS Workshop-OpenCode
+```
+
+The full lines also include the model and check result. Verification makes real model requests. Its workspaces and reports are stored in a new `../odsc-runs/setup-check-*` folder each time. They are separate from your exercise workspaces. If any run fails, open its conversation and fix the setup before comparing harnesses. A setup failure is not a model result.
+
+## 8. Open Exercise 1
+
+Prepare a fresh workspace for your own run:
+
+```bash
 .workshop-venv/bin/python workshops/odsc-2026/labs/lab.py prepare w1 --workspace ../odsc-runs/w1-openhands
 ```
 
-Check `python3 --version` before creating the environment. It must report 3.11 or newer; if your machine has an older default, use your installed `python3.11` or newer interpreter in the `-m venv` command.
+The command prints an **absolute workspace path** and a complete prompt with your Python interpreter path.
 
-On Windows use WSL for this workshop's shell commands and ACP agents.
-The helper prints the workspace and full prompt with your interpreter path.
-In Canvas, choose **Open Workspace**, select the printed directory, start a new conversation, and paste the prompt. Prepare a different path
-for each run you want to compare. The helper refuses to prepare an existing directory, so it won't overwrite
-previous work. Set `PYTHONPATH=src` for the slugify workspace; its printed
-prompt includes this instruction. The other packages import from their root.
+1. In Canvas, choose **Open Workspace** and select that exact directory.
+2. Select **Workshop-OpenHands**.
+3. Start a new conversation and paste the printed prompt.
+4. Check that the conversation's workspace matches the printed path. The Files panel should contain `toyapp/pagination.py` and `tests/test_pagination.py`.
 
-Keep the course checkout's checker and saved results outside
-the agent's editing workspace. After a run, execute the checker yourself:
+For Pi or OpenCode, prepare a separate copy:
+
+```bash
+.workshop-venv/bin/python workshops/odsc-2026/labs/lab.py prepare w1 --workspace ../odsc-runs/w1-pi
+.workshop-venv/bin/python workshops/odsc-2026/labs/lab.py prepare w1 --workspace ../odsc-runs/w1-opencode
+```
+
+Open the matching workspace and select **Workshop-Pi** or **Workshop-OpenCode** before starting a new conversation. Do not open the entire course checkout as the agent's editing workspace. Do not reuse a repaired workspace for another harness. Preparation refuses an existing directory to preserve your work; choose a new path for a retry.
+
+After a run, execute the independent checker yourself from the course checkout:
 
 ```bash
 .workshop-venv/bin/python workshops/odsc-2026/labs/lab.py check w1 --workspace ../odsc-runs/w1-openhands
 ```
 
-The untouched pagination starter should fail. That is the planted defect,
-not an installation error. Exercise 3 starts with passing regression tests but
-fails the new-feature checker. Exercise 5's original tests pass while its dot
-assertion fails. Check the exercise page for its expected baseline.
+The untouched Exercise 1 starter should fail its checks because it contains the planted bug. The repaired version should pass. Other exercises have different expected baselines; follow their preparation and checking instructions.
 
-## Check your agent before starting
+Open [Exercise 1](/workshops/odsc-2026/exercises/00-working-harness) or the [prompt index](/workshops/odsc-2026/prompts) to continue. These profiles are a starting configuration. Follow each exercise when it asks you to change tools, models, or goal settings. Use [saved runs and results](/workshops/odsc-2026/results) if a capability is unavailable. Make your predictions before inspecting the saved results.
 
-Ask it to read `README.md` in the prepared workspace without changing files.
-Check that the trace shows the agent reading the file and that its answer matches the contents. Then use a new
-conversation for the exercise. If you want to compare runs, record the Canvas, Agent Server, and agent
-versions, resolved model, enabled tools, automatic memory/skills, and limits.
-If your setup supports OpenTelemetry (OTel), you can connect a compatible observability tool to save traces.
+## If setup stops
 
-## Start an exercise
+- **Cannot connect to Canvas or missing API-key file:** start local Canvas first. If it prints a different port, add `--canvas-url http://localhost:PORT` to both helper commands. If you use a different Canvas state directory, supply its `api-key.txt` with `--key-file /path/to/api-key.txt`.
+- **HTTP 401 or 403 from model access:** use the OpenHands **LLM API Key**, not the Cloud API Key, and confirm your account can access the model.
+- **Pi or OpenCode shows another model:** use the named Workshop profile, not an older profile with “Agent default.” Start a new conversation after changing profiles and rerun verification.
+- **Empty workspace:** choose the directory printed by `prepare`. Do not ask the agent to search your laptop for the course files.
+- **Want to use your own provider:** you can configure another supported provider, but record the model change. A comparison with different models does not isolate the harness.
 
-Open [Exercise prompts](/workshops/odsc-2026/prompts). Each exercise has a
-preparation command, complete prompt, optional check or citation checklist,
-and decision worksheet. If live model access, MCP, goals, or delegation is
-unavailable, inspect the [saved runs and results](/workshops/odsc-2026/results) instead of running that exercise yourself. Use the small scenarios to explore memory, tools, routing, goals, and delegation. After trying the supplied prompt, you can adapt the task to your own interests. Your model's results may differ from the saved measurements.
+<details>
+<summary>Optional: create the profiles automatically</summary>
 
+If you prefer a command to the UI steps, run this after installing the harnesses and cloning the course:
+
+```bash
+.workshop-venv/bin/python workshops/odsc-2026/labs/setup_canvas.py configure
+```
+
+It prompts for your OpenHands LLM key, checks model access, writes the provider files, and creates the same three Workshop profiles through Canvas's API. It leaves existing profiles available and updates only the named Workshop profiles and their shared LLM profile and secret when rerun.
+
+If your OpenHands key is already saved as `LLM_API_KEY` in Canvas, add `--use-canvas-key` to reuse it without pasting it again. This option validates access; it does not assume a differently named provider key is equivalent.
+
+</details>
