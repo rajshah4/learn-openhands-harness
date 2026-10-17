@@ -52,6 +52,14 @@ WORKSPACES = [
     ('w6-single', 'w6-single', 'Workshop-OpenHands; one repair owner'),
     ('w6-validator', 'w6-validator', 'Workshop-OpenHands; owner plus validator'),
 ]
+PROMPT_INDEX = 'https://rajshah4.github.io/learn-openhands-harness/workshops/odsc-2026/prompts'
+EXERCISE_PAGES = dict(zip(('w1', 'w2', 'w3', 'w4', 'w5', 'w6'), (
+    '00-working-harness', '01-add-harness-capability', '02-place-context',
+    '03-model-routing', '04-let-it-run', '05-multi-agent')))
+
+
+def exercise_url(case):
+    return PROMPT_INDEX.rsplit('/', 1)[0] + '/exercises/' + EXERCISE_PAGES[case.split('-')[0]]
 
 def files(folder):
     return {str(p.relative_to(folder)): p for p in folder.rglob('*')
@@ -112,7 +120,9 @@ def prepare_all(parent):
     prompts = session / 'prompts'
     prompts.mkdir()
     records = []
-    lines = ['WORKSHOP WORKSPACES', '', 'Open one exercise folder in Canvas, not this session folder.',
+    lines = ['WORKSHOP WORKSPACES', '', 'Exercise prompts: ' + PROMPT_INDEX,
+             'Python interpreter for web prompts: ' + shlex.quote(sys.executable), '',
+             'Open one exercise folder in Canvas, not this session folder.',
              'Start a new conversation for each run. Keep prompts and this index outside the agent workspace.',
              'Each retry of prepare-all creates a new session and leaves previous runs alone.', '']
     for case, name, profile in WORKSPACES:
@@ -122,10 +132,11 @@ def prepare_all(parent):
         prompt_file = prompts / (name + '.txt')
         prompt_file.write_text(prompt(case) + '\n')
         record = {'case': case, 'workspace': str(workspace), 'profile_or_configuration': profile,
-                  'prompt_file': str(prompt_file)}
+                  'exercise_page': exercise_url(case), 'prompt_file': str(prompt_file)}
         records.append(record)
         lines.extend([name, '  Canvas workspace: ' + str(workspace), '  Profile/configuration: ' + profile,
-                      '  Copy prompt from: ' + str(prompt_file)])
+                      '  Get the prompt: ' + exercise_url(case),
+                      '  Optional local prompt copy: ' + str(prompt_file)])
         if case != 'w2':
             command = shlex.join([sys.executable, str(ROOT / 'lab.py'), 'check', case,
                                   '--workspace', str(workspace)])
@@ -141,9 +152,9 @@ def prepare_all(parent):
     for record in records[:3]:
         print(f"  {record['profile_or_configuration']}: {record['workspace']}")
     print('\nIn Canvas, open the Workshop-OpenHands folder above and start a new conversation.')
-    print(f"Saved Exercise 1 prompt: {records[0]['prompt_file']}")
-    print('\nCopy this Exercise 1 prompt into Canvas:\n')
-    print(prompt('w1'))
+    print('Open Exercise 1 for its prompt: ' + exercise_url('w1'))
+    print('All exercise prompts: ' + PROMPT_INDEX)
+    print('Replace the web prompt\'s interpreter placeholder with: ' + shlex.quote(sys.executable))
     return session
 
 def scope(case, workspace):

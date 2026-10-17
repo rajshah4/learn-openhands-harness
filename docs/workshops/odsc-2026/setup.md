@@ -51,9 +51,9 @@ Prepare all the exercise workspaces now:
 .workshop-venv/bin/python workshops/odsc-2026/labs/lab.py prepare-all
 ```
 
-This creates a new session folder under `../odsc-runs/` with **22 separate workspaces for all six exercises**, including separate OpenHands, Pi, and OpenCode copies for Exercise 1. It prints the session path and a `WORKSPACES.txt` index with each folder, profile/configuration, prompt file, and checking command. Optional comparisons are prepared too; you do not have to run them all.
+This creates a new session folder under `../odsc-runs/` with **22 separate workspaces for all six exercises**, including separate OpenHands, Pi, and OpenCode copies for Exercise 1. It prints the session path and a `WORKSPACES.txt` index with each folder, profile/configuration, exercise-page link, and checking command. Optional comparisons are prepared too; you do not have to run them all.
 
-The command also prints the complete Exercise 1 prompt so you can copy it directly into Canvas. Keep the index open during the workshop. Complete prompts are saved in the session's `prompts/` folder, outside the agent workspaces. This command runs no agents and makes no model requests. Running it again creates another session and preserves all earlier work.
+Get the prompts from the [exercise web pages](/workshops/odsc-2026/prompts). The terminal prints the Exercise 1 link and your Python interpreter path. When a web prompt contains `/absolute/path/to/.workshop-venv/bin/python`, replace it with that printed path before sending. Keep `WORKSPACES.txt` open to find the matching folder for each exercise. Local prompt files are also saved as an optional convenience. This command runs no agents and makes no model requests. Running it again creates another session and preserves all earlier work.
 
 
 ## 4. Prepare the Pi and OpenCode connection files
@@ -176,10 +176,10 @@ Use the session folder and `WORKSPACES.txt` printed in step 3. You already have 
 
 1. In Canvas, choose **Open Workspace** and select the full `w1-openhands` path from the index.
 2. Select **Workshop-OpenHands**.
-3. Start a new conversation and paste the contents of `prompts/w1-openhands.txt` from your session.
+3. Open the [Exercise 1 page](/workshops/odsc-2026/exercises/00-working-harness), copy its task prompt, and replace the Python interpreter placeholder with the path printed by `prepare-all`. Paste it into a new Canvas conversation.
 4. Check that the conversation's workspace matches the printed path. The Files panel should contain `toyapp/pagination.py` and `tests/test_pagination.py`.
 
-For Pi or OpenCode, open its own folder, choose the matching profile, and start a new conversation with its prompt file. Do not open the entire course checkout or session folder as the agent's editing workspace. Each harness needs the original bug, so do not reuse a repaired copy.
+For Pi or OpenCode, open its own folder, choose the matching profile, and start a new conversation with the same task prompt from the Exercise 1 page. Do not open the entire course checkout or session folder as the agent's editing workspace. Each harness needs the original bug, so do not reuse a repaired copy.
 
 After each run, copy its exact **After the run, check** command from `WORKSPACES.txt` into your course terminal. The command already contains your interpreter and workspace paths.
 
