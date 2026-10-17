@@ -45,6 +45,17 @@ If you already have a current course checkout, open a terminal in that folder an
 
 Run the remaining commands from the `learn-openhands-harness` folder.
 
+Prepare all the exercise workspaces now:
+
+```bash
+.workshop-venv/bin/python workshops/odsc-2026/labs/lab.py prepare-all
+```
+
+This creates a new session folder under `../odsc-runs/` with **22 separate workspaces for all six exercises**, including separate OpenHands, Pi, and OpenCode copies for Exercise 1. It prints the session path and a `WORKSPACES.txt` index with each folder, profile/configuration, prompt file, and checking command. Optional comparisons are prepared too; you do not have to run them all.
+
+Keep that index open during the workshop. Complete prompts are saved in the session's `prompts/` folder, outside the agent workspaces. This command runs no agents and makes no model requests. Running it again creates another session and preserves all earlier work.
+
+
 ## 4. Prepare the Pi and OpenCode connection files
 
 In your course terminal, run:
@@ -155,33 +166,30 @@ The full lines also include the model and check result. Verification makes real 
 
 ## 8. Open Exercise 1
 
-Prepare a fresh workspace for your own run:
+Use the session folder and `WORKSPACES.txt` printed in step 3. You already have these fresh copies:
 
-```bash
-.workshop-venv/bin/python workshops/odsc-2026/labs/lab.py prepare w1 --workspace ../odsc-runs/w1-openhands
-```
+| Folder inside your session | Canvas profile |
+|---|---|
+| `w1-openhands` | `Workshop-OpenHands` |
+| `w1-pi` | `Workshop-Pi` |
+| `w1-opencode` | `Workshop-OpenCode` |
 
-The command prints an **absolute workspace path** and a complete prompt with your Python interpreter path.
-
-1. In Canvas, choose **Open Workspace** and select that exact directory.
+1. In Canvas, choose **Open Workspace** and select the full `w1-openhands` path from the index.
 2. Select **Workshop-OpenHands**.
-3. Start a new conversation and paste the printed prompt.
+3. Start a new conversation and paste the contents of `prompts/w1-openhands.txt` from your session.
 4. Check that the conversation's workspace matches the printed path. The Files panel should contain `toyapp/pagination.py` and `tests/test_pagination.py`.
 
-For Pi or OpenCode, prepare a separate copy:
+For Pi or OpenCode, open its own folder, choose the matching profile, and start a new conversation with its prompt file. Do not open the entire course checkout or session folder as the agent's editing workspace. Each harness needs the original bug, so do not reuse a repaired copy.
+
+After each run, copy its exact **After the run, check** command from `WORKSPACES.txt` into your course terminal. The command already contains your interpreter and workspace paths.
+
+For a fresh retry of the whole workshop, run `prepare-all` again and use its new session. To prepare just one extra attempt, use a new folder name:
 
 ```bash
-.workshop-venv/bin/python workshops/odsc-2026/labs/lab.py prepare w1 --workspace ../odsc-runs/w1-pi
-.workshop-venv/bin/python workshops/odsc-2026/labs/lab.py prepare w1 --workspace ../odsc-runs/w1-opencode
+.workshop-venv/bin/python workshops/odsc-2026/labs/lab.py prepare w1 --workspace ../odsc-runs/w1-pi-retry
 ```
 
-Open the matching workspace and select **Workshop-Pi** or **Workshop-OpenCode** before starting a new conversation. Do not open the entire course checkout as the agent's editing workspace. Do not reuse a repaired workspace for another harness. Preparation refuses an existing directory to preserve your work; choose a new path for a retry.
-
-After a run, execute the independent checker yourself from the course checkout:
-
-```bash
-.workshop-venv/bin/python workshops/odsc-2026/labs/lab.py check w1 --workspace ../odsc-runs/w1-openhands
-```
+Single-workspace preparation also refuses existing directories, so it will not overwrite your work.
 
 The untouched Exercise 1 starter should fail its checks because it contains the planted bug. The repaired version should pass. Other exercises have different expected baselines; follow their preparation and checking instructions.
 

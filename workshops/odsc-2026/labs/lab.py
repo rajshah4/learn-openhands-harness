@@ -3,8 +3,10 @@
 from __future__ import annotations
 import argparse
 import ast
+import contextlib
 import hashlib
 import importlib
+import io
 import json
 import os
 from pathlib import Path
@@ -14,6 +16,7 @@ import re
 import subprocess
 import sys
 import time
+import uuid
 
 ROOT = Path(__file__).resolve().parent
 CASES = {
@@ -32,6 +35,23 @@ CASES = {
     'w6-validator': ('async', 'w6-validator', None),
 }
 IGNORED = {'.git', '.venv', '__pycache__', '.pytest_cache'}
+
+# Folder names match the exercise pages. Each comparison owns its own copy.
+WORKSPACES = [
+    ('w1', 'w1-openhands', 'Workshop-OpenHands'),
+    ('w1', 'w1-pi', 'Workshop-Pi'),
+    ('w1', 'w1-opencode', 'Workshop-OpenCode'),
+    *[('w2', 'w2-' + mode, 'Workshop-OpenHands; tools: ' + mode)
+      for mode in ('terminal', 'primitive', 'broad', 'task-shaped')],
+    *[(case, case, 'Workshop-OpenHands')
+      for case in ('w3-none', 'w3-older', 'w3-current')],
+    *[('w4-' + task, 'w4-' + tier + '-' + task, tier + ' model profile')
+      for tier in ('cheap', 'stronger') for task in ('rename', 'pagination', 'async', 'security')],
+    ('w5', 'w5-repair', 'Workshop-OpenHands; ordinary conversation'),
+    ('w5-goal', 'w5-goal', 'Workshop-OpenHands; native goal mode'),
+    ('w6-single', 'w6-single', 'Workshop-OpenHands; one repair owner'),
+    ('w6-validator', 'w6-validator', 'Workshop-OpenHands; owner plus validator'),
+]
 
 def files(folder):
     return {str(p.relative_to(folder)): p for p in folder.rglob('*')
@@ -75,6 +95,52 @@ def prepare(case, workspace):
     ]:
         subprocess.run(command, cwd=workspace, check=True)
     print(f'Prepared {case}: {workspace}\nOpen only this workspace in your agent.\n\n{prompt(case)}')
+
+
+def prepare_all(parent):
+    checkout = ROOT.parents[2]
+    if parent == checkout or checkout in parent.parents:
+        raise ValueError('Choose a workspace parent outside the course checkout, such as ../odsc-runs.')
+    # Validate the inputs before creating the session. Preparation never resets old work.
+    for case, _, _ in WORKSPACES:
+        prompt(case)
+        fixture = CASES[case][0]
+        if fixture and not (ROOT / 'starters' / fixture).is_dir():
+            raise ValueError('Missing starter: ' + fixture)
+    session = parent / ('session-' + time.strftime('%Y%m%d-%H%M%S') + '-' + uuid.uuid4().hex[:6])
+    session.mkdir(parents=True, exist_ok=False)
+    prompts = session / 'prompts'
+    prompts.mkdir()
+    records = []
+    lines = ['WORKSHOP WORKSPACES', '', 'Open one exercise folder in Canvas, not this session folder.',
+             'Start a new conversation for each run. Keep prompts and this index outside the agent workspace.',
+             'Each retry of prepare-all creates a new session and leaves previous runs alone.', '']
+    for case, name, profile in WORKSPACES:
+        workspace = session / name
+        with contextlib.redirect_stdout(io.StringIO()):
+            prepare(case, workspace)
+        prompt_file = prompts / (name + '.txt')
+        prompt_file.write_text(prompt(case) + '\n')
+        record = {'case': case, 'workspace': str(workspace), 'profile_or_configuration': profile,
+                  'prompt_file': str(prompt_file)}
+        records.append(record)
+        lines.extend([name, '  Canvas workspace: ' + str(workspace), '  Profile/configuration: ' + profile,
+                      '  Copy prompt from: ' + str(prompt_file)])
+        if case != 'w2':
+            command = shlex.join([sys.executable, str(ROOT / 'lab.py'), 'check', case,
+                                  '--workspace', str(workspace)])
+            record['check_command'] = command
+            lines.append('  After the run, check: ' + command)
+        lines.append('')
+    (session / 'workspaces.json').write_text(json.dumps(records, indent=2) + '\n')
+    index = session / 'WORKSPACES.txt'
+    index.write_text('\n'.join(lines))
+    print(f'Prepared {len(records)} fresh workspaces for all six exercises. No agents were run.')
+    print(f'Session: {session}\nWorkspace, profile, prompt and check instructions: {index}')
+    print('\nStart Exercise 1 with:')
+    for record in records[:3]:
+        print(f"  {record['profile_or_configuration']}: {record['workspace']}")
+    return session
 
 def scope(case, workspace):
     fixture = CASES[case][0]
@@ -177,13 +243,16 @@ def check(case, workspace, strict_scope=False):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('action',choices=['list','prepare','prompt','check'])
+    parser.add_argument('action',choices=['list','prepare','prepare-all','prompt','check'])
     parser.add_argument('case',choices=list(CASES),nargs='?')
     parser.add_argument('--workspace',type=Path)
     parser.add_argument('--strict-scope',action='store_true',help='Optionally reject edits outside the supplied fixture scope.')
     args=parser.parse_args()
     try:
         if args.action=='list': print('\n'.join(CASES));return 0
+        if args.action=='prepare-all':
+            prepare_all((args.workspace or ROOT.parents[3] / 'odsc-runs').expanduser().resolve())
+            return 0
         if not args.case: parser.error('case is required')
         if args.action=='prompt': print(prompt(args.case));return 0
         if not args.workspace: parser.error('--workspace is required')
@@ -192,7 +261,7 @@ def main():
         else: check(args.case,workspace,args.strict_scope)
         return 0
     except Exception as exc:
-        print(json.dumps({'passed':False,'detail':f'{type(exc).__name__}: {exc or 'Inspect the implementation and test output.'}'},indent=2),file=sys.stderr)
+        print(json.dumps({'passed':False,'detail':f"{type(exc).__name__}: {exc or 'Inspect the implementation and test output.'}"},indent=2),file=sys.stderr)
         return 1
 
 if __name__=='__main__': sys.exit(main())

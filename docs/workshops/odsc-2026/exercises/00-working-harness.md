@@ -10,7 +10,7 @@ Hold the model, prompt, starter, and checks fixed. Change the harness and inspec
 
 ## Start With These Files
 
-Follow [setup](/workshops/odsc-2026/setup) first. The portable package is `workshops/odsc-2026/labs/` in the course checkout. Its `starters/` hold only student inputs; `prompts/` hold full tasks; `checks/` and `evidence/` stay outside the agent workspace.
+Follow [setup](/workshops/odsc-2026/setup) first. If you ran `lab.py prepare-all` during setup, the workspaces below are already prepared inside your session folder. Use its `WORKSPACES.txt` for the exact paths, prompt files, and check commands. The individual commands below are an alternative for preparing one run at a time. The portable package is `workshops/odsc-2026/labs/` in the course checkout. Its `starters/` hold only student inputs; `prompts/` hold full tasks; `checks/` and `evidence/` stay outside the agent workspace.
 
 Prepare the OpenHands workspace first. The Pi and OpenCode workspaces are optional. If you want to compare efficiency, configure the same resolved model and settings in each harness. For exploration, different models are fine as long as you record what changed.
 
@@ -34,7 +34,7 @@ Write your prediction before opening [saved results](/workshops/odsc-2026/result
 
 ## Run It And Explore
 
-Use the prompt printed by `prepare`; it substitutes your absolute interpreter path. The copies below make the task readable on the website. Replace the interpreter placeholder if copying directly. Use only the prepared workspace for editing.
+Use the matching prompt file from your session, or the prompt printed by individual `prepare`; both substitute your absolute interpreter path. The copies below make the task readable on the website. Replace the interpreter placeholder if copying directly. Use only the prepared workspace for editing.
 
 ### w1
 
