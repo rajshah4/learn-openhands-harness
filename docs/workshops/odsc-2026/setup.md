@@ -1,6 +1,7 @@
 # Get started for the workshop
 
-Use Agent Canvas to run the exercises and inspect the agent's work. This tutorial works with the free models available through OpenHands Cloud, or with your own provider keys and models. You can learn the same harness techniques with either path; results and run times will differ.
+The workshop is built around the open source Agent Canvas, because of it's ability to be flexible and open. You could probably do some of these exercises in another harness.
+This tutorial works with the free models available through OpenHands Cloud, or with your own provider keys and models. It's your decision.
 
 ## Install Agent Canvas
 
@@ -8,7 +9,7 @@ Use Agent Canvas to run the exercises and inspect the agent's work. This tutoria
 npm install -g @openhands/agent-canvas
 ```
 
-Launch it with `agent-canvas` and open the URL printed in your terminal. Use this local npm installation for the workshop so the printed Python paths are available to the agent. The Docker option needs its own Python environment and paths. Follow the [Agent Canvas installation docs](https://github.com/OpenHands/docs/blob/main/openhands/usage/agent-canvas/setup.mdx) for prerequisites, platform instructions, and other installation options.
+Launch it with `agent-canvas` and open the URL printed in your terminal. Use this local npm installation for the workshop so the printed Python paths are available to the agent. Follow the [Agent Canvas installation docs](https://github.com/OpenHands/docs/blob/main/openhands/usage/agent-canvas/setup.mdx) for prerequisites, platform instructions, and other installation options.
 
 ## Get model access
 
@@ -23,11 +24,11 @@ No separate provider key is needed for this path. Free-model availability and li
 
 ### Your own provider and model
 
-Choose your provider in Canvas and enter its API key and a tool-capable model available to your account. For an OpenAI-compatible service, also enter its documented base URL; your provider's usage charges apply.
+Choose your provider in Canvas and enter its API key and a tool-capable model available to your account. (You can easily add Anthropic or OpenAI or other keys). For an OpenAI-compatible service, also enter its documented base URL; your provider's usage charges apply.
 
 Keep keys in settings, not in prompts or exercise files.
 
-## Add OpenCode and Pi through ACP
+## Add Additional Harnesses via ACP (OpenCode and Pi)
 
 OpenHands is enough to start every exercise. Adding OpenCode or Pi is optional for exploring another harness. ACP (Agent Client Protocol) lets Canvas communicate with these other coding agents.
 
@@ -54,7 +55,7 @@ In Canvas's agent settings, select **ACP**, then a matching preset or **Custom**
 
 Configure the provider and model in each agent before starting the comparison. Saving an OpenHands model profile in Canvas does not automatically configure these external agents; using the OpenHands Cloud LLM key may require a custom provider configuration in each CLI. Follow the [Canvas ACP docs](https://github.com/OpenHands/docs/blob/main/openhands/usage/agent-canvas/acp-agents.mdx), [OpenCode provider docs](https://opencode.ai/docs/providers/), and [Pi provider instructions](https://www.npmjs.com/package/@earendil-works/pi-coding-agent). The [OpenCode ACP guide](https://opencode.ai/docs/acp/) and [Pi ACP adapter guide](https://github.com/svkozak/pi-acp) describe their launch requirements.
 
-Start a new conversation after changing the agent. For a controlled comparison, use the same model and a separate copy of the starting workspace for each harness.
+Start a new conversation after changing the agent. You will see the different right away when you start a new conversation for each harness.
 
 ## Prepare the local lab package
 
@@ -97,7 +98,7 @@ Ask it to read `README.md` in the prepared workspace without changing files.
 Verify the trace contains a real read and an accurate answer. Then use a new
 conversation for the exercise. If you want to compare runs, record the Canvas, Agent Server, and agent
 versions, resolved model, enabled tools, automatic memory/skills, and limits.
-Provider or tool authentication failures are setup failures, not model results.
+(You can add an obserability tool compatible with OTEL if you want traces saved)
 
 ## Choose your route
 
