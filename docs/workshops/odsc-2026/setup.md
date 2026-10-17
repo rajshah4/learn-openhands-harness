@@ -1,7 +1,8 @@
 # Get started for the workshop
 
-The workshop is built around the open source Agent Canvas, because of it's ability to be flexible and open. You could probably do some of these exercises in another harness.
-This tutorial works with the free models available through OpenHands Cloud, or with your own provider keys and models. It's your decision.
+The workshop uses Agent Canvas because it's open source and flexible. You can also try some of these exercises in another harness.
+
+Use the free models available through OpenHands Cloud or connect your own provider keys and models. The choice is yours.
 
 ## Install Agent Canvas
 
@@ -9,7 +10,7 @@ This tutorial works with the free models available through OpenHands Cloud, or w
 npm install -g @openhands/agent-canvas
 ```
 
-Launch it with `agent-canvas` and open the URL printed in your terminal. Use this local npm installation for the workshop so the printed Python paths are available to the agent. Follow the [Agent Canvas installation docs](https://github.com/OpenHands/docs/blob/main/openhands/usage/agent-canvas/setup.mdx) for prerequisites, platform instructions, and other installation options.
+Run `agent-canvas` in your terminal, then open the URL it prints. Use this local npm installation for the workshop so the Python paths printed by the lab helper are available to the agent. Follow the [Agent Canvas installation docs](https://github.com/OpenHands/docs/blob/main/openhands/usage/agent-canvas/setup.mdx) for prerequisites, platform instructions, and other installation options.
 
 ## Get model access
 
@@ -24,11 +25,11 @@ No separate provider key is needed for this path. Free-model availability and li
 
 ### Your own provider and model
 
-Choose your provider in Canvas and enter its API key and a tool-capable model available to your account. (You can easily add Anthropic or OpenAI or other keys). For an OpenAI-compatible service, also enter its documented base URL; your provider's usage charges apply.
+Choose your provider in Canvas, enter its API key, and select a model that supports tool use. You can use Anthropic, OpenAI, or another supported provider. For an OpenAI-compatible service, also enter its documented base URL. Your provider's usage charges apply.
 
 Keep keys in settings, not in prompts or exercise files.
 
-## Add Additional Harnesses via ACP (OpenCode and Pi)
+## Add other harnesses through ACP (optional)
 
 OpenHands is enough to start every exercise. Adding OpenCode or Pi is optional for exploring another harness. ACP (Agent Client Protocol) lets Canvas communicate with these other coding agents.
 
@@ -55,12 +56,11 @@ In Canvas's agent settings, select **ACP**, then a matching preset or **Custom**
 
 Configure the provider and model in each agent before starting the comparison. Saving an OpenHands model profile in Canvas does not automatically configure these external agents; using the OpenHands Cloud LLM key may require a custom provider configuration in each CLI. Follow the [Canvas ACP docs](https://github.com/OpenHands/docs/blob/main/openhands/usage/agent-canvas/acp-agents.mdx), [OpenCode provider docs](https://opencode.ai/docs/providers/), and [Pi provider instructions](https://www.npmjs.com/package/@earendil-works/pi-coding-agent). The [OpenCode ACP guide](https://opencode.ai/docs/acp/) and [Pi ACP adapter guide](https://github.com/svkozak/pi-acp) describe their launch requirements.
 
-Start a new conversation after changing the agent. You will see the different right away when you start a new conversation for each harness.
+Start a new conversation after changing the agent so you can explore how each harness works.
 
 ## Prepare the local lab package
 
-Install Python 3.11 or newer and Git, then clone the course. Run these commands
-from the checkout root on macOS or Linux:
+Install Python 3.11 or newer and Git. On macOS or Linux, open a terminal and run:
 
 ```bash
 git clone https://github.com/rajshah4/learn-openhands-harness.git
@@ -76,7 +76,7 @@ Check `python3 --version` before creating the environment. It must report 3.11 o
 On Windows use WSL for this workshop's shell commands and ACP agents.
 The helper prints the workspace and full prompt with your interpreter path.
 In Canvas, choose **Open Workspace**, select the printed directory, start a new conversation, and paste the prompt. Prepare a different path
-for each lane. Preparation refuses existing directories, so retries preserve
+for each run you want to compare. The helper refuses to prepare an existing directory, so it won't overwrite
 previous work. Set `PYTHONPATH=src` for the slugify workspace; its printed
 prompt includes this instruction. The other packages import from their root.
 
@@ -95,15 +95,15 @@ assertion fails. Check the exercise page for its expected baseline.
 ## Check your agent before starting
 
 Ask it to read `README.md` in the prepared workspace without changing files.
-Verify the trace contains a real read and an accurate answer. Then use a new
+Check that the trace shows the agent reading the file and that its answer matches the contents. Then use a new
 conversation for the exercise. If you want to compare runs, record the Canvas, Agent Server, and agent
 versions, resolved model, enabled tools, automatic memory/skills, and limits.
-(You can add an obserability tool compatible with OTEL if you want traces saved)
+If your setup supports OpenTelemetry (OTel), you can connect a compatible observability tool to save traces.
 
-## Choose your route
+## Start an exercise
 
 Open [Exercise prompts](/workshops/odsc-2026/prompts). Each exercise has a
 preparation command, complete prompt, optional check or citation checklist,
 and decision worksheet. If live model access, MCP, goals, or delegation is
-unavailable, use [saved results](/workshops/odsc-2026/results) and label your
-work as an evidence audit. Use the small scenarios to explore memory, tools, routing, goals, and another context. You can adapt the task to your own interests after trying the supplied prompt. Saved measurements are not predictions for your model.
+unavailable, inspect the [saved runs and results](/workshops/odsc-2026/results) instead of running that exercise yourself. Use the small scenarios to explore memory, tools, routing, goals, and delegation. After trying the supplied prompt, you can adapt the task to your own interests. Your model's results may differ from the saved measurements.
+
