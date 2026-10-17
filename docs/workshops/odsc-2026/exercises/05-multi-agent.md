@@ -2,15 +2,17 @@
 
 ## What Problem Are You Solving?
 
-Repair a shared counter so 50 concurrent jobs produce 50 without serializing simulated work. Compare one generalist with a repair owner followed by one fresh validator. This is sequential validation.
+Start by comparing one repair agent against multiple agents. Both approaches must fix a counter so 50 concurrent jobs produce 50 while keeping the work concurrent. See what the validator adds after the repair.
 
 1. Predict what changes before running or reading results.
-2. Try a harness choice and inspect the trace, or use the saved examples.
+2. Try a single agent and a fresh validator, or use the saved examples.
 3. Record evidence and a decision in the [worksheet](/workshops/odsc-2026/worksheet).
 
 ## Start With These Files
 
-Follow [setup](/workshops/odsc-2026/setup) first. If you ran `lab.py prepare-all` during setup, the workspaces below are already prepared inside your session folder. Use its `WORKSPACES.txt` for the exact workspace paths and check commands. Copy the task prompt from this page. The individual commands below are an alternative for preparing one run at a time. The portable package is `workshops/odsc-2026/labs/` in the course checkout. Its `starters/` hold only student inputs; `prompts/` hold full tasks; `checks/` and `evidence/` stay outside the agent workspace.
+Follow [setup](/workshops/odsc-2026/setup) first. If you ran `lab.py prepare-all` during setup, the workspaces below are already prepared inside your session folder. Use its `WORKSPACES.txt` for the exact workspace paths and check commands. Copy the task prompt from this page.
+
+The individual commands below are an alternative for preparing one run at a time. The portable package is `workshops/odsc-2026/labs/` in the course checkout. Its `starters/` hold only student inputs; `prompts/` hold full tasks; `checks/` and `evidence/` stay outside the agent workspace.
 
 Before the validator run, open a fresh conversation with your OpenHands profile and ask:
 
@@ -27,17 +29,13 @@ If your profile has no delegation tool, use two conversations: let the first rep
 .workshop-venv/bin/python workshops/odsc-2026/labs/lab.py prepare w6-validator --workspace ../odsc-runs/w6-validator
 ```
 
-Use the same model if you want to focus on the effect of adding a context. If you record usage, include the owner and validator. The historical matched-budget comparison is a separate example; no gateway needs to be set up for this practice.
+Use the same model if you want to focus on the effect of adding a context. If you record usage, include the owner and validator.
 
 ## Try A Variation
 
 Try the single-agent repair first. Then add a fresh validator, using native delegation or the two-conversation fallback below. Compare what the second context notices and what the owner has to explain again.
 
 Change the validator's brief: ask it to check concurrency, then ask it to critique the evidence. Notice how the handoff changes. You are exploring the cost and usefulness of another context, so a full orchestration system is optional.
-
-## Start With The Baseline
-
-Write your prediction before opening [saved results](/workshops/odsc-2026/results#exercise-6). An offline learner can inspect those receipts without model access and complete the same decision worksheet. The saved examples show what happened in earlier runs.
 
 ## Run It And Explore
 
@@ -65,7 +63,6 @@ The validator must inspect and test only. Pass these requirements explicitly to 
 Do not modify files while the validator runs. After its return, address rejected requirements and report initial and final verdicts. The parent owns the final synthesis.
 ```
 
-
 ## Optional Checks
 
 After the agent stops, run this command yourself from the course checkout. For other lanes replace both the case and workspace. Preserve the checker outside the editing workspace.
@@ -76,7 +73,7 @@ After the agent stops, run this command yourself from the course checkout. For o
 
 Use this check as feedback on your experiment. Exit 0 means the example's behavior checks passed; exit 1 explains what needs inspection. Unexpected file edits appear as notes. Add `--strict-scope` if you want to reproduce the supplied editing scope. The check is optional; inspect the agent's actual test output and final diff either way.
 
-What did the fresh context add? Did the child return usable commands and results? Who owns synthesis? What could be checked more cheaply with deterministic code?
+Look through the conversation details. What did the fresh context add? Did the child return usable commands and results? Who owns synthesis? What could be checked more cheaply with deterministic code?
 
 ## Record What You Notice
 
@@ -86,7 +83,3 @@ What did the fresh context add? Did the child return usable commands and results
 | Owner plus validator | | | |
 
 Time, calls, and provider usage are optional. Record unavailable numbers as unknown. Repeated runs are useful if you want to make a performance claim.
-
-## What Students Should Leave With
-
-One policy you can explain with observed evidence, plus the condition that would change your decision. Complete the [worksheet](/workshops/odsc-2026/worksheet) and compare your reasoning with the [saved evidence](/workshops/odsc-2026/results).

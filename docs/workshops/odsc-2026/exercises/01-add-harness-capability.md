@@ -2,15 +2,17 @@
 
 ## What Problem Are You Solving?
 
-Hold the PR explanation task and model fixed. Compare four GitHub operations, twelve operations, and one evidence-bundle tool. More operations do not automatically produce better evidence.
+Start by varying the tools and holding the PR explanation task and model fixed. Compare four GitHub operations, twelve operations, and one custom PR tool that gathers evidence in a single call. See how the agent finds evidence and supports its answer.
 
 1. Predict what changes before running or reading results.
-2. Try a harness choice and inspect the trace, or use the saved examples.
+2. Try a tool setup and inspect the trace, or use the saved examples.
 3. Record evidence and a decision in the [worksheet](/workshops/odsc-2026/worksheet).
 
 ## Start With These Files
 
-Follow [setup](/workshops/odsc-2026/setup) first. If you ran `lab.py prepare-all` during setup, the workspaces below are already prepared inside your session folder. Use its `WORKSPACES.txt` for the exact workspace paths and check commands. Copy the task prompt from this page. The individual commands below are an alternative for preparing one run at a time. The portable package is `workshops/odsc-2026/labs/` in the course checkout. Its `starters/` hold only student inputs; `prompts/` hold full tasks; `checks/` and `evidence/` stay outside the agent workspace.
+Follow [setup](/workshops/odsc-2026/setup) first. If you ran `lab.py prepare-all` during setup, the workspaces below are already prepared inside your session folder. Use its `WORKSPACES.txt` for the exact workspace paths and check commands. Copy the task prompt from this page.
+
+The individual commands below are an alternative for preparing one run at a time. The portable package is `workshops/odsc-2026/labs/` in the course checkout. Its `starters/` hold only student inputs; `prompts/` hold full tasks; `checks/` and `evidence/` stay outside the agent workspace.
 
 Prepare an empty scratch workspace:
 
@@ -26,6 +28,8 @@ In Canvas, open **Customize → MCP Servers** and add a local stdio server. Use 
 | `broad` | 12 |
 | `task-shaped` | 1 |
 
+The `task-shaped` mode is the custom PR tool shown in the slides: `get_pull_request_evidence_bundle`. It collects PR details, selected patches, reported checks, and links. The model uses that evidence to write the explanation; the tool does not run tests.
+
 The packaged server performs read-only public GitHub requests. It works without a token; if shared Wi-Fi exhausts the public quota, optionally set `GITHUB_TOKEN` in the server environment to a token with access only to the public repository. Keep it out of prompts and files. Preflight with the command below before timing. It uses GitHub's unauthenticated quota; HTTP 403/429 is a setup failure, not a tool-quality result. If quota is exhausted, use the saved comparison.
 
 ```bash
@@ -36,13 +40,11 @@ Optional terminal lane: remove MCP, keep `gh` installed and authenticated, and u
 
 ## Try A Variation
 
-Try the four-operation GitHub server first. Switch to the evidence bundle, then the broad server, in fresh conversations. Which interface makes the evidence easier to find? Open a citation and check it yourself.
+The [recorded comparison](/workshops/odsc-2026/results#exercise-2) in the slides used Sonnet 4.6. Your Flash runs let you try the same tool choices with another model.
 
-Change the task to an unfamiliar PR or ask for a small file the bundle missed. Notice when the compact tool helps and when you need a primitive read. Review the answer yourself if you are working alone.
+Try the four-operation GitHub server first. Switch to the custom PR tool, then the broad server, in fresh conversations. Which interface makes the evidence easier to find? Open a citation and check it yourself.
 
-## Start With The Baseline
-
-Write your prediction before opening [saved results](/workshops/odsc-2026/results#exercise-2). An offline learner can inspect those receipts without model access and complete the same decision worksheet. The saved examples show what happened in earlier runs.
+Change the task to an unfamiliar PR or ask for a small file the bundle missed. Notice when the custom tool helps and when you need a primitive read. Review the answer yourself if you are working alone.
 
 ## Run It And Explore
 
@@ -64,23 +66,18 @@ report. State whether you personally ran any tests. Your final answer must
 contain the complete explanation, not a reference to hidden analysis.
 ```
 
-
 ## Optional Checks
 
 Exercise 2 has no automatic semantic checker. Use this six-part rubric: allow-list behavior, two implementation files explained accurately, test runner identified, new tests identified, citations support claims, and uncertainty/test attribution stated. A score is evidence coverage, not complete correctness. Review the cited code yourself, or compare notes with a partner. Trace one claim back to its source and distinguish reported checks from commands the agent executed.
 
-Open two citations and verify the claims. Did the agent execute tests, or read upstream reports? Which necessary evidence was omitted by the bundle selection?
+Look through the conversation details. Open two citations and verify the claims. Did the agent execute tests, or read upstream reports? Which necessary evidence was omitted by the custom tool?
 
 ## Record What You Notice
 
 | Run | What changed? | What did the agent do differently? | What did I learn? |
 |---|---|---|---|
 | Four GitHub operations | | | |
-| Evidence bundle | | | |
+| Custom PR tool | | | |
 | Twelve operations (optional) | | | |
 
 Time, calls, and provider usage are optional. Record unavailable numbers as unknown. Repeated runs are useful if you want to make a performance claim.
-
-## What Students Should Leave With
-
-One policy you can explain with observed evidence, plus the condition that would change your decision. Complete the [worksheet](/workshops/odsc-2026/worksheet) and compare your reasoning with the [saved evidence](/workshops/odsc-2026/results).
