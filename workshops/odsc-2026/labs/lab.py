@@ -140,6 +140,10 @@ def prepare_all(parent):
     print('\nStart Exercise 1 with:')
     for record in records[:3]:
         print(f"  {record['profile_or_configuration']}: {record['workspace']}")
+    print('\nIn Canvas, open the Workshop-OpenHands folder above and start a new conversation.')
+    print(f"Saved Exercise 1 prompt: {records[0]['prompt_file']}")
+    print('\nCopy this Exercise 1 prompt into Canvas:\n')
+    print(prompt('w1'))
     return session
 
 def scope(case, workspace):

@@ -53,7 +53,7 @@ Prepare all the exercise workspaces now:
 
 This creates a new session folder under `../odsc-runs/` with **22 separate workspaces for all six exercises**, including separate OpenHands, Pi, and OpenCode copies for Exercise 1. It prints the session path and a `WORKSPACES.txt` index with each folder, profile/configuration, prompt file, and checking command. Optional comparisons are prepared too; you do not have to run them all.
 
-Keep that index open during the workshop. Complete prompts are saved in the session's `prompts/` folder, outside the agent workspaces. This command runs no agents and makes no model requests. Running it again creates another session and preserves all earlier work.
+The command also prints the complete Exercise 1 prompt so you can copy it directly into Canvas. Keep the index open during the workshop. Complete prompts are saved in the session's `prompts/` folder, outside the agent workspaces. This command runs no agents and makes no model requests. Running it again creates another session and preserves all earlier work.
 
 
 ## 4. Prepare the Pi and OpenCode connection files
