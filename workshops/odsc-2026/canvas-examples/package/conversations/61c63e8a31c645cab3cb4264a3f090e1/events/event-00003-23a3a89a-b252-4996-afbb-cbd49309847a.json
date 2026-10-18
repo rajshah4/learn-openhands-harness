@@ -1,0 +1,18 @@
+{
+  "id": "23a3a89a-b252-4996-afbb-cbd49309847a",
+  "timestamp": "2026-10-03T17:48:39.210760",
+  "source": "agent",
+  "parent_id": "cef18f13-3512-408e-ba79-ba523a1f485f",
+  "system_prompt": {
+    "cache_prompt": false,
+    "type": "text",
+    "text": "This conversation is powered by an ACP server. The system prompt and tools are managed by the ACP server and are not available for display."
+  },
+  "tools": [],
+  "dynamic_context": {
+    "cache_prompt": false,
+    "type": "text",
+    "text": "<CUSTOM_SECRETS>\n### Credential Access\n* Automatic secret injection: When you reference a registered secret key in your bash command, the secret value will be automatically exported as an environment variable before your command executes.\n* How to use secrets: Simply reference the secret key in your command (e.g., `curl -H \"Authorization: Bearer $API_KEY\" https://api.example.com`). The system will detect the key name in your command text and export it as environment variable before it executes your command.\n* Secret detection: The system performs case-insensitive matching to find secret keys in your command text. If a registered secret key appears anywhere in your command, its value will be made available as an environment variable.\n* Security: Secret values are automatically masked in command output to prevent accidental exposure. You will see `<secret-hidden>` instead of the actual secret value in the output.\n* Avoid exposing raw secrets: Never echo or print the full value of secrets (e.g., avoid `echo $SECRET`). The conversation history may be logged or shared, and exposing raw secret values could compromise security. Instead, use secrets directly in commands where they serve their intended purpose (e.g., in curl headers or git URLs).\n* Refreshing expired secrets: Some secrets (like GITHUB_TOKEN) may be updated periodically or expire over time. If a secret stops working (e.g., authentication failures), try using it again in a new command - the system should automatically use the refreshed value. For example, if GITHUB_TOKEN was used in a git remote URL and later expired, you can update the remote URL with the current token: `git remote set-url origin https://${GITHUB_TOKEN}@github.com/username/repo.git` to pick up the refreshed token value.\n* If it still fails, report it to the user.\n\nYou have access to the following environment variables\n\n* **$LLM_API_KEY**\n\n</CUSTOM_SECRETS>\n\n<CURRENT_DATETIME>\nThe current date and time is: 2026-10-03T17:41\n</CURRENT_DATETIME>"
+  },
+  "kind": "SystemPromptEvent"
+}

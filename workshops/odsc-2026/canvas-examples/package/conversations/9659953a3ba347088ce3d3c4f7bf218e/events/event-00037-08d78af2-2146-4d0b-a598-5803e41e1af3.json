@@ -1,0 +1,26 @@
+{
+  "id": "08d78af2-2146-4d0b-a598-5803e41e1af3",
+  "timestamp": "2026-10-17T16:33:56.051000",
+  "source": "environment",
+  "parent_id": "a21b3dc0-1baf-4a83-bdf2-f6b0d003fa1d",
+  "tool_name": "file_editor",
+  "tool_call_id": "call_f98f0bd3190e4f8eb95bed79",
+  "observation": {
+    "content": [
+      {
+        "cache_prompt": false,
+        "type": "text",
+        "text": "File created successfully at: /tmp/pr16860-body.txt"
+      }
+    ],
+    "is_error": false,
+    "command": "create",
+    "path": "/tmp/pr16860-body.txt",
+    "prev_exist": false,
+    "new_content": "PR #16860 replaces the all-on skill catalog with enabled_skills, an allow-list over the bundled OpenHands extensions catalog, defaulting to the 11 entries the catalog flags defaultEnabled (Phase 0 shipped in extensions #485; the repo pins 0.18.0). Of 59 skills only the 11 render enabled; add-javadoc and bitbucket — the skills from #16302 — start disabled. disabled_skills still governs user/project skills from .agents/skills/.\nThe decision point is src/utils/skill-enablement.ts: buildSkillEnablementFilter, one-shot migrateSkillEnablement, and findInvokedCatalogSkill (a leading slash command loads that skill regardless of the lists). src/hooks/use-skill-enablement.ts is the shared toggle hook replacing duplicate hydrate/auto-save logic in Customize and the conversation drawer, so one surface cannot write a preference the other cannot see.\nUpstream PR report: npx vitest run yields 5064 passed with one unrelated pre-existing failure (dev-with-automation SIGHUP cleanup, failing identically on main); lint and translation-completeness checks are clean, with the 4 new keys translated for all 15 locales.\nNew tests: __tests__/utils/skill-enablement.test.ts (resolve, deny-veto, every migration branch) and __tests__/hooks/use-migrate-enabled-skills.test.tsx (one-shot, cloud skip, no write over a failed settings load), plus route and facet cases. The adapter tests flipped to assert add-javadoc is absent from agent context — that flip is the fix.\nRemaining uncertainty, per the PR: per-workspace scoping needs an SDK WorkspacesClient schema change; cloud is untouched (server-side catalog); and the agent-profile disabled_skills deny-list is a second, independent list the adapter never consults, so which wins is unresolved. I personally ran no tests; Vitest, lint, and translation results are attributed to the PR report.",
+    "kind": "FileEditorObservation"
+  },
+  "action_id": "a21b3dc0-1baf-4a83-bdf2-f6b0d003fa1d",
+  "extended_content": [],
+  "kind": "ObservationEvent"
+}

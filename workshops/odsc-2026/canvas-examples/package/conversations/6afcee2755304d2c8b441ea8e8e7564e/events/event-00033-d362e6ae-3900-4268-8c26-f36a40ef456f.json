@@ -1,0 +1,22 @@
+{
+  "id": "d362e6ae-3900-4268-8c26-f36a40ef456f",
+  "timestamp": "2026-10-17T16:32:43.277737",
+  "source": "agent",
+  "parent_id": "719e5cc7-48aa-4496-be44-baf545a65987",
+  "llm_message": {
+    "role": "assistant",
+    "content": [
+      {
+        "cache_prompt": false,
+        "type": "text",
+        "text": "237 words — within the 200–280 target. No files were modified; all evidence is from the public GitHub API/raw files.\n\n**PR #16860: \"feat(skills): replace the all-on skill catalog with an explicit allow-list\"** — VascoSch92, merged 2026-08-24 as c4c5bb74, fixes #16302. Link: https://github.com/OpenHands/OpenHands/pull/16860\n\n1. **Allow-list change.** The entire `@openhands/extensions` catalog (59 skills) is no longer baked into every `agent_context.skills`. A persisted `enabled_skills` allow-list now gates bundled catalog skills only, defaulting to the 11 entries the catalog flags `defaultEnabled`; `disabled_skills` survives solely for user/project-authored skills from `.agents/skills/`.\n\n2. **`src/utils/skill-enablement.ts` — the single rule.** `resolveEnabledCatalogSkills` (allow-list, else curated default), `buildSkillEnablementFilter` (deny-list still vetoes pre-migration), `migrateSkillEnablement` (one-shot; persisting an explicit list stops later `defaultEnabled` additions from self-enabling), and `findInvokedCatalogSkill` so an opening `/<command>` loads its skill regardless. https://github.com/OpenHands/OpenHands/blob/fae6ad8a0ccaaa5ec8f87aac36abe321e72fbb2c/src/utils/skill-enablement.ts\n\n3. **`src/api/agent-server-adapter.ts` applies it** — merged skills kept only if `skill.name === invokedCatalogSkill || isSkillEnabled(name)`; a new `useMigrateEnabledSkills` hook runs the migration at the app root (gated to non-cloud). https://github.com/OpenHands/OpenHands/commit/b28af79ef06f\n\n4. **Runner + new tests (per the upstream PR report).** It reports `npx vitest run` → 5064 passed, `npm run lint` clean, and `npm run check-translation-completeness` clean (4 new keys, 15 locales). New: `__tests__/utils/skill-enablement.test.ts` and `__tests__/hooks/use-migrate-enabled-skills.test.tsx`; adapter tests flipped to assert `add-javadoc` is **not** in context. https://github.com/OpenHands/OpenHands/blob/fae6ad8a0ccaaa5ec8f87aac36abe321e72fbb2c/src/api/agent-server-adapter.test.ts\n\n5. **Uncertainty.** Cloud keeps deny-list behavior; per-workspace scoping awaits an SDK schema change; allow-list vs. agent-profile deny-list precedence is unresolved; two pre-existing failures reportedly reproduce on `main`.\n\nThe Vitest, lint, and translation results are attributed solely to the upstream PR report — I personally ran no tests."
+      }
+    ],
+    "reasoning_content": "237 words, within 200-280 target. All claims verified. No files modified. Deliver final answer.",
+    "thinking_blocks": []
+  },
+  "llm_response_id": "gen-1792272758-oi6uqt8ViP33iDPEQoPr",
+  "activated_skills": [],
+  "extended_content": [],
+  "kind": "MessageEvent"
+}

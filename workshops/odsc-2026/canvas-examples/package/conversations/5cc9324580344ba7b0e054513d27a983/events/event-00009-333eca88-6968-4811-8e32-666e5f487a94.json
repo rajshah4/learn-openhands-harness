@@ -1,0 +1,36 @@
+{
+  "id": "333eca88-6968-4811-8e32-666e5f487a94",
+  "timestamp": "2026-10-17T16:37:00.816717",
+  "source": "environment",
+  "parent_id": "052961d7-0c6c-47e2-991d-db3bb8ad664b",
+  "tool_name": "terminal",
+  "tool_call_id": "call_resp_01a14bcb-edc8-70ae-99db-127f94d5ae1a_0",
+  "observation": {
+    "content": [
+      {
+        "cache_prompt": false,
+        "type": "text",
+        "text": "=== async_jobs.py ===\n     1\tfrom __future__ import annotations\n     2\n     3\timport asyncio\n     4\n     5\tWORK_DELAY_SECONDS = 0.005\n     6\n     7\n     8\tclass AsyncCounter:\n     9\t    def __init__(self) -> None:\n    10\t        self.value = 0\n    11\n    12\t    async def increment(self) -> None:\n    13\t        await asyncio.sleep(WORK_DELAY_SECONDS)\n    14\t        current = self.value\n    15\t        await asyncio.sleep(0)\n    16\t        self.value = current + 1\n    17\n    18\n    19\tasync def run_batch(size: int) -> int:\n    20\t    counter = AsyncCounter()\n    21\t    await asyncio.gather(*(counter.increment() for _ in range(size)))\n    22\t    return counter.value\n    23\n    24\n    25\tdef run_batch_sync(size: int) -> int:\n    26\t    return asyncio.run(run_batch(size))\n=== test_async_jobs.py ===\n     1\timport asyncio\n     2\timport time\n     3\n     4\tfrom toyapp.async_jobs import run_batch\n     5\n     6\n     7\tasync def _run_batch_with_elapsed(size: int) -> tuple[int, float]:\n     8\t    started = time.perf_counter()\n     9\t    result = await run_batch(size)\n    10\t    return result, time.perf_counter() - started\n    11\n    12\n    13\tdef test_run_batch_counts_every_increment() -> None:\n    14\t    assert asyncio.run(run_batch(50)) == 50\n    15\n    16\n    17\tdef test_run_batch_keeps_work_concurrent() -> None:\n    18\t    result, elapsed = asyncio.run(_run_batch_with_elapsed(30))\n    19\t    assert result == 30\n    20\t    assert elapsed < 0.08\n=== __init__.py ===\n\"\"\"Toy application package for the model routing lesson.\"\"\"\n\n__all__ = [\"__version__\"]\n\n__version__ = \"0.1.0\"\n=== README ===\n# Workshop async fixture\n\nThis small package contains one intentional defect. Inspect the source and tests.\nRun `python -m pytest -q` from this directory using the prepared workshop interpreter."
+      }
+    ],
+    "is_error": false,
+    "command": "cd /Users/instructor/Code/odsc-runs/session-20261017-163134-615d65/w4-stronger-async && echo \"=== async_jobs.py ===\" && cat -n toyapp/async_jobs.py && echo \"=== test_async_jobs.py ===\" && cat -n tests/test_async_jobs.py && echo \"=== __init__.py ===\" && cat toyapp/__init__.py && echo \"=== README ===\" && cat README.md",
+    "exit_code": 0,
+    "timeout": false,
+    "metadata": {
+      "exit_code": 0,
+      "pid": -1,
+      "username": "instructor",
+      "hostname": "rajivshah-MacBook-Pro",
+      "working_dir": "/Users/instructor/Code/odsc-runs/session-20261017-163134-615d65/w4-stronger-async",
+      "py_interpreter_path": "/Users/instructor/.cache/uv/archive-v0/cZpGatmgSZEYIeuAv16p4/bin/python",
+      "prefix": "",
+      "suffix": "\n[The command completed with exit code 0.]"
+    },
+    "full_output_save_dir": "/Users/instructor/.openhands/agent-canvas/dev_conversations/5cc9324580344ba7b0e054513d27a983/observations",
+    "kind": "TerminalObservation"
+  },
+  "action_id": "052961d7-0c6c-47e2-991d-db3bb8ad664b",
+  "extended_content": [],
+  "kind": "ObservationEvent"
+}
