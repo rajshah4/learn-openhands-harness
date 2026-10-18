@@ -1,5 +1,7 @@
 # Workshop inspection evidence
 
+[Inspect the saved workshop conversations without a model key](./conversations). Download and viewer directions are included.
+
 Exact source excerpts for participant inspection. No new runs or model reasoning.
 
 ## Workshop 1 : OpenHands action evidence

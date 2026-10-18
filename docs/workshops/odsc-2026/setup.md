@@ -1,5 +1,15 @@
 # Get started for the workshop
 
+## Start with the saved conversations
+
+Download the [student conversation package on GitHub](https://github.com/rajshah4/learn-openhands-harness/releases/tag/odsc-conversations-2026-10-18). It includes 19 conversations, setup scripts, directions, and verified checksums.
+
+Unzip the named student ZIP and open `harness-conversations/package/index.html` to inspect the conversations immediately. No model key is required. For the optional read-only Canvas viewer, follow the README inside the package. See [conversation viewer directions](./conversations) for more details.
+
+The package passed all 17 automated tests, and the ZIP downloaded from GitHub matched its published checksum.
+
+## Run new exercises
+
 The workshop uses Agent Canvas because it's open source and flexible. You can also try some of these exercises in another harness.
 
 For the workshop, use **DeepSeek Flash through OpenHands** in all three harnesses: OpenHands, Pi, and OpenCode. You need one OpenHands **LLM API Key**. You do not need separate Anthropic, OpenAI, or DeepSeek keys. You will save the key and create the three profiles in the Canvas UI. One preparation command writes the provider files needed by Pi and OpenCode; you do not need to edit JSON.
