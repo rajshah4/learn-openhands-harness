@@ -2,7 +2,7 @@
 
 ## Start with the saved conversations
 
-Download the [student conversation package on GitHub](https://github.com/rajshah4/learn-openhands-harness/releases/tag/odsc-conversations-2026-10-18). It includes 19 conversations, setup scripts, directions, and verified checksums.
+Download the [student conversation package on GitHub](https://github.com/rajshah4/learn-openhands-harness/releases/tag/odsc-conversations-2026-10-18-v2). It includes 19 conversations, setup scripts, directions, and verified checksums.
 
 Unzip the named student ZIP and open `harness-conversations/package/index.html` to inspect the conversations immediately. No model key is required. For the optional read-only Canvas viewer, follow the README inside the package. See [conversation viewer directions](./conversations) for more details.
 

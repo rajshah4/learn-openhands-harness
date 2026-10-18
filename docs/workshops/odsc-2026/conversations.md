@@ -1,6 +1,6 @@
 # Inspect the saved conversations
 
-Download the [19-conversation workshop package](https://github.com/rajshah4/learn-openhands-harness/releases/tag/odsc-conversations-2026-10-18). Unzip the named ZIP asset and open `harness-conversations/package/index.html`. No model key is needed.
+Download the [19-conversation workshop package](https://github.com/rajshah4/learn-openhands-harness/releases/tag/odsc-conversations-2026-10-18-v2). Unzip the named ZIP asset and open `harness-conversations/package/index.html`. No model key is needed. Workshop 1 contains 01A OpenHands (batched reads), 01B Pi (edge assertions), and 01C OpenCode (separate reads).
 
 If local HTML is restricted, run `python3 serve_transcripts.py` inside the extracted folder and open http://127.0.0.1:28081/. Windows users can use `py -3 serve_transcripts.py`. Stop with Ctrl-C.
 
