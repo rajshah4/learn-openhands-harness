@@ -1,0 +1,185 @@
+{
+  "id": "5ce1199e-2b88-4cec-928e-a12e31383ecd",
+  "timestamp": "2026-10-17T16:37:33.925341",
+  "source": "environment",
+  "key": "agent",
+  "value": {
+    "llm": {
+      "model": "openhands/deepseek-v4-pro",
+      "api_key": null,
+      "auth_type": "api_key",
+      "openrouter_site_url": "https://docs.all-hands.dev/",
+      "openrouter_app_name": "OpenHands",
+      "num_retries": 2,
+      "retry_multiplier": 8.0,
+      "retry_min_wait": 8,
+      "retry_max_wait": 64,
+      "timeout": 120,
+      "stream_idle_timeout": 120.0,
+      "max_message_chars": 30000,
+      "max_output_tokens": 16384,
+      "api_mode": "auto",
+      "capability_overrides": {},
+      "stream": false,
+      "drop_params": true,
+      "disable_stop_word": false,
+      "caching_prompt": true,
+      "log_completions": false,
+      "log_completions_folder": "logs/completions",
+      "native_tool_calling": true,
+      "reasoning_effort": "none",
+      "enable_encrypted_reasoning": true,
+      "prompt_cache_retention": "24h",
+      "extended_thinking_budget": 200000,
+      "usage_id": "default",
+      "litellm_extra_body": {},
+      "is_subscription": false
+    },
+    "tools": [
+      {
+        "name": "terminal",
+        "params": {}
+      },
+      {
+        "name": "file_editor",
+        "params": {}
+      }
+    ],
+    "mcp_config": {},
+    "include_default_tools": [
+      "FinishTool",
+      "ThinkTool"
+    ],
+    "agent_context": {
+      "skills": [
+        {
+          "name": "autodocs",
+          "content": "# Autodocs\n\nYou are maintaining durable repository documentation that is useful to both humans and future coding agents.\n\nThe default output format is OpenWiki-style documentation under `openwiki/`. The required default entrypoint is `openwiki/quickstart.md`.\n\nAutodocs is flexible: when a user asks for another documentation format or an existing tool produces useful docs, use that format if it fits the request. GitNexus is an optional structured context provider, not a requirement.\n\n## Core Contract\n\n- Ground important claims in files, existing docs, tests, configuration, scripts, git evidence, or structured tool output you inspected.\n- Treat GitNexus output as evidence. Do not treat it as a replacement for source files, existing docs, tests, config, or git history.\n- Do not invent APIs, architecture, business logic, deployment behavior, ownership, or runtime guarantees.\n- Do not read secret values, credentials, private keys, tokens, `.env` files, or other sensitive material.\n- Keep default generated documentation under `openwiki/`.\n- The only allowed default edits outside `openwiki/` are top-level `AGENTS.md` and `CLAUDE.md`, and only for the Autodocs reference section.\n- Prefer concise, navigable docs over exhaustive file inventories.\n- Write for future change work: where to start, what to watch, and how to verify changes.\n\n## Modes\n\nUse plan mode when the user asks what docs should be created, wants a dry run, or wants to compare documentation approaches.\n\nUse init mode when the repository does not have useful default docs yet.\n\nUse update mode when `openwiki/` exists and the task is to refresh docs from recent repository changes.\n\nIf the user or automation command does not specify a mode:\n\n- choose init mode when `openwiki/quickstart.md` is missing\n- choose update mode when `openwiki/quickstart.md` exists\n\n## Context Sources\n\nAutodocs can use multiple context sources:\n\n- repository files and directory structure\n- existing README files and docs\n- tests, evals, scripts, configs, schemas, and deployment files\n- recent git history and current diffs\n- existing agent instructions such as `AGENTS.md`, `CLAUDE.md`, and nested skills\n- optional GitNexus graph context when available\n- optional generated GitNexus wiki output when the user explicitly asks to use or compare it\n- optional MCP servers, OpenHands tools, plugins, or custom integrations that provide relevant project evidence\n- optional structured project artifacts such as OpenAPI specs, database schemas, ADRs, runbooks, issue specs, CI reports, coverage reports, eval outputs, and service maps\n\nWhen GitNexus is not available, continue with standard repository inspection.\n\nWhen another integration is available, use it only when it directly improves the documentation task. Summarize the useful evidence and keep claims grounded in inspectable output.\n\n## Optional GitNexus Rules\n\nUse GitNexus only when it is available through MCP or CLI and the target repository has an index. Do not fail the Autodocs run just because GitNexus is missing.\n\nHigh-value GitNexus uses:\n\n- Use `list` or MCP repo listing to verify the target repository is indexed.\n- Use `query` to find graph-ranked starting points for workflows, concepts, services, or features.\n- Use `context` for important symbols before writing architecture or workflow details.\n- Use `impact` to identify risky change surfaces and blast radius.\n- Use `trace` to document execution paths when a workflow crosses multiple files or layers.\n- Use `detect-changes` during update mode to map current diffs to changed symbols and affected execution flows.\n- Use generated GitNexus wiki pages as comparison material only when the user asks for a GitNexus docs format or comparison.\n\nGood places to mention GitNexus-backed evidence:\n\n- architecture pages\n- workflow pages\n- \"where to start\" sections\n- change-risk or watch-out sections\n- update-mode docs impact plans\n\nDo not copy raw GitNexus JSON into docs unless the user asks. Summarize the useful structure and cite the command or tool used.\n\n## Discovery Rules\n\n- Start with targeted repository inventory:\n  - README and root docs\n  - package, build, and config files\n  - application or service entrypoints\n  - routing and API surfaces\n  - schema, data, and model files\n  - tests and evals\n  - operational scripts and deployment config\n  - existing agent instructions such as `AGENTS.md`, `CLAUDE.md`, and nested skills\n- Use fast targeted search. Prefer `rg --files` with excludes for `.git`, `node_modules`, `dist`, `build`, cache directories, generated `openwiki/`, and generated `.gitnexus/wiki/`.\n- Do not exhaustively read every file.\n- Prefer representative source files for each major domain.\n- Use git history where it helps explain why code exists, not only what code exists.\n- During init, inspect recent commit history and selectively inspect high-signal commits.\n- During update, inspect commits since `openwiki/.last-update.json` `gitHead` when available. Fall back to `updatedAt`, then recent history.\n- Use `git status` and `git diff` to account for uncommitted local changes.\n\n## Plan Mode\n\nPlan mode should not edit files.\n\nReturn:\n\n- recommended documentation format\n- proposed docs pages\n- evidence to inspect\n- whether GitNexus appears available and useful\n- risks, unknowns, and suggested next command\n\nPrefer a short plan over a full design document. The plan should make it easy for a human to approve init or update mode.\n\n## Init Mode\n\nBuild a strong first-pass documentation set, then stop.\n\nRequired behavior:\n\n- Create `openwiki/quickstart.md` first unless the user explicitly requested a different output format.\n- Create the smallest useful set of supporting pages needed to explain the repo.\n- Use at most 8 documentation pages unless the repo clearly needs more.\n- Include a high-level repository overview in `quickstart.md`.\n- Link from `quickstart.md` to every major supporting page.\n- Do not link from `quickstart.md` to a supporting page unless that page exists by the end of the same run.\n- Include source references inline where they help a reader verify or continue exploring.\n- When a Markdown file under `openwiki/` links to repository-root files or directories, use paths relative to the page location, such as `../src/server.js` or `../README.md`.\n- Add change-oriented guidance for future agents.\n- If GitNexus was used, include concise graph-backed notes only where they improve the docs.\n- Avoid thin pages and one-file section directories unless the boundary is clearly useful and likely to grow.\n- Before finishing, review the `openwiki/` tree and merge or remove stubs.\n\nFor small repositories with about 10 or fewer primary source files, prefer `openwiki/quickstart.md` plus at most 1-2 supporting pages.\n\n## Update Mode\n\nUpdate runs must be surgical.\n\nRequired behavior:\n\n- Read existing `openwiki/` docs before editing.\n- Read `openwiki/.last-update.json` if present.\n- Build a docs impact plan in your own working notes:\n  - source change\n  - docs affected\n  - edit needed\n  - why\n- If GitNexus is available, consider `detect-changes` to map diffs to indexed symbols and affected flows.\n- Only edit pages whose current content is inaccurate, incomplete, or misleading because of recent source, workflow, product, or existing-doc changes.\n- Prefer replacing one stale sentence over rewriting an accurate page.\n- Do not make formatting-only edits.\n- Do not refresh source maps, git evidence lists, or generic watch-outs unless materially wrong.\n- Avoid editing `quickstart.md` unless top-level behavior, setup, or navigation changed.\n- If fewer than about 5 source files changed, update at most 1-2 wiki pages unless there is a clear reason to do more.\n- If the docs are already current, do not edit files.\n\n## Required Autodocs Reference Section\n\nUnless the user explicitly asks otherwise, ensure top-level `AGENTS.md` and/or `CLAUDE.md` reference the default docs entrypoint.\n\nOnly inspect and edit top-level files for this step. Do not edit nested `AGENTS.md` or `CLAUDE.md`.\n\nIf both top-level files exist, ensure both contain the same section. If neither exists, create top-level `AGENTS.md` containing only this section.\n\nUse this section structure. Keep the \"includes\" sentence accurate for the pages that actually exist; do not claim architecture, workflow, domain, integration, test, source-map, or GitNexus-enriched pages exist unless you created or verified them.\n\n```markdown\n## Autodocs\n\nThis repository has durable documentation located in the /openwiki directory. Start here:\n\n- [Autodocs quickstart](openwiki/quickstart.md)\n\nAutodocs includes <accurate, comma-separated list of existing documentation areas>.\n\nWhen working in this repository, read the Autodocs quickstart first, then follow its links to the relevant supporting notes.\n```\n\nPreserve surrounding instructions. Replace an existing stale Autodocs or OpenWiki section instead of adding duplicates.\n\n## Metadata\n\nTrack successful default docs updates in `openwiki/.last-update.json`.\n\nUse this shape:\n\n```json\n{\n  \"updatedAt\": \"2026-07-02T00:00:00.000Z\",\n  \"command\": \"init\",\n  \"gitHead\": \"abc123\",\n  \"model\": \"openhands\",\n  \"contextSources\": [\"repo\", \"git\", \"gitnexus\"]\n}\n```\n\nSet `command` to `init` or `update`.\n\nSet `gitHead` from `git rev-parse HEAD` when available.\n\nSet `updatedAt` from the runtime clock, not from your prompt context. Prefer a command such as `date -u +\"%Y-%m-%dT%H:%M:%S.000Z\"` before writing metadata.\n\nSet `contextSources` to the sources that materially shaped the docs. Omit `gitnexus` if GitNexus was unavailable or unused.\n\nIn update mode, update metadata only when docs content changed. In init mode, write metadata after creating useful docs.\n\n## Automation Behavior\n\nWhen running inside an automation, keep the final response short and PR-friendly:\n\n- changed docs\n- evidence inspected\n- context sources used\n- caveats\n- whether a PR should be opened\n\nIf the automation asks you to open a PR, commit only:\n\n- `openwiki/**`\n- top-level `AGENTS.md`\n- top-level `CLAUDE.md`\n\nUse a branch name like `autodocs/update` or `autodocs/init`.\n\nSuggested commit messages:\n\n- `docs: initialize Autodocs`\n- `docs: update Autodocs`\n\nSuggested PR title:\n\n- `docs: initialize Autodocs`\n- `docs: update Autodocs`\n\nSuggested PR body:\n\n```markdown\nAutomated Autodocs documentation update.\n\nSummary:\n- ...\n\nContext sources:\n- ...\n\nReview notes:\n- ...\n```\n\n## Quality Bar\n\nThe docs are successful when a new engineer or coding agent can start at `openwiki/quickstart.md` and understand:\n\n- what the project does\n- how it is organized\n- where important workflows live\n- how to verify common changes\n- where to continue reading for architecture, data, operations, integrations, and tests\n- what change surfaces deserve extra care\n\nDo not optimize for volume. Optimize for reliable orientation.",
+          "trigger": {
+            "type": "keyword",
+            "keywords": [
+              "autodocs",
+              "openwiki",
+              "repo docs",
+              "documentation automation",
+              "generate wiki",
+              "update wiki",
+              "gitnexus docs",
+              "agent docs"
+            ]
+          },
+          "source": "/Users/instructor/.openhands/plugins/installed/autodocs/skills/autodocs/SKILL.md",
+          "inputs": [],
+          "is_agentskills_format": true,
+          "version": "1.0.0",
+          "description": "Generate and maintain durable repository documentation for humans and future coding agents. Use when asked to plan, initialize, update, repair, or automate repo docs, including OpenWiki-style docs and optional GitNexus-enriched docs.",
+          "disable_model_invocation": false
+        },
+        {
+          "name": "autodocs:init",
+          "content": "## init\n\nInitialize durable repository documentation for the current repository\n\n**Arguments**: `$ARGUMENTS` - focus\n\n\n# Autodocs Init\n\nInitialize durable repository documentation for the current workspace.\n\nOptional focus: **$ARGUMENTS**\n\n## Instructions\n\n1. Use the `autodocs` skill.\n2. Run in init mode.\n3. Inspect the repository enough to identify major architecture, workflows, domains, integrations, operations, and test surfaces.\n4. Use GitNexus as optional structured evidence if it is available and indexed for this repository.\n5. Write default OpenWiki-style documentation under `openwiki/`, with `openwiki/quickstart.md` as the required entrypoint.\n6. Add or update only the top-level `AGENTS.md` and/or `CLAUDE.md` Autodocs reference section.\n7. Record successful metadata in `openwiki/.last-update.json`.\n\n## Output\n\nReturn a concise summary of created files, context sources used, key caveats, and recommended next verification.",
+          "trigger": {
+            "type": "keyword",
+            "keywords": [
+              "/autodocs:init"
+            ]
+          },
+          "source": "/Users/instructor/.openhands/plugins/installed/autodocs/commands/init.md",
+          "inputs": [],
+          "is_agentskills_format": false,
+          "version": "1.0.0",
+          "description": "Initialize durable repository documentation for the current repository",
+          "disable_model_invocation": false
+        },
+        {
+          "name": "autodocs:plan",
+          "content": "## plan\n\nPlan durable repository documentation without editing files\n\n**Arguments**: `$ARGUMENTS` - focus\n\n\n# Autodocs Plan\n\nPlan durable repository documentation for the current workspace without writing files.\n\nOptional focus: **$ARGUMENTS**\n\n## Instructions\n\n1. Use the `autodocs` skill.\n2. Run in plan mode.\n3. Inspect the repository enough to identify likely documentation areas, existing docs, tests, config, workflows, and operational surfaces.\n4. Check whether GitNexus appears available and useful for this repository. Do not require GitNexus.\n5. Do not create, edit, move, or delete files.\n6. Return a recommended documentation plan and the evidence that should be inspected before writing docs.\n\n## Output\n\nReturn:\n\n- recommended documentation format\n- proposed docs pages\n- context sources to use\n- GitNexus availability and likely value\n- risks or unknowns\n- suggested next prompt or command",
+          "trigger": {
+            "type": "keyword",
+            "keywords": [
+              "/autodocs:plan"
+            ]
+          },
+          "source": "/Users/instructor/.openhands/plugins/installed/autodocs/commands/plan.md",
+          "inputs": [],
+          "is_agentskills_format": false,
+          "version": "1.0.0",
+          "description": "Plan durable repository documentation without editing files",
+          "disable_model_invocation": false
+        },
+        {
+          "name": "autodocs:update",
+          "content": "## update\n\nUpdate existing durable repository documentation from recent repository changes\n\n**Arguments**: `$ARGUMENTS` - focus\n\n\n# Autodocs Update\n\nRefresh durable repository documentation for the current workspace.\n\nOptional focus: **$ARGUMENTS**\n\n## Instructions\n\n1. Use the `autodocs` skill.\n2. Run in update mode.\n3. Inspect existing `openwiki/` documentation and `openwiki/.last-update.json` when present.\n4. Use git evidence to identify changes since the last successful docs run.\n5. Use GitNexus `detect-changes`, `context`, or `impact` as optional structured evidence if GitNexus is available and indexed for this repository.\n6. Update only documentation that is stale, incomplete, or misleading because of those changes.\n7. If no docs changes are needed, leave files untouched and say the docs are current.\n8. Refresh the top-level `AGENTS.md` and/or `CLAUDE.md` Autodocs reference section only if missing or stale.\n9. Record successful metadata in `openwiki/.last-update.json` only when docs content changed.\n\n## Output\n\nReturn a concise summary of changed files, skipped areas, context sources used, and any review notes for the docs PR.",
+          "trigger": {
+            "type": "keyword",
+            "keywords": [
+              "/autodocs:update"
+            ]
+          },
+          "source": "/Users/instructor/.openhands/plugins/installed/autodocs/commands/update.md",
+          "inputs": [],
+          "is_agentskills_format": false,
+          "version": "1.0.0",
+          "description": "Update existing durable repository documentation from recent repository changes",
+          "disable_model_invocation": false
+        }
+      ],
+      "load_user_skills": false,
+      "load_public_skills": false,
+      "marketplace_path": "marketplaces/default.json",
+      "registered_marketplaces": [],
+      "load_project_skills": false,
+      "load_memory": true,
+      "disabled_skills": [],
+      "current_datetime": "2026-10-17T16:37:33.887304-05:00"
+    },
+    "system_prompt_filename": "system_prompt.j2",
+    "security_policy_filename": "security_policy.j2",
+    "system_prompt_kwargs": {
+      "llm_security_analyzer": true
+    },
+    "condenser": {
+      "llm": {
+        "model": "openhands/deepseek-v4-pro",
+        "api_key": null,
+        "auth_type": "api_key",
+        "openrouter_site_url": "https://docs.all-hands.dev/",
+        "openrouter_app_name": "OpenHands",
+        "num_retries": 2,
+        "retry_multiplier": 8.0,
+        "retry_min_wait": 8,
+        "retry_max_wait": 64,
+        "timeout": 120,
+        "stream_idle_timeout": 120.0,
+        "max_message_chars": 30000,
+        "max_output_tokens": 16384,
+        "api_mode": "auto",
+        "capability_overrides": {},
+        "stream": false,
+        "drop_params": true,
+        "disable_stop_word": false,
+        "caching_prompt": true,
+        "log_completions": false,
+        "log_completions_folder": "logs/completions",
+        "native_tool_calling": true,
+        "reasoning_effort": "none",
+        "enable_encrypted_reasoning": true,
+        "prompt_cache_retention": "24h",
+        "extended_thinking_budget": 200000,
+        "usage_id": "condenser",
+        "litellm_extra_body": {},
+        "is_subscription": false
+      },
+      "max_size": 240,
+      "max_tokens": 1000000,
+      "keep_first": 2,
+      "minimum_progress": 0.1,
+      "hard_context_reset_max_retries": 5,
+      "hard_context_reset_context_scaling": 0.8,
+      "kind": "LLMSummarizingCondenser"
+    },
+    "tool_concurrency_limit": 1,
+    "kind": "Agent"
+  },
+  "kind": "ConversationStateUpdateEvent"
+}

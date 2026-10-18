@@ -1,0 +1,134 @@
+<!doctype html><meta charset="utf-8"><title>Pi command evidence</title><style>body{font:17px system-ui;max-width:1100px;margin:40px auto}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#f4f5f8;padding:20px}</style><h1>Pi command evidence</h1><p>Recovered from the native Pi session for this conversation and matched by tool-call ID. These outputs were omitted from Canvas capture.</p><h2>bash</h2><p>call_63ebf094b11142268eefd0c0</p><pre>total 16
+drwxr-xr-x@  8 instructor  staff  256 Oct 17 16:31 .
+drwxr-xr-x@ 27 instructor  staff  864 Oct 17 16:31 ..
+drwxr-xr-x@ 12 instructor  staff  384 Oct 17 16:31 .git
+-rw-r--r--@  1 instructor  staff   41 Oct 17 16:31 .gitignore
+drwxr-xr-x@  6 instructor  staff  192 Oct 17 14:59 .pytest_cache
+-rw-r--r--@  1 instructor  staff  200 Oct 17 14:50 README.md
+drwxr-xr-x@  4 instructor  staff  128 Oct 17 14:59 tests
+drwxr-xr-x@  5 instructor  staff  160 Oct 17 14:59 toyapp
+On branch master
+nothing to commit, working tree clean
+6e53e6f Fresh workshop fixture
+</pre><h2>read</h2><p>call_b48fc84b17814f8180c0e18c</p><pre>from __future__ import annotations
+
+from dataclasses import dataclass
+from math import ceil
+from typing import Sequence, TypeVar
+
+T = TypeVar(&quot;T&quot;)
+
+
+@dataclass(frozen=True)
+class Page:
+    number: int
+    per_page: int
+    total_items: int
+    total_pages: int
+    items: list[object]
+
+
+def paginate(items: Sequence[T], page: int, per_page: int) -&gt; Page:
+    if page &lt; 1:
+        raise ValueError(&quot;page must be &gt;= 1&quot;)
+    if per_page &lt; 1:
+        raise ValueError(&quot;per_page must be &gt;= 1&quot;)
+
+    raw_items = list(items)
+    total_items = len(raw_items)
+    total_pages = ceil(total_items / per_page) if total_items else 0
+    start = (page - 1) * per_page
+    end = start + per_page - 1
+    return Page(
+        number=page,
+        per_page=per_page,
+        total_items=total_items,
+        total_pages=total_pages,
+        items=raw_items[start:end],
+    )
+
+
+def page_numbers(total_items: int, per_page: int) -&gt; list[int]:
+    if total_items &lt;= 0:
+        return []
+    total_pages = ceil(total_items / per_page)
+    return list(range(1, total_pages + 1))
+</pre><h2>bash</h2><p>call_580aed1820584a16ac102f77</p><pre>tests:
+__pycache__
+test_pagination.py
+
+toyapp:
+__init__.py
+__pycache__
+pagination.py
+tests/test_pagination.py
+tests/__pycache__/test_pagination.cpython-314-pytest-8.4.2.pyc
+toyapp/__init__.py
+toyapp/__pycache__/pagination.cpython-314.pyc
+toyapp/__pycache__/__init__.cpython-314.pyc
+toyapp/pagination.py
+</pre><h2>read</h2><p>call_26440e92d2e84660af4df631</p><pre>from toyapp.pagination import paginate
+
+
+def test_first_page_includes_full_page() -&gt; None:
+    page = paginate([&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;], page=1, per_page=2)
+    assert page.items == [&quot;a&quot;, &quot;b&quot;]
+
+
+def test_second_page_includes_full_page() -&gt; None:
+    page = paginate([&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;], page=2, per_page=2)
+    assert page.items == [&quot;c&quot;, &quot;d&quot;]
+
+
+def test_last_page_can_be_partial() -&gt; None:
+    page = paginate([&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;, &quot;e&quot;], page=3, per_page=2)
+    assert page.items == [&quot;e&quot;]
+</pre><h2>bash</h2><p>call_f9af619fb5fb4c5c9b9e345d</p><pre>E         
+E         Right contains one more item: &#x27;b&#x27;
+E         Use -v to get more diff
+
+../../../odsc-workshop/workshops/odsc-2026/labs/starters/pagination/tests/test_pagination.py:6: AssertionError
+_____________________ test_second_page_includes_full_page ______________________
+
+    def test_second_page_includes_full_page() -&gt; None:
+        page = paginate([&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;], page=2, per_page=2)
+&gt;       assert page.items == [&quot;c&quot;, &quot;d&quot;]
+E       AssertionError: assert [&#x27;c&#x27;] == [&#x27;c&#x27;, &#x27;d&#x27;]
+E         
+E         Right contains one more item: &#x27;d&#x27;
+E         Use -v to get more diff
+
+../../../odsc-workshop/workshops/odsc-2026/labs/starters/pagination/tests/test_pagination.py:11: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_pagination.py::test_first_page_includes_full_page - Asserti...
+FAILED tests/test_pagination.py::test_second_page_includes_full_page - Assert...
+2 failed, 1 passed in 0.02s
+</pre><h2>edit</h2><p>call_3ea89d100f524c06afd3cb9c</p><pre>Successfully replaced 1 block(s) in /Users/instructor/Code/odsc-runs/session-20261017-163134-615d65/w1-pi/toyapp/pagination.py.</pre><h2>bash</h2><p>call_77d27d3754774dc3a0450101</p><pre>...                                                                      [100%]
+3 passed in 0.03s
+---GIT STATUS---
+On branch master
+Changes not staged for commit:
+  (use &quot;git add &lt;file&gt;...&quot; to update what will be committed)
+  (use &quot;git restore &lt;file&gt;...&quot; to discard changes in working directory)
+	modified:   toyapp/pagination.py
+
+no changes added to commit (use &quot;git add&quot; and/or &quot;git commit -a&quot;)
+---DIFF---
+diff --git a/toyapp/pagination.py b/toyapp/pagination.py
+index d276f4e..e510fa3 100644
+--- a/toyapp/pagination.py
++++ b/toyapp/pagination.py
+@@ -26,7 +26,7 @@ def paginate(items: Sequence[T], page: int, per_page: int) -&gt; Page:
+     total_items = len(raw_items)
+     total_pages = ceil(total_items / per_page) if total_items else 0
+     start = (page - 1) * per_page
+-    end = start + per_page - 1
++    end = start + per_page
+     return Page(
+         number=page,
+         per_page=per_page,
+</pre><h2>bash</h2><p>call_c4eab27dbe8a4e41af035417</p><pre>[&#x27;e&#x27;]
+[]
+[]
+[1, 2, 3]
+</pre>

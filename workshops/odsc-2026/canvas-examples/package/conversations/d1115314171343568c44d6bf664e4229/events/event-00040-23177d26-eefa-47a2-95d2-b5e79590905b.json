@@ -1,0 +1,36 @@
+{
+  "id": "23177d26-eefa-47a2-95d2-b5e79590905b",
+  "timestamp": "2026-10-17T16:34:00.764859",
+  "source": "environment",
+  "parent_id": "16bffd4f-8ca0-4ed5-bf2d-8737651756ce",
+  "tool_name": "terminal",
+  "tool_call_id": "call_eb125bb5bade4ed69fb9e73d",
+  "observation": {
+    "content": [
+      {
+        "cache_prompt": false,
+        "type": "text",
+        "text": "On branch master\nChanges not staged for commit:\n  (use \"git add <file>...\" to update what will be committed)\n  (use \"git restore <file>...\" to discard changes in working directory)\n\tmodified:   tests/test_catalog.py\n\tmodified:   tests/test_pagination.py\n\tmodified:   toyapp/catalog.py\n\tmodified:   toyapp/pagination.py\n\nno changes added to commit (use \"git add\" and/or \"git commit -a\")\n---DIFF---\ndiff --git a/tests/test_catalog.py b/tests/test_catalog.py\nindex e6d8db9..134e943 100644\n--- a/tests/test_catalog.py\n+++ b/tests/test_catalog.py\n@@ -1,5 +1,15 @@\n-from toyapp.catalog import browse\n+from toyapp.catalog import browse, browse_next\n\n\n def test_direct_catalog_page():\n     assert browse([\"a\", \"b\", \"c\"], page=2, per_page=2).items == [\"c\"]\n+\n+\n+def test_next_page_catalog_browsing():\n+    first = browse_next([\"a\", \"b\", \"c\"], per_page=2)\n+    assert first.items == [\"a\", \"b\"]\n+    assert first.has_more is True\n+    second = browse_next([\"a\", \"b\", \"c\"], first.next_cursor, per_page=2)\n+    assert second.items == [\"c\"]\n+    assert second.has_more is False\n+    assert second.next_cursor is None\ndiff --git a/tests/test_pagination.py b/tests/test_pagination.py\nindex c373425..7e474d8 100644\n--- a/tests/test_pagination.py\n+++ b/tests/test_pagination.py\n@@ -1,6 +1,7 @@\n import pytest\n\n-from toyapp.pagination import page_numbers, paginate\n+from toyapp.pagination import CursorPage, page_numbers, paginate, paginate_cursor\n+from toyapp.tokens import decode_offset, encode_offset\n\n\n def test_page_number_api_remains_one_based() -> None:\n@@ -12,3 +13,35 @@ def test_page_number_validation_is_preserved() -> None:\n     with pytest.raises(ValueError):\n         paginate([\"a\"], page=0, per_page=1)\n     assert page_numbers(5, 2) == [1, 2, 3]\n+\n+\n+def test_paginate_cursor_traverses_next_pages() -> None:\n+    first = paginate_cursor([\"a\", \"b\", \"c\", \"d\", \"e\"], per_page=2)\n+    assert isinstance(first, CursorPage)\n+    assert first.items == [\"a\", \"b\"]\n+    assert first.has_more is True\n+    assert first.next_cursor == encode_offset(2)\n+\n+    second = paginate_cursor([\"a\", \"b\", \"c\", \"d\", \"e\"], first.next_cursor, 2)\n+    assert second.items == [\"c\", \"d\"]\n+    assert second.has_more is True\n+\n+    third = paginate_cursor([\"a\", \"b\", \"c\", \"d\", \"e\"], second.next_cursor, 2)\n+    assert third.items == [\"e\"]\n+    assert third.has_more is False\n+    assert third.next_cursor is None\n+\n+\n+def test_paginate_cursor_empty_and_exhausted() -> None:\n+    assert paginate_cursor([]) == CursorPage([], None, False)\n+    assert paginate_cursor([1], encode_offset(100), 2) == CursorPage([], None, False)\n+\n+\n+def test_paginate_cursor_validation() -> None:\n+    with pytest.raises(ValueError):\n+        paginate_cursor([1], per_page=0)\n+    with pytest.raises(ValueError):\n+        paginate_cursor([1], cursor=encode_offset(-1))\n+    with pytest.raises(ValueError):\n+        paginate_cursor([1], cursor=\"%%%\")\n+    assert decode_offset(paginate_cursor([1, 2, 3], per_page=2).next_cursor) == 2\ndiff --git a/toyapp/catalog.py b/toyapp/catalog.py\nindex 976c0a5..8574c1d 100644\n--- a/toyapp/catalog.py\n+++ b/toyapp/catalog.py\n@@ -1,9 +1,13 @@\n \"\"\"The existing catalog supports direct page-number access.\"\"\"\n from typing import Sequence, TypeVar\n-from .pagination import Page, paginate\n+from .pagination import CursorPage, Page, paginate, paginate_cursor\n\n T = TypeVar(\"T\")\n\n\n def browse(items: Sequence[T], page: int = 1, per_page: int = 20) -> Page[T]:\n     return paginate(items, page, per_page)\n+\n+\n+def browse_next(items: Sequence[T], cursor: str | None = None, per_page: int = 20) -> CursorPage[T]:\n+    return paginate_cursor(items, cursor, per_page)\ndiff --git a/toyapp/pagination.py b/toyapp/pagination.py\nindex 4c91fb2..a9dcfff 100644\n--- a/toyapp/pagination.py\n+++ b/toyapp/pagination.py\n@@ -46,6 +46,26 @@ def page_numbers(total_items: int, per_page: int) -> list[int]:\n\n\n\n+@dataclass(frozen=True)\n+class CursorPage(Generic[T]):\n+    items: list[T]\n+    next_cursor: str | None\n+    has_more: bool\n+\n+\n+def paginate_cursor(items: Sequence[T], cursor: str | None = None, per_page: int = 20) -> CursorPage[T]:\n+    \"\"\"Return one page and a cursor pointing at the first item of the next.\"\"\"\n+    from .tokens import decode_offset, encode_offset\n+\n+    if per_page < 1:\n+        raise ValueError(\"per_page must be >= 1\")\n+    offset = decode_offset(cursor)\n+    batch = list(items[offset:offset + per_page])\n+    end = offset + len(batch)\n+    next_cursor = encode_offset(end) if end < len(items) else None\n+    return CursorPage(batch, next_cursor, next_cursor is not None)\n+\n+\n @dataclass(frozen=True)\n class ExportWindow(Generic[T]):\n     records: list[T]"
+      }
+    ],
+    "is_error": false,
+    "command": "cd /Users/instructor/Code/odsc-runs/session-20261017-163134-615d65/w3-none && git status && echo \"---DIFF---\" && git --no-pager diff",
+    "exit_code": 0,
+    "timeout": false,
+    "metadata": {
+      "exit_code": 0,
+      "pid": -1,
+      "username": "instructor",
+      "hostname": "rajivshah-MacBook-Pro",
+      "working_dir": "/Users/instructor/Code/odsc-runs/session-20261017-163134-615d65/w3-none",
+      "py_interpreter_path": "/Users/instructor/.cache/uv/archive-v0/cZpGatmgSZEYIeuAv16p4/bin/python",
+      "prefix": "",
+      "suffix": "\n[The command completed with exit code 0.]"
+    },
+    "full_output_save_dir": "/Users/instructor/.openhands/agent-canvas/dev_conversations/d1115314171343568c44d6bf664e4229/observations",
+    "kind": "TerminalObservation"
+  },
+  "action_id": "16bffd4f-8ca0-4ed5-bf2d-8737651756ce",
+  "extended_content": [],
+  "kind": "ObservationEvent"
+}

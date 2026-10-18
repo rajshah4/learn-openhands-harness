@@ -1,0 +1,36 @@
+{
+  "id": "7848f21d-0e50-4f4b-afba-e79b6c746dea",
+  "timestamp": "2026-10-17T16:34:12.493279",
+  "source": "environment",
+  "parent_id": "78e3fa1e-f354-4f2a-844f-6631168b6b02",
+  "tool_name": "terminal",
+  "tool_call_id": "call_844863f25bc74d46bc43135c",
+  "observation": {
+    "content": [
+      {
+        "cache_prompt": false,
+        "type": "text",
+        "text": "1\tfrom __future__ import annotations\n     2\n     3\tfrom dataclasses import dataclass\n     4\tfrom math import ceil\n     5\tfrom typing import Generic, Sequence, TypeVar\n     6\n     7\tT = TypeVar(\"T\")\n     8\n     9\n    10\t@dataclass(frozen=True)\n    11\tclass Page(Generic[T]):\n    12\t    number: int\n    13\t    per_page: int\n    14\t    total_items: int\n    15\t    total_pages: int\n    16\t    items: list[T]\n    17\n    18\n    19\tdef paginate(items: Sequence[T], page: int, per_page: int) -> Page[T]:\n    20\t    \"\"\"Return one page using the package's existing one-based page API.\"\"\"\n    21\t    if page < 1:\n    22\t        raise ValueError(\"page must be >= 1\")\n    23\t    if per_page < 1:\n    24\t        raise ValueError(\"per_page must be >= 1\")\n    25\n    26\t    source_items = list(items)\n    27\t    total_items = len(source_items)\n    28\t    total_pages = ceil(total_items / per_page) if total_items else 0\n    29\t    start = (page - 1) * per_page\n    30\t    end = start + per_page\n    31\t    return Page(\n    32\t        number=page,\n    33\t        per_page=per_page,\n    34\t        total_items=total_items,\n    35\t        total_pages=total_pages,\n    36\t        items=source_items[start:end],\n    37\t    )\n    38\n    39\n    40\tdef page_numbers(total_items: int, per_page: int) -> list[int]:\n    41\t    if per_page < 1:\n    42\t        raise ValueError(\"per_page must be >= 1\")\n    43\t    if total_items <= 0:\n    44\t        return []\n    45\t    return list(range(1, ceil(total_items / per_page) + 1))\n    46\n    47\n    48\n    49\t@dataclass(frozen=True)\n    50\tclass CursorPage(Generic[T]):\n    51\t    items: list[T]\n    52\t    next_cursor: str | None\n    53\t    has_more: bool\n    54\n    55\n    56\tdef paginate_cursor(items: Sequence[T], cursor: str | None = None, per_page: int = 20) -> CursorPage[T]:\n    57\t    \"\"\"Return one page and a cursor pointing at the first item of the next.\"\"\"\n    58\t    from .tokens import decode_offset, encode_offset\n    59\n    60\t    if per_page < 1:\n    61\t        raise ValueError(\"per_page must be >= 1\")\n    62\t    offset = decode_offset(cursor)\n    63\t    batch = list(items[offset:offset + per_page])\n    64\t    end = offset + len(batch)\n    65\t    next_cursor = encode_offset(end) if end < len(items) else None\n    66\t    return CursorPage(batch, next_cursor, next_cursor is not None)\n    67\n    68\n    69\t@dataclass(frozen=True)\n    70\tclass ExportWindow(Generic[T]):\n    71\t    records: list[T]\n    72\t    resume_token: str | None\n    73\n    74\n    75\tdef export_window(records: Sequence[T], resume_token: str | None = None, limit: int = 100) -> ExportWindow[T]:\n    76\t    \"\"\"Resume a snapshot export using the shared v2 token protocol.\"\"\"\n    77\t    from .tokens import decode_offset, encode_offset\n    78\n    79\t    if limit < 1:\n    80\t        raise ValueError(\"limit must be >= 1\")\n    81\t    offset = decode_offset(resume_token)\n    82\t    batch = list(records[offset:offset + limit])\n    83\t    end = offset + len(batch)\n    84\t    return ExportWindow(batch, encode_offset(end) if end < len(records) else None)"
+      }
+    ],
+    "is_error": false,
+    "command": "cd /Users/instructor/Code/odsc-runs/session-20261017-163134-615d65/w3-none && cat -n toyapp/pagination.py",
+    "exit_code": 0,
+    "timeout": false,
+    "metadata": {
+      "exit_code": 0,
+      "pid": -1,
+      "username": "instructor",
+      "hostname": "rajivshah-MacBook-Pro",
+      "working_dir": "/Users/instructor/Code/odsc-runs/session-20261017-163134-615d65/w3-none",
+      "py_interpreter_path": "/Users/instructor/.cache/uv/archive-v0/cZpGatmgSZEYIeuAv16p4/bin/python",
+      "prefix": "",
+      "suffix": "\n[The command completed with exit code 0.]"
+    },
+    "full_output_save_dir": "/Users/instructor/.openhands/agent-canvas/dev_conversations/d1115314171343568c44d6bf664e4229/observations",
+    "kind": "TerminalObservation"
+  },
+  "action_id": "dd346499-0e8d-44c7-a8ce-a454a2dde140",
+  "extended_content": [],
+  "kind": "ObservationEvent"
+}

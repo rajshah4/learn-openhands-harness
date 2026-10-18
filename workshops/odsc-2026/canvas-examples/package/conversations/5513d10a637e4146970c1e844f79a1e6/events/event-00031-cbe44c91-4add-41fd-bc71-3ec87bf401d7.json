@@ -1,0 +1,36 @@
+{
+  "id": "cbe44c91-4add-41fd-bc71-3ec87bf401d7",
+  "timestamp": "2026-10-17T17:30:47.501138",
+  "source": "environment",
+  "parent_id": "bc22bc19-c489-4a64-91fe-07f594edd9c0",
+  "tool_name": "terminal",
+  "tool_call_id": "call_289e43c190e64768a476038f",
+  "observation": {
+    "content": [
+      {
+        "cache_prompt": false,
+        "type": "text",
+        "text": "asyncio.run(main())\nEOF\nsize=30 result=30 elapsed=0.0059s (serial would be ~0.150s)\nsize=50 result=50 elapsed=0.0059s (serial would be ~0.250s)\nsize=50 result=50 elapsed=0.0059s (serial would be ~0.250s)"
+      }
+    ],
+    "is_error": false,
+    "command": "/Users/instructor/Code/odsc-workshop/.workshop-venv/bin/python - <<'EOF'\nimport asyncio, time\nfrom toyapp.async_jobs import run_batch, WORK_DELAY_SECONDS\n\nasync def main():\n    for size in (30, 50, 50):\n        started = time.perf_counter()\n        result = await run_batch(size)\n        elapsed = time.perf_counter() - started\n        print(f\"size={size} result={result} elapsed={elapsed:.4f}s (serial would be ~{size*WORK_DELAY_SECONDS:.3f}s)\")\n\nasyncio.run(main())\nEOF",
+    "exit_code": 0,
+    "timeout": false,
+    "metadata": {
+      "exit_code": 0,
+      "pid": -1,
+      "username": "instructor",
+      "hostname": "rajivshah-MacBook-Pro",
+      "working_dir": "/Users/instructor/Code/harness-engineering/outputs/odsc-canned-20261017/profile-exercise6-173006/w6-single",
+      "py_interpreter_path": "/Users/instructor/.cache/uv/archive-v0/cZpGatmgSZEYIeuAv16p4/bin/python",
+      "prefix": "",
+      "suffix": "\n[The command completed with exit code 0.]"
+    },
+    "full_output_save_dir": "/Users/instructor/.openhands/agent-canvas/dev_conversations/5513d10a637e4146970c1e844f79a1e6/observations",
+    "kind": "TerminalObservation"
+  },
+  "action_id": "e429ed24-3a64-4dfb-a299-44978f0a14fa",
+  "extended_content": [],
+  "kind": "ObservationEvent"
+}

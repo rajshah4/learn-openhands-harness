@@ -1,0 +1,36 @@
+{
+  "id": "76becda1-7122-41cb-942e-64a96b99e665",
+  "timestamp": "2026-10-17T16:36:49.221059",
+  "source": "environment",
+  "parent_id": "36acc017-8830-4400-8240-6d97c3534442",
+  "tool_name": "terminal",
+  "tool_call_id": "call_4c8692727db84f6ca2058831",
+  "observation": {
+    "content": [
+      {
+        "cache_prompt": false,
+        "type": "text",
+        "text": "1. valid Bearer dev-token                        -> 200  user_id='dev-user'\n2. scheme-less dev-token                         -> 200  user_id='dev-user'\n3. lowercase bearer dev-token                    -> 401  user_id=None\n4. UPPERCASE BEARER dev-token                    -> 401  user_id=None\n5. X-Debug-User backdoor alone                   -> 200  user_id='admin'\n6. X-Debug-User + bogus token                    -> 200  user_id='bob'\n7. /health bypass (exact)                        -> 200  user_id=None\n8. /health-subpath collision                     -> 200  user_id=None\n9. /health then traversal                        -> 200  user_id=None\n10. lowercase x-debug-user                       -> 401  user_id=None\n11. lowercase authorization                      -> 401  user_id=None\n12. no auth at all                               -> 401  user_id=None\n13. empty-string token                           -> 401  user_id=None\ntokens: {'dev-token': 'dev-user', 'ops-token': 'ops-user'}"
+      }
+    ],
+    "is_error": false,
+    "command": "python3 /tmp/probe_auth.py; rm -f /tmp/probe_auth.py",
+    "exit_code": 0,
+    "timeout": false,
+    "metadata": {
+      "exit_code": 0,
+      "pid": -1,
+      "username": "instructor",
+      "hostname": "rajivshah-MacBook-Pro",
+      "working_dir": "/Users/instructor/Code/odsc-runs/session-20261017-163134-615d65/w4-cheap-security",
+      "py_interpreter_path": "/Users/instructor/.cache/uv/archive-v0/cZpGatmgSZEYIeuAv16p4/bin/python",
+      "prefix": "",
+      "suffix": "\n[The command completed with exit code 0.]"
+    },
+    "full_output_save_dir": "/Users/instructor/.openhands/agent-canvas/dev_conversations/b50aad33dee24216a563fd633d5c031b/observations",
+    "kind": "TerminalObservation"
+  },
+  "action_id": "36acc017-8830-4400-8240-6d97c3534442",
+  "extended_content": [],
+  "kind": "ObservationEvent"
+}

@@ -1,0 +1,26 @@
+{
+  "id": "6e19d800-3b2c-4a3d-acf5-17960858e53a",
+  "timestamp": "2026-10-17T16:36:47.183749",
+  "source": "environment",
+  "parent_id": "b192eab4-414d-46ad-8261-7aca859b4ff3",
+  "tool_name": "file_editor",
+  "tool_call_id": "call_eb05513eb0504d1180a509d1",
+  "observation": {
+    "content": [
+      {
+        "cache_prompt": false,
+        "type": "text",
+        "text": "File created successfully at: /tmp/probe_auth.py"
+      }
+    ],
+    "is_error": false,
+    "command": "create",
+    "path": "/tmp/probe_auth.py",
+    "prev_exist": false,
+    "new_content": "import sys\nsys.path.insert(0, \"/Users/instructor/Code/odsc-runs/session-20261017-163134-615d65/w4-cheap-security\")\nfrom toyapp.auth import Request, Response, auth_middleware, TOKEN_TO_USER\n\ndef dummy(req):\n    return Response(200, \"ok for \" + str(req.user_id))\n\ndef probe(name, headers, path=\"/api/items\"):\n    req = Request(headers, path)\n    r = auth_middleware(req, dummy)\n    print(\"%-48s -> %s  user_id=%r\" % (name, r.status_code, req.user_id))\n\nprobe(\"1. valid Bearer dev-token\",        {\"Authorization\": \"Bearer dev-token\"})\nprobe(\"2. scheme-less dev-token\",          {\"Authorization\": \"dev-token\"})\nprobe(\"3. lowercase bearer dev-token\",     {\"Authorization\": \"bearer dev-token\"})\nprobe(\"4. UPPERCASE BEARER dev-token\",     {\"Authorization\": \"BEARER dev-token\"})\nprobe(\"5. X-Debug-User backdoor alone\",    {\"X-Debug-User\": \"admin\"})\nprobe(\"6. X-Debug-User + bogus token\",     {\"Authorization\": \"Bearer nope\", \"X-Debug-User\": \"bob\"})\nprobe(\"7. /health bypass (exact)\",         {}, \"/health\")\nprobe(\"8. /health-subpath collision\",      {}, \"/health-events\")\nprobe(\"9. /health then traversal\",         {}, \"/health/../api/admin\")\nprobe(\"10. lowercase x-debug-user\",        {\"x-debug-user\": \"mallory\"})\nprobe(\"11. lowercase authorization\",       {\"authorization\": \"Bearer dev-token\"})\nprobe(\"12. no auth at all\",                {}, \"/api/items\")\nprobe(\"13. empty-string token\",            {\"Authorization\": \"Bearer \"}, \"/api/items\")\nprint(\"tokens:\", TOKEN_TO_USER)",
+    "kind": "FileEditorObservation"
+  },
+  "action_id": "b192eab4-414d-46ad-8261-7aca859b4ff3",
+  "extended_content": [],
+  "kind": "ObservationEvent"
+}

@@ -1,0 +1,22 @@
+{
+  "id": "311cf393-b444-45d9-89a9-88466c2ffd4d",
+  "timestamp": "2026-10-17T16:34:01.970040",
+  "source": "agent",
+  "parent_id": "ac3d383c-a8c5-4b1a-80a8-34cd5d7ab220",
+  "llm_message": {
+    "role": "assistant",
+    "content": [
+      {
+        "cache_prompt": false,
+        "type": "text",
+        "text": "**OpenHands/OpenHands #16860** — \"feat(skills): replace the all-on skill catalog with an explicit allow-list\" — https://github.com/OpenHands/OpenHands/pull/16860 (merged, fixes #16302).\n\n1. **Allow-list change.** Replaces the build-time all-catalog-on behavior with an explicit `enabled_skills` allow-list over the bundled `@openhands/extensions` catalog, defaulting to the 11 catalog entries flagged `defaultEnabled`. `disabled_skills` still governs user- and project-authored skills, and `src/utils/skill-enablement.ts` is the single rule source: the deny-list wins, non-catalog skills stay on unless denied.\n\n2. **Implementation files.** `src/utils/skill-enablement.ts` (link below) supplies `CATALOG_SKILL_NAMES`, `buildSkillEnablementFilter`, and the one-shot `migrateSkillEnablement`. `src/hooks/use-skill-enablement.ts` (link below) shares hydrate/auto-save/toggle logic between the Customize page and the conversation drawer; cloud backends keep deny-list governance.\n\n3. **Test runner.** Per the upstream PR report: `npx vitest run` → 5064 passed, one unrelated pre-existing `dev-with-automation` SIGHUP failure; `npm run lint` and `npm run check-translation-completeness` clean; the 4 new keys are translated for all 15 locales.\n\n4. **New tests.** `__tests__/utils/skill-enablement.test.ts` covers resolution, deny-veto, and every migration branch; `__tests__/hooks/use-migrate-enabled-skills.test.tsx` covers one-shot migration, cloud skip, and no write after a failed settings load. Adapter tests flipped to assert `add-javadoc` no longer reaches the agent context.\n\n5. **Uncertainty.** I personally ran no tests or live verification — Vitest, lint, and translation results are attributed solely to the upstream PR report. Cloud-side behavior (server catalog never reads `enabled_skills`), slash-command loading, and the no-`Core`-tier deviation remain unverified.\n\n**Links:** https://github.com/OpenHands/OpenHands/blob/fae6ad8a0ccaaa5ec8f87aac36abe321e72fbb2c/src/utils/skill-enablement.ts · https://github.com/OpenHands/OpenHands/blob/fae6ad8a0ccaaa5ec8f87aac36abe321e72fbb2c/src/hooks/use-skill-enablement.ts · https://github.com/OpenHands/OpenHands/blob/fae6ad8a0ccaaa5ec8f87aac36abe321e72fbb2c/__tests__/utils/skill-enablement.test.ts\n\n*(183 words — within the 200-word target, under the 280-word cap.)*"
+      }
+    ],
+    "reasoning_content": "183 words, within the 200-target, under 280 limit. Though it says \"targeting 200 words\", so maybe I could expand slightly to get closer to 200. But 183 is fine—\"targeting 200 words and never exceeding 280\". It's acceptable. I might make it a bit closer to 200. Let me finalize as is since it's within limits. Actually, let me keep it simple at 183 words. Done.",
+    "thinking_blocks": []
+  },
+  "llm_response_id": "gen-1792272836-GiyndwuMUWK4w56YCjAC",
+  "activated_skills": [],
+  "extended_content": [],
+  "kind": "MessageEvent"
+}

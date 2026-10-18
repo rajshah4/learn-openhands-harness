@@ -1,5 +1,7 @@
 # Get started for the workshop
 
+[Inspect the saved workshop conversations without a model key](./conversations). Download and viewer directions are included.
+
 The workshop uses Agent Canvas because it's open source and flexible. You can also try some of these exercises in another harness.
 
 For the workshop, use **DeepSeek Flash through OpenHands** in all three harnesses: OpenHands, Pi, and OpenCode. You need one OpenHands **LLM API Key**. You do not need separate Anthropic, OpenAI, or DeepSeek keys. You will save the key and create the three profiles in the Canvas UI. One preparation command writes the provider files needed by Pi and OpenCode; you do not need to edit JSON.
