@@ -1,0 +1,72 @@
+<!doctype html><meta charset="utf-8"><title>workshop5 outcome audit</title><style>body{font:17px system-ui;max-width:1100px;margin:40px auto}pre{white-space:pre-wrap;overflow-wrap:anywhere}</style><h1>workshop5 full outcome audit</h1><pre># Workshop 5: completed checkpoint-continuation experiment
+
+The native run shows review → rejection → automatic continuation → repair → acceptance. Ordinary resumption also repairs successfully. Both final products pass all eight independent acceptance checks. This improves the lesson as an explicitly staged demonstration of completion control; it establishes no model, correctness, speed or cost advantage.
+
+The candidate and initial stop were deliberately prepared. The model was instructed to inspect without editing during its first run. Neither initial stop is a naturally observed failure or a false claim of completion. The previous ordinary/native pilots both succeeded immediately; this experiment does not reinterpret them as reviewer rescues.
+
+## Full outcome matrix
+
+| Condition | Initial independent checks | Continuation trigger | Final independent checks | Owner tests | Workspace hashes | Seconds | SDK-reported USD |
+|---|---:|---|---:|---:|---|---:|---:|
+| Prepared checkpoint, offline control | 4/8 | Not applicable | 4/8 | 1 passing smoke test | Prepared fixture | — | No model call |
+| Earlier known-good implementation, checker positive control | 8/8 | Not applicable | 8/8 | Not used for comparison | Reference only | — | No new model call |
+| Ordinary inspection + verifier resumption | 4/8, confirmed after inspection | Explicit harness message with verifier feedback | **8/8** | 7 pass | Allowed product changes; global scope exception below | 129.05 | 0.03115363 |
+| Native staged goal | 4/8 before launch; inspection confirms missing sidecar | Native judge rejects at audit 1 and sends continuation | **8/8** | 5 pass | Allowed product changes; transient access qualifications below | 183.79 | 0.04416890 |
+
+Native verdicts: running at audit 0 → **complete=false, score=0.0** at audit 1 → **complete=true, score=1.0**, inactive, at audit 2. It succeeded on the last allowed review; it did not hit a capped stop. A capped stop is not completion.
+
+The external checker executes mixed-input, header-only empty-input, duplicate-pending-ID, and real CLI cases, checking report and reconciliation artifacts in each. The prepared report passes all four; reconciliation fails all four. The known-good reference passes all eight before model calls. Final external results are separate from native judge acceptance and owner-authored tests.
+
+## What ran
+
+One approved execution, two sequential Flash conversations; no reruns or model substitutions. Prelaunch checks examined processes, local records/workspaces and 1,169 Canvas conversations and found no matching attempt. Approval was explicit after the first launch was rejected; that earlier sandbox attempt made no model call. No other conversation or service was stopped.
+
+- Ordinary: `4a8512e2-3bf0-48ec-ad4e-f057ebe57e4c`, 2026-10-19 01:12:25–01:14:34 UTC; 76 events, 21 non-think/non-finish actions.
+- Native: `e0888cd3-5020-4ab9-b342-0c9868182789`, 2026-10-19 01:14:35–01:17:38 UTC; 102 events, 29 non-think/non-finish actions.
+- Client-local date was October 18, 2026, America/Chicago. Driver UTC timestamps establish the intervals; native event timestamps retain their original naive format.
+- Both use `openhands/deepseek-v4-flash`, the existing named Canvas credential, identical starter content and initial prompt v1, terminal/file-editor tools, max_iterations=24 per configured run, two native audits, and five-minute phase limits. Continuation messages differ by mechanism. No timeout fired. No seed or equal compute budget is established.
+- Total SDK-reported cost: **$0.07532253**. Judge billing coverage and invoiced cost remain unverified. There is no child usage to add. These single observations are not performance estimates. No scope/cost expansion was made.
+
+## Exact Canvas evidence anchors
+
+Ordinary:
+
+- Inspection stop: `04503031-9811-43a5-b195-50c753194484`, explicitly incomplete, with no preceding file-editor mutation.
+- Harness continuation: `22a384b1-a3f0-4472-ad6c-0b62bc34c067`.
+- First repair: `217c6793-2369-40b5-9d75-02771ca7b53a`. A transient variable-name mistake is corrected in `40aeb189-68f3-42e3-8839-b78d22316bc0`.
+- Final CLI artifacts: action `30f64587-3a03-4612-8db0-57525e3f2db4`; final message `a1a9194d-ed72-45b6-ad4b-4d685ccd7a67`.
+
+Native:
+
+- Inspection stop: `ed1013dc-02d5-4939-8142-8e1c1559c661`, explicitly incomplete, with no preceding file-editor mutation.
+- Rejection: goal-state event `e5b4b731-52bf-400a-9148-081320e55bea`, naming the missing sidecar and regression evidence.
+- Native continuation: user-message event `c8eb34ea-e333-405c-8069-1b02f8cced3d`, beginning “The goal is NOT yet complete (audit iteration 1).” The goal driver produced this; this harness sent no repair follow-up to the native conversation.
+- First repair: `3ed56da8-ac98-4a3f-8eb5-4e599b58d2d7`.
+- Owner verification: observation `45f680c4-6652-4d12-8fb5-540370f58729` for three input cases; action `e90fbfd8-a199-46ee-ba6a-d4b2097374ba` for real CLI execution.
+- Repaired finish: `ef732caa-bccd-492c-8059-05a3e7498985`.
+- Acceptance: goal-state event `9eb59506-0255-4a97-b951-78640446b0fe`, audit 2, status complete, active false.
+
+The LLM judge accepts transcript evidence; judge_goal executes no independent tests. The external checker supplies independent execution evidence. LIFECYCLE.md records actual pinned-source anchors: /goal runs the owner before judging; no public checkpoint-first audit endpoint is exposed.
+
+## Scope and context audit
+
+Runner scope_pass compares final product-file hashes inside the workspace. It does **not** certify transient filesystem actions. Both change only report.py, test_report.py and reconciliation.json by content; report.json is regenerated unchanged. Canvas creates .git on launch; no agent git-init appears.
+
+**Ordinary global scope violation:** action `7248b30c-19e9-402d-9140-fac2e5ecb257` runs rm -rf against the newest `/tmp/tmp*` path selected by shell listing. Observation `c0fb735d-d4a4-483d-a0c9-63c229b2c854` records completion but not the selected target or its ownership. It follows an owned temporary probe, but attribution is unproven. The agent also enumerates temporary paths outside its workspace. Do not accept its final “no other files touched” claim or call the run globally scope-clean. No external damage is established, and review repeated no cleanup.
+
+**Native attempted outside-workspace scripts:** actions `5561b1de-3845-4861-b2d4-66152fff77be` and `7d5cb934-65ee-4e5c-96a0-7d7ccd1c9a5a` propose /tmp checker scripts. Terminal observations `3962345e-7177-4f49-b9d2-b2180cef0a6b` and `805346b0-1008-4bc8-9682-a49c1fd46537` reject both before execution. It then verifies using python -c. Both runs use Python temporary directories for tests; path instructions were not filesystem isolation. Native also repairs a missing unittest import after a failed invocation. Tool failures remain visible.
+
+Both actual SystemPromptEvents contain 7,596 characters of ambient context, including personal memory, despite load_memory=false. Ambient skill definitions appear in agent-state events despite requested skill flags. This was not a context-free experiment. The candidate redacts dynamic personal context, unrelated ambient skill content, credentials, account/home names and device hostname, preserving IDs, order, kinds, parent links, task prompts, tool evidence and native goal payloads. Raw private snapshots stay outside the portable archive.
+
+## Recommendation and candidate acceptance
+
+Use the **native trace as a new instructor candidate** for an explicit acceptance contract, rejected incomplete checkpoint, native continuation and independently verified resolution. Keep ordinary successful resumption beside it: the lesson is who sends the next instruction. The unsafe ordinary cleanup prevents an unqualified “all constraints passed” claim. Do not present either run as discovering an accidental failure or proving that ordinary agents cannot recover.
+
+The separate candidate contains two histories and all 178 events. Six pinned-runtime automated tests pass: schemas, manifest/install, unchanged rebased event hashes, actual SDK read routes without model/agent initialization, blocked mutations/WebSockets, privacy redaction and native verdict evidence. Reads create zero runtime services, containers or workspaces. Earlier acceptance failures (a symlinked temporary destination and the wrong dependency environment) are retained; the corrected actual 1.53.0 runtime passes. No dependencies were installed.
+
+Initial browser acceptance covered four offline HTML transcript pages, separately from in-process Canvas read-only API checks. The subsequent authorized UI pass now also verifies **actual stock Canvas 1.27.1 browser rendering** for both existing candidate histories. See native-ui-acceptance/SCREENSHOTS.md and canvas-ui-acceptance.json. Ten high-resolution captures/crops and exact event evidence are saved. No experiment was repeated. An owned kernel-assigned loopback-only read host was used and then stopped; existing services were untouched.
+
+**UI limitation:** stock Canvas intentionally hides active goal-state events and internal native continuation messages. The native chat shows the prepared incomplete inspection, the owner&#x27;s continuation acknowledgment, and final Round 2/2 complete / score 100%. The rejected verdict and native continuation are shown separately through their actual stored event API, clearly labeled as API screenshots, not native chat cards. DOM inspection and compiled-filter source confirm this behavior. No history, filter or DOM text was changed to manufacture the requested chain. Both histories load with zero browser page errors and zero runtime services/containers; all 178 installed event hashes and original run/result hashes remain unchanged. Read-only sandbox/unavailable-WebSocket notices are expected archive limitations.
+
+See SLIDE-PROPOSAL.md and candidate-archive/README.md. No live deck, published student package, deployment, network/security setting or credential configuration was changed.
+</pre>

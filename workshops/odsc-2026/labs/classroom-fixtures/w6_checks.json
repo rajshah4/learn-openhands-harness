@@ -1,0 +1,23 @@
+{
+  "reservation": {
+    "imports": "from inventory import Inventory",
+    "checks": {
+      "atomic_failure": "x=Inventory({'a':3,'b':0});assert x.reserve('r',[('a',2),('b',1)]) is False;assert x.snapshot()=={'a':3,'b':0};assert x.reserve('r',[('a',1)]) is True",
+      "duplicate_skus": "x=Inventory({'a':5});assert x.reserve('r',[('a',2),('a',2)]) is True;assert x.snapshot()=={'a':1};assert x.cancel('r') is True;assert x.snapshot()=={'a':5}",
+      "replay_identity": "x=Inventory({'a':9,'b':2});assert x.reserve('r',[('a',1),('a',2),('b',1)]);assert x.reserve('r',[('b',1),('a',3)]);assert x.snapshot()=={'a':6,'b':1};assert x.reserve('r',[('a',1)]) is False",
+      "cancel_once_reuse": "x=Inventory({'a':3});assert x.reserve('r',[('a',1)]);assert x.cancel('r');assert x.cancel('r') is False;assert x.snapshot()=={'a':3};assert x.reserve('r',[('a',2)]);assert x.snapshot()=={'a':1}",
+      "invalid_input": "x=Inventory({'a':3});assert x.reserve('r',[('z',1)]) is False;assert x.reserve('r',[('a',0)]) is False;assert x.reserve('r',[('a',-1)]) is False;assert x.snapshot()=={'a':3};assert x.reserve('r',[]) is True;assert x.cancel('r') is True",
+      "aliasing": "s={'a':3};x=Inventory(s);s['a']=8;assert x.snapshot()=={'a':3};t=x.snapshot();t['a']=0;assert x.snapshot()=={'a':3}"
+    }
+  },
+  "ledger": {
+    "imports": "from codec import encode,decode\nfrom reducer import summarize\ndef reject(fn,*a):\n try:fn(*a)\n except ValueError:return\n raise AssertionError(\"expected ValueError\")",
+    "checks": {
+      "codec_roundtrip": "import itertools\nfor fields in itertools.product(['','a','|','\\\\','\u00e9','a|b\\\\c'],repeat=3):assert decode(encode(list(fields)))==list(fields)",
+      "codec_exact": "assert encode(['a|b','c'+chr(92)+'d',''])=='a'+chr(92)+'|b|c'+chr(92)*2+'d|';assert decode('')==[''];assert decode('||')==['','',''];reject(decode,'a'+chr(92));reject(decode,chr(92)+'q')",
+      "aggregation": "lines=[encode(['x','a|b','100']),encode(['y','a|b','-100']),encode(['z','','0'])];assert summarize(lines)=={'a|b':0,'':0};assert len(lines)==3;assert summarize([])=={}",
+      "dedup": "assert summarize([encode(['x','a','001']),encode(['x','a','1'])])=={'a':1};reject(summarize,[encode(['x','a','1']),encode(['x','b','1'])]);reject(summarize,[encode(['x','a','1']),encode(['x','a','2'])])",
+      "reject_records": "for fields in [['x','a'],['x','a','1','z'],['x','a','+1'],['x','a','1.0'],['x','a','\u0661'],['x','a',''],['x','a',' 1']]:reject(summarize,[encode(fields)])\nreject(summarize,[chr(92)+'q'])"
+    }
+  }
+}

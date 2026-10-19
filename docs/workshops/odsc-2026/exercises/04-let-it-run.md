@@ -1,101 +1,41 @@
-# Exercise 5: Define completion and stopping
+# Exercise 5: Separate stopping from acceptance
 
-## What Problem Are You Solving?
+Start both runs from the same deliberately incomplete daily-report checkpoint. This is staged teaching input, not a naturally observed prior agent failure. Predict what evidence should make the verifier reject the first inspection milestone.
 
-A goal states what a completed task must achieve. In native goal mode, a judge checks the result and can request another attempt if work is missing. Compare this with an ordinary repair and watch what evidence supports completion.
-
-1. Predict what changes before running or reading results.
-2. Try an ordinary repair and goal mode, or use the saved examples.
-3. Record evidence and a decision in the [worksheet](/workshops/odsc-2026/worksheet).
-
-## Start With These Files
-
-Follow [setup](/workshops/odsc-2026/setup) first. If you ran `lab.py prepare-all` during setup, the workspaces below are already prepared inside your session folder. Use its `WORKSPACES.txt` for the exact workspace paths and check commands. Copy the task prompt from this page.
-
-The individual commands below are an alternative for preparing one run at a time. The portable package is `workshops/odsc-2026/labs/` in the course checkout. Its `starters/` hold only student inputs; `prompts/` hold full tasks; `checks/` and `evidence/` stay outside the agent workspace.
-
-Prepare the missing-dot starter:
+Run these commands from the course checkout after [setup](../setup). Keep the course checkout and checkers outside the agent workspace. Preparation refuses an existing directory and makes no model requests. New conversations may produce different results from the saved examples. Path instructions are not filesystem isolation.
 
 ```bash
-.workshop-venv/bin/python workshops/odsc-2026/labs/lab.py prepare w5 --workspace ../odsc-runs/w5-repair
+.workshop-venv/bin/python workshops/odsc-2026/labs/classroom.py prepare w5-checkpoint-ordinary --workspace ../odsc-runs/w5-checkpoint-ordinary
+.workshop-venv/bin/python workshops/odsc-2026/labs/classroom.py check w5-checkpoint-ordinary --workspace ../odsc-runs/w5-checkpoint-ordinary
 ```
 
-The five existing tests pass. The independent dot assertion fails. Run an ordinary repair first; the preparation output gives the interpreter path. Its prompt asks for a new regression test before the source fix.
-
-For native goal practice, prepare a second workspace:
+Send the printed prompt to the agent after preparation. Run the check command yourself after it stops.
 
 ```bash
-.workshop-venv/bin/python workshops/odsc-2026/labs/lab.py prepare w5-goal --workspace ../odsc-runs/w5-goal
+.workshop-venv/bin/python workshops/odsc-2026/labs/classroom.py prepare w5-checkpoint-goal --workspace ../odsc-runs/w5-checkpoint-goal
+.workshop-venv/bin/python workshops/odsc-2026/labs/classroom.py check w5-checkpoint-goal --workspace ../odsc-runs/w5-checkpoint-goal
 ```
 
-In Canvas, choose **Open Workspace**, select the printed directory, and start a fresh conversation. Paste the complete printed prompt. It begins with `/goal --max 2` and includes your Python interpreter and `PYTHONPATH=src` test command. Canvas shows a goal banner with the round, status, and missing work. After it stops, use the same `check` command with case `w5-goal` and its workspace.
+Send the printed prompt to the agent after preparation. Run the check command yourself after it stops.
 
-The two-round cap limits outer judge audits, not all model calls or elapsed time. Goal mode uses a judge model as well as the agent. Inspect its explanation and run the optional behavior check yourself.
+Use the same model and tools. The native prompt enables `/goal --max 2`; configure a judge supported by your Canvas installation. The first run must inspect and report missing evidence without repairing it. The overall objective still requires both JSON artifacts. After the ordinary run stops, run the external check, show the missing reconciliation feedback, and ask it to continue. Let the native goal verifier request its own continuation within its two-audit cap. Never change this into an approval gate: the prompt already authorizes the repair stage.
 
-If your version does not recognize `/goal`, run the ordinary repair and inspect the saved complete/capped events. See the [Canvas goal instructions](https://github.com/OpenHands/docs/blob/main/openhands/usage/agent-canvas/conversations.mdx#run-a-goal).
-
-## Try A Variation
-
-First run the ordinary repair. On another fresh workspace, use the native goal command below and watch the goal banner. Which evidence does the judge use to decide that the work is complete?
-
-For the stopping example shown in the slides, use the optional `w5-goal-capped` workspace from `prepare-all`. If preparing it separately:
-
-```bash
-.workshop-venv/bin/python workshops/odsc-2026/labs/lab.py prepare w5-goal-capped --workspace ../odsc-runs/w5-goal-capped
-```
-
-Open it in a fresh Canvas conversation and use the blocked-goal prompt below. Edits are prohibited on purpose. Watch whether the judge identifies the missing output, requests another attempt, and stops at the two-audit cap. Stop a goal by sending a normal message if you want to change the experiment.
-
-## Run It And Explore
-
-Copy the task prompt below. Replace its Python interpreter placeholder with the path printed by `prepare-all`. The optional local prompt files already include that path. Use only the prepared workspace for editing.
-
-### w5
+### w5-checkpoint-ordinary
 
 ```text
-Add support for preserving dots in slugify: "api.v1 endpoint" must become "api.v1-endpoint". Inspect implementation and tests first. Add a regression test, run PYTHONPATH=src /absolute/path/to/.workshop-venv/bin/python -m pytest -q and show the failing output and exit status before changing implementation. Then fix only src/slugify.py, rerun the tests, and run a separate exact-output assertion. Preserve existing behavior and tests. Inspect the diff and report the commands, results, and uncertainty. Stop honestly incomplete if checks still fail after two repair attempts. Do not install dependencies or make git commits.
+Work only in this workspace. Do not read parent directories, external files, other conversations, network, credentials, or grading artifacts. Do not install dependencies, commit, or create memory files. Use PYTHONDONTWRITEBYTECODE=1. All requirements are stated in README.md. Verify the actual behavior and report the evidence and changed files. Complete the daily-report acceptance contract in README.md, including BOTH report.json and reconciliation.json. This is a deliberately prepared incomplete checkpoint, not an observed prior agent failure. Read CHECKPOINT.md and VERIFICATION.json for provenance and executable-check feedback. Only report.py, test_report.py, report.json, reconciliation.json may change.
 
-For imports and tests use PYTHONPATH=src /absolute/path/to/.workshop-venv/bin/python -m pytest -q. Use the same interpreter and PYTHONPATH=src for the separate dot assertion. The dependencies are already installed; do not install packages.
+This exercise intentionally has two stages. On the FIRST run of this conversation, inspect the checkpoint, run the existing tests and CLI, and report concrete missing acceptance evidence. Do not edit any files during that first run (CLI-generated report.json is allowed). End the run after the checkpoint report, explicitly identifying it as incomplete. That inspection milestone does NOT satisfy the overall objective. On a subsequent continuation message, the first-run restriction is lifted: repair the missing implementation, add regression tests, generate both artifacts and verify the complete contract, including empty input and pending retransmission IDs. No human approval is required for the continuation stage. Do not delegate. The objective is complete only when both artifacts and all README requirements are verified.
 ```
 
-### w5-goal
+### w5-checkpoint-goal
 
 ```text
-/goal --max 2 Preserve dots: slugify("api.v1 endpoint") must return "api.v1-endpoint". Existing tests must pass. Inspect first; edit only src/slugify.py and tests/test_slugify.py if needed. Preserve existing tests. Completion requires actual passing test output and a separate exact-output assertion after the latest edit. Report remaining failures honestly.
+/goal --max 2 Work only in this workspace. Do not read parent directories, external files, other conversations, network, credentials, or grading artifacts. Do not install dependencies, commit, or create memory files. Use PYTHONDONTWRITEBYTECODE=1. All requirements are stated in README.md. Verify the actual behavior and report the evidence and changed files. Complete the daily-report acceptance contract in README.md, including BOTH report.json and reconciliation.json. This is a deliberately prepared incomplete checkpoint, not an observed prior agent failure. Read CHECKPOINT.md and VERIFICATION.json for provenance and executable-check feedback. Only report.py, test_report.py, report.json, reconciliation.json may change.
 
-For imports and tests use PYTHONPATH=src /absolute/path/to/.workshop-venv/bin/python -m pytest -q. Use the same interpreter and PYTHONPATH=src for the separate dot assertion. The dependencies are already installed; do not install packages.
+This exercise intentionally has two stages. On the FIRST run of this conversation, inspect the checkpoint, run the existing tests and CLI, and report concrete missing acceptance evidence. Do not edit any files during that first run (CLI-generated report.json is allowed). End the run after the checkpoint report, explicitly identifying it as incomplete. That inspection milestone does NOT satisfy the overall objective. On a subsequent continuation message, the first-run restriction is lifted: repair the missing implementation, add regression tests, generate both artifacts and verify the complete contract, including empty input and pending retransmission IDs. No human approval is required for the continuation stage. Do not delegate. The objective is complete only when both artifacts and all README requirements are verified.
 ```
 
-### w5-goal-capped (optional)
+## Inspect saved evidence
 
-```text
-/goal --max 2 Preserve dots: slugify("api.v1 endpoint") must return "api.v1-endpoint". Existing tests must pass. Completion requires actual passing test output and a separate exact-output assertion. Report remaining failures honestly.
-
-For this deliberately constrained cap probe, do not edit source or tests, create output files, install packages, or make commits. Only inspect and run checks. The starting implementation drops dots; never manufacture a passing result. Do not request human input. If the goal cannot be satisfied under these constraints, report the failed check.
-
-For imports and tests use PYTHONPATH=src PYTHONDONTWRITEBYTECODE=1 /absolute/path/to/.workshop-venv/bin/python -m pytest -q -p no:cacheprovider. Use the same interpreter and environment for the separate dot assertion. The dependencies are already installed.
-```
-
-This probe should leave the workspace unchanged. Its five existing tests pass while the dot assertion fails. A failed behavior check is expected here; inspect the goal banner for the separate continuation and cap result.
-
-## Optional Checks
-
-After the agent stops, run this command yourself from the course checkout. For other lanes replace both the case and workspace. Preserve the checker outside the editing workspace.
-
-```bash
-.workshop-venv/bin/python workshops/odsc-2026/labs/lab.py check w5 --workspace ../odsc-runs/w5-repair
-```
-
-Use this check as feedback on your experiment. Exit 0 means the example's behavior checks passed; exit 1 explains what needs inspection. Unexpected file edits appear as notes. Add `--strict-scope` if you want to reproduce the supplied editing scope. The check is optional; inspect the agent's actual test output and final diff either way.
-
-Look through the conversation details. When original tests pass but the objective check fails, who should reject completion? What new evidence earns another attempt? What should happen when edits are prohibited?
-
-## Record What You Notice
-
-| Run | What changed? | What did the agent do differently? | What did I learn? |
-|---|---|---|---|
-| Ordinary repair | | | |
-| Native goal | | | |
-| Blocked goal (optional) | | | |
-
-Time, calls, and provider usage are optional. Record unavailable numbers as unknown. Repeated runs are useful if you want to make a performance claim.
+<a href="/learn-openhands-harness/workshop-examples/2026-10-18-v3/classroom/05D.html" target="_self">05D</a> resumes after ordinary verifier feedback. <a href="/learn-openhands-harness/workshop-examples/2026-10-18-v3/classroom/05E.html" target="_self">05E</a> contains a saved rejection, continuation and acceptance, with exact goal verdict payloads in the full history. Both move from 4/8 to 8/8 external checks. The native judge reviews the transcript; it does not independently execute those checks. Stock Canvas chat can hide internal goal updates; use the linked full history for rejection evidence. Ordinary unsafe cleanup and native rejected out-of-workspace attempts remain explicit in the <a href="/learn-openhands-harness/workshop-examples/2026-10-18-v3/reports/workshop5.html" target="_self">full W5 report</a>. The original slugify and capped goal examples remain reserves.

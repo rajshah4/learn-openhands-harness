@@ -1,0 +1,53 @@
+<!doctype html><meta charset="utf-8"><title>workshop3 outcome audit</title><style>body{font:17px system-ui;max-width:1100px;margin:40px auto}pre{white-space:pre-wrap;overflow-wrap:anywhere}</style><h1>workshop3 full outcome audit</h1><pre># Use the prior-agreement design for Workshop 3
+
+The clearest teaching example is a fictional customer&#x27;s export agreement carried from an earlier session. Use the three isolated trial-2 histories: no supplied agreement, an older draft, and the accepted note. The task explicitly signals that the earlier agreement matters. A specific clarification with no speculative edit is a successful outcome.
+
+All 14 new runs completed. Eight implemented the requested behavior and passed independent contract checks. Six correctly stopped for clarification and left their starters untouched. All 14 passed the file-change audit. One investigation run crossed the read boundary and accessed the parent grader; its efficiency comparison is contaminated. All outcomes remain in outcome-matrix.md, outcome-matrix.csv, per-run evidence, and the separate candidate archive. The three original published histories remain indexed in originals.json and were not replaced.
+
+## What the three designs showed
+
+| Design | Conditions and observations | Teaching decision |
+|---|---|---|
+| Prior customer agreement | Initial pilot plus two isolated repeats per condition: no notes and older draft each asked for clarification without editing; accepted notes each produced a passing implementation. | Recommend. Show information sufficiency, draft status, and independent validation. |
+| Saved investigation shortcut | Both pilots passed. No notes used 14 actions; the supplied hint used 16. The no-notes run read parent baseline-contract.json, prompt.txt and run.json despite its workspace restriction. | Preserve as an inconclusive/contaminated pilot. Do not claim fewer reads, faster reasoning, or token savings. |
+| Stale guidance with current evidence | All three pilots passed. Action counts were 11/10/10 for no/current/older notes. The older note was reconciled with accepted decision 002. | Optional reserve. Show successful reconciliation, with no claim that stale memory caused harm. |
+
+For the agreement design, trial 1 used workspaces nested in the evidence repository. Trials 2 and 3 used separate temporary workspaces and kept graders elsewhere. The prompts and starter bytes remained unchanged, but this layout change is explicitly versioned. Each isolated condition therefore has two matched repeats; pooling three runs as if their harness layout were identical would be misleading. No seeds were requested or established. These are curated demonstrations, not representative statistics or an estimate of model reliability.
+
+## Recommended classroom set
+
+| Current slide | Selected history | What to highlight |
+|---|---|---|
+| 60 | agreement-none-t2, db0457db-ec29-451e-9481-f8303d040e6b | The task signals a prior agreement. Final event 6e21b568-fbc4-410f-b709-bdd4370215da asks for the exact missing-value representation and ID rules. Hash audit shows no edits. Some extra questions are unnecessary. |
+| 61 | agreement-older-t2, 9972020e-e474-475d-a36a-a24cfa763ae5 | The supplied September draft explicitly awaits the October decision. Final event bd686a0e-10a4-416a-9896-4f800aeb1929 asks for the final marker instead of implementing the draft. Some extra ID questions are unnecessary. |
+| 62 | agreement-current-t2, f6e6f898-504d-4e4b-9d5f-9089ddc3c25a | The accepted note specifies absent/None -&gt; NA, existing empty string unchanged, and string IDs preserved. Direct probe action 987006a4-299f-437f-8548-8f2e4234b554 and the independent contract demonstrate the difference. Only exporter.py and test_exporter.py changed. |
+| Optional reserve | stale-older-t1, bbee1149-3f29-4f72-8766-517cd71f4983 | The repository&#x27;s accepted decision supersedes the saved note. Final event a14bbf64-f043-4858-8d7b-f50d8e1d1f86 explains the choice. |
+
+Trial 2 was the first complete trio in the corrected workspace layout. It was selected by that common layout and its visible evidence, not by the lowest cost or a dramatic failure. Trial 3 remains available and shows the same handling with different investigation lengths. The initial no-notes pilot includes an incorrect claim that Python csv.writer emits None as the text None. It emits an empty field; an absent key raises KeyError before CSV writing. csv-claim-probe.json preserves this check. Its clarification was appropriate even though that explanatory claim was wrong.
+
+The older draft is explicitly uncertain. This is not a test of an apparently authoritative stale agreement, nor a demonstration that the model spontaneously distrusts every stale note. The common prompt also tells it to clarify when a necessary prior agreement is missing. The lesson is a visible, checkable workflow using that instruction.
+
+## Actual context and resource limits
+
+The requested settings disabled memory and skill loading. Actual persisted Canvas configuration enabled ambient user memory and retained four skill listings. Across all 14 runs, the static system prompt, ambient MEMORY_CONTEXT and SKILLS blocks each have one shared hash. The memory and skill blocks contain no Northstar facts. context-audit.json records requested-versus-effective details. The defensible label is **supplied task-specific notes under shared ambient context**, rather than “automatic memory off.” The three original classroom states also persist load_memory=true and four skill listings (original-effective-context.json), so the earlier runner&#x27;s claim that automatic memory was disabled was incorrect. The existing public histories and captions were not changed here. The originals still do not establish that stale note content caused the extra memory-file write.
+
+Model requested and resolved: openhands/deepseek-v4-flash through the existing workshop gateway. Requested reasoning_effort=none; SDK receipts nevertheless report reasoning tokens. Do not infer absence of model reasoning from the requested parameter. Canvas 1.27.1 and SDK/server 1.53.0 were used; server version and pinned archive dependencies were checked. The provider weight revision is unavailable. Terminal and file_editor were the only model tools, with no task delegation tool. Budgets were 24 conversation iterations and a 300-second runner timeout, two active runs maximum.
+
+The 14 SDK cost records sum to **$0.14316**, including the contaminated pilot. This is SDK-reported accounting, not an independently reconciled invoice. Per-run prompt, completion and cache-read counts are in outcome-matrix.csv; raw per-call usage/cost structures are in each run.json. Prompt counts include cached input. Clarification and implementation are different amounts of completed work, so their costs do not measure a memory efficiency benefit. Elapsed durations include startup and polling overhead. Note lengths were not matched. Earlier quantitative experiments use different versioned conditions and remain separate.
+
+## Fixtures, checks and reproducibility
+
+experiment.py contains the three starter builders, exact task/notes dictionaries and independent contract checkers. Every run retains prompt.txt, starter-hashes.json, baseline-contract.json, final hashes, sanitized events, final response, and a run.json with independent behavior and unittest results. The runner refuses to overwrite a run. File-edit scope and read boundaries are assessed separately. The hash audit compares final source-file contents, excludes Git metadata and bytecode, and does not prove that no transient write occurred. LocalWorkspace is not a filesystem security sandbox.
+
+Two offline checker tests reject the broken starters, accept known good fixes, and reject a wrong missing-value sentinel. Starter and prompt identity across conditions/repeats are checked in validation-summary.json. Agent-written unittest success alone is weak: the unmodified starter&#x27;s single header test also passes. The independent checker adds the discriminating cases.
+
+The official skill refresh hit a filesystem restriction. Checked-out guidance and the existing tested Canvas runner were used. The referenced completion-wait skill was absent, so attached job outputs and exit codes were inspected during this turn. No model-capacity error occurred in the resumed batch, and no model switch or retry batch was used.
+
+## Archive/import result
+
+The separate candidate-package contains all 14 histories, 484 original event IDs and timestamps, inert execution configuration, checksummed metadata, readable HTML transcripts, sanitized JSON evidence and final workspace snapshots. Ambient personal memory text is omitted from the portable SystemPromptEvent dynamic context; context-audit.json preserves its shared hash. Git control directories are excluded. No raw credential-bearing state or metadata was copied. Packaging provenance records the transformation and source event/state hashes.
+
+The existing setup_examples workflow verified and imported this package into candidate-import without touching the live store. The first archive attempt lacked the viewer&#x27;s expected evidence directory; that failed acceptance log and attempt are retained. The corrected package includes it. Final acceptance tests check actual event schemas, every history&#x27;s detail/event reads, byte-preserved import of packaged events, inert credentials/tools, and mutation rejection. Tests run through an in-process TestClient, so no new port or service was opened. The existing viewer&#x27;s root redirect names an unrelated original classroom history; navigate to a selected conversation URL explicitly when integrating this candidate. Follow-up acceptance visually verified the three original selected histories and an expanded successful tool result in native Canvas. Four actual screenshots and event-level provenance are in native-browser/. Sanitized browser inspection against an already-running archive viewer returned 404 for newly staged IDs because its catalog predates the imports; temporary copies were removed. A viewer initialized from the final imported store still needs browser verification during integration.
+
+There is no blocker to reviewing the recommendation or importing the histories through the existing workflow. Replacing the live deck/package/release and browser presentation review remain outside this exploration. The proposed wording is in SLIDE-PROPOSAL.md. Nothing was published, pushed or deployed; no active service or AWS configuration was changed.
+</pre>

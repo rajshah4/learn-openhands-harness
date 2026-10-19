@@ -2,11 +2,9 @@
 
 ## Start with the saved conversations
 
-Download the [student conversation package on GitHub](https://github.com/rajshah4/learn-openhands-harness/releases/tag/odsc-conversations-2026-10-18-v2). It includes 19 conversations, setup scripts, directions, and verified checksums.
+The updated <a href="/learn-openhands-harness/workshop-examples/2026-10-18-v3/index.html" target="_self">saved conversations</a> contain 18 classroom selections, two optional ledger examples and 33 reserve histories. Read the <a href="/learn-openhands-harness/workshop-examples/2026-10-18-v3/outcomes.html" target="_self">complete outcome tables</a> before comparing selected traces. Download all 53 parents and seven child histories from the [v3 release](https://github.com/rajshah4/learn-openhands-harness/releases/tag/odsc-conversations-2026-10-18-v3). No model key is needed to inspect them.
 
-Unzip the named student ZIP and open `harness-conversations/package/index.html` to inspect the conversations immediately. No model key is required. For the optional read-only Canvas viewer, follow the README inside the package. See [conversation viewer directions](./conversations) for more details.
-
-The package passed all 17 automated tests, and the ZIP downloaded from GitHub matched its published checksum.
+Unzip the named student ZIP and follow its README. See [conversation viewer directions](./conversations).
 
 ## Run new exercises
 
@@ -55,16 +53,13 @@ If you already have a current course checkout, open a terminal in that folder an
 
 Run the remaining commands from the `learn-openhands-harness` folder.
 
-Prepare all the exercise workspaces now:
+Prepare the original session folders for Exercises 1 and 2:
 
 ```bash
 .workshop-venv/bin/python workshops/odsc-2026/labs/lab.py prepare-all
 ```
 
-This creates a new session folder under `../odsc-runs/` with **23 separate workspaces for all six exercises**, including separate OpenHands, Pi, and OpenCode copies for Exercise 1 and the optional blocked-goal probe in Exercise 5. It prints the session path and a `WORKSPACES.txt` index with each folder, profile/configuration, exercise-page link, and checking command. You do not have to run every comparison.
-
-Get the prompts from the [exercise web pages](/workshops/odsc-2026/prompts). The terminal prints the Exercise 1 link and your Python interpreter path. When a web prompt contains `/absolute/path/to/.workshop-venv/bin/python`, replace it with that printed path before sending. Keep `WORKSPACES.txt` open to find the matching folder for each exercise. Local prompt files are also saved as an optional convenience. This command runs no agents and makes no model requests. Running it again creates another session and preserves all earlier work.
-
+This creates a fresh session outside the checkout and prints `WORKSPACES.txt` plus the Python interpreter path. Use its W1 and W2 folders and prompts. It also includes the older W3-W6 fixtures, which are now reserves. **For the updated W3-W6 classroom sequence, use `classroom.py` and the exact preparation commands on the exercise pages.** These create separate new directories. Neither helper runs agents or makes model requests. Running preparation again preserves earlier work.
 
 ## 4. Prepare the Pi and OpenCode connection files
 
@@ -193,7 +188,7 @@ For Pi or OpenCode, open its own folder, choose the matching profile, and start 
 
 After each run, copy its exact **After the run, check** command from `WORKSPACES.txt` into your course terminal. The command already contains your interpreter and workspace paths.
 
-For a fresh retry of the whole workshop, run `prepare-all` again and use its new session. To prepare just one extra attempt, use a new folder name:
+For a fresh retry of Exercises 1 and 2, run `prepare-all` again and use its new session. For Exercises 3-6, use their `classroom.py prepare` command with a new path. To prepare just one extra attempt, use a new folder name:
 
 ```bash
 .workshop-venv/bin/python workshops/odsc-2026/labs/lab.py prepare w1 --workspace ../odsc-runs/w1-pi-retry

@@ -1,5 +1,7 @@
 # Six workshop labs
 
+The current classroom selections use `classroom.py` and `classroom-fixtures/` for W3-W6. Use the updated exercise pages for preparation, prompts and checks. `lab.py` remains the W1/W2 helper and preserves original W3-W6 cases as reserves. The original instructions below describe that preserved lab package.
+
 The participant guide lives in [the workshop docs](../../../docs/workshops/odsc-2026/index.md).
 This directory is the portable execution package: prompts, focused starters,
 optional behavior checks, a read-only GitHub MCP server, and selected saved receipts.

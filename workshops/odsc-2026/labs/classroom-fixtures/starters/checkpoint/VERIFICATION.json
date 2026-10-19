@@ -1,0 +1,142 @@
+{
+  "pass": false,
+  "checks": [
+    {
+      "case": "mixed",
+      "artifact": "report.json",
+      "expected": {
+        "total": "0.25",
+        "rows": 3
+      },
+      "observed": {
+        "total": "0.25",
+        "rows": 3
+      },
+      "pass": true,
+      "build_error": null
+    },
+    {
+      "case": "mixed",
+      "artifact": "reconciliation.json",
+      "expected": {
+        "included_ids": [
+          "a",
+          "b",
+          "d"
+        ],
+        "excluded_pending_ids": [
+          "c"
+        ],
+        "duplicate_ids": [
+          "a"
+        ],
+        "total": "0.25"
+      },
+      "observed": {
+        "error": "FileNotFoundError"
+      },
+      "pass": false,
+      "build_error": null
+    },
+    {
+      "case": "empty",
+      "artifact": "report.json",
+      "expected": {
+        "total": "0.00",
+        "rows": 0
+      },
+      "observed": {
+        "total": "0.00",
+        "rows": 0
+      },
+      "pass": true,
+      "build_error": null
+    },
+    {
+      "case": "empty",
+      "artifact": "reconciliation.json",
+      "expected": {
+        "included_ids": [],
+        "excluded_pending_ids": [],
+        "duplicate_ids": [],
+        "total": "0.00"
+      },
+      "observed": {
+        "error": "FileNotFoundError"
+      },
+      "pass": false,
+      "build_error": null
+    },
+    {
+      "case": "pending-duplicate",
+      "artifact": "report.json",
+      "expected": {
+        "total": "10.00",
+        "rows": 2
+      },
+      "observed": {
+        "total": "10.00",
+        "rows": 2
+      },
+      "pass": true,
+      "build_error": null
+    },
+    {
+      "case": "pending-duplicate",
+      "artifact": "reconciliation.json",
+      "expected": {
+        "included_ids": [
+          "x",
+          "y"
+        ],
+        "excluded_pending_ids": [
+          "z"
+        ],
+        "duplicate_ids": [
+          "z"
+        ],
+        "total": "10.00"
+      },
+      "observed": {
+        "error": "FileNotFoundError"
+      },
+      "pass": false,
+      "build_error": null
+    },
+    {
+      "case": "cli",
+      "artifact": "report.json",
+      "expected": {
+        "total": "0.25",
+        "rows": 3
+      },
+      "observed": {
+        "total": "0.25",
+        "rows": 3
+      },
+      "pass": true
+    },
+    {
+      "case": "cli",
+      "artifact": "reconciliation.json",
+      "expected": {
+        "included_ids": [
+          "a",
+          "b",
+          "d"
+        ],
+        "excluded_pending_ids": [
+          "c"
+        ],
+        "duplicate_ids": [
+          "a"
+        ],
+        "total": "0.25"
+      },
+      "observed": {
+        "error": "FileNotFoundError"
+      },
+      "pass": false
+    }
+  ]
+}

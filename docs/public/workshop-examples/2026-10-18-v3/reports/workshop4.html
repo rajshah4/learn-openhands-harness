@@ -1,0 +1,80 @@
+<!doctype html><meta charset="utf-8"><title>workshop4 outcome audit</title><style>body{font:17px system-ui;max-width:1100px;margin:40px auto}pre{white-space:pre-wrap;overflow-wrap:anywhere}</style><h1>workshop4 full outcome audit</h1><pre># Workshop 4 substitute pilots, 2026-10-18
+
+Retain the existing Flash/Pro async-counter repair pair. Replace the open-ended security review with the controlled security fixture if the lesson is evidence-based acceptance. These pilots do not establish a general Pro quality advantage or validate an escalation policy. The ledger repair is a useful reserve task and produced a full-check tie in its initial pair.
+
+Observed security check sequences: Flash timeout, 10/10, 10/10; Pro 9/10, 9/10, 9/10. Both ledger attempts passed 12/12. This contradicts a stronger-model-win story on this selected fixture. These are behavioral check scores, not full protocol acceptance: no security attempt satisfies every combined behavior, reporting, and scope criterion. Both 10/10 Flash attempts have documented scope deviations.
+
+This is exploratory task selection. Every attempt is retained, including timeouts and scope deviations. Selected traces are teaching examples, not representative model success rates.
+
+## Candidates and independent checks
+
+| Candidate | Task and acceptance | Selection rationale |
+|---|---|---|
+| Controlled security | Repair three planted vulnerability families; preserve two explicitly signposted safe functions. Three supported findings, zero false positives, executable reproductions, 10/10 behavioral groups, and scope compliance are required. | Most readable evidence. Separates supported findings from successful remediation and final-answer claims. The signposted decoys limit its value as a blind security-review benchmark. |
+| Event ledger | Repair unordered credits, debits, idempotent retries, and reversals under a written contract. 12/12 behavioral groups and scope compliance required. | Both initial attempts pass. More domain rules to explain, and less additional teaching value beside the accepted counter baseline. |
+
+Fixtures: `fixtures/security/`, `fixtures/ledger/`. Prompts: `prompts/security-v1.txt`, `prompts/ledger-v1.txt`. Separate checker entrypoints: `check_security.py WORKSPACE`, `check_ledger.py WORKSPACE`; shared implementation in `check.py`. Reference solutions remain outside the model workspaces.
+
+Checker validation preceded model output evaluation: security starter 4/10, reference 10/10, reject-all 2/10, partial fix 9/10; ledger starter 2/12, reference 12/12, reject-all 9/12, constant-zero 0/12. Full acceptance is required, so high invalid-case counts do not make reject-all acceptable. See `checker-validation.json` and `CHECKER-REVISIONS.md`. These finite checks are not a proof over all inputs.
+
+## Complete attempt matrix
+
+| Attempt | State | Independent groups | Finding families / raw extra entries | Tool calls | Seconds | SDK-reported USD |
+|---|---|---:|---:|---:|---:|---:|
+| [security-flash-01](runs/security-flash-01/outcome-audited.json) | error | 4/10 (unchanged starter) | n/a | 2 | 254.1 | 0.00199666 |
+| [security-pro-01](runs/security-pro-01/outcome-audited.json) | finished | 9/10 | 3 / 0 | 16 | 65.4 | 0.06533239 |
+| [ledger-flash-01](runs/ledger-flash-01/outcome-audited.json) | finished | 12/12 | n/a | 7 | 130.2 | 0.01229031 |
+| [ledger-pro-01](runs/ledger-pro-01/outcome-audited.json) | finished | 12/12 | n/a | 5 | 54.1 | 0.03186552 |
+| [security-flash-02](runs/security-flash-02/outcome-audited.json) | finished | 10/10 | 3 / 2 | 14 | 201.7 | 0.02339691 |
+| [security-pro-02](runs/security-pro-02/outcome-audited.json) | finished | 9/10 | 3 / 0 | 13 | 46.3 | 0.07680455 |
+| [security-flash-03](runs/security-flash-03/outcome-audited.json) | finished | 10/10 | 3 / 0 | 27 | 196.8 | 0.03904185 |
+| [security-pro-03](runs/security-pro-03/outcome-audited.json) | finished | 9/10 | 3 / 0 | 16 | 112.5 | 0.05394506 |
+
+Total SDK-reported cost across all attempts: **$0.30467327**.
+`usage-receipt.json` retains per-request cost records, token usage and response identifiers. These are SDK/gateway reports, not a provider invoice reconciliation. Timed-out or retried requests may have unreported billing. Cache reads vary across runs. No savings claim or general cost ratio follows from this exploratory sample.
+
+The raw extra-entry column counts repeated function names, not false claims. Flash attempt 2 reports five demonstrated attack cases across three functions; its two extra path entries are supported by the original/repaired reproduction outputs. This exposed a flaw in the preregistered function-name proxy. Keep that raw result; use `finding-audit.json` for the separate evidence-backed claim review. Do not rank models by the flawed raw report score. This is a post-output evaluator correction, so the findings review is exploratory.
+
+Each run retains the prompt/hash, requested configuration, baseline check, events, final response, independent checks and receipt. `results.json` is the audited matrix; `outcome.json` preserves original runner output; `outcome-audited.json` adds actual model resolution and context/scope audit results.
+
+## Exact evidence to teach
+
+1. Keep 04C Flash counter `e44aa44509154ccdbaf34951996cb5bf` and 04G Pro counter `5cc9324580344ba7b0e054513d27a983`: both meet the existing async-counter acceptance checks using different repairs. Do not infer general thread safety from the single-event-loop version.
+
+2. Controlled security, `security-pro-01`: `repro-original.json` prints three `[OK]` demonstrations and exits 0. `repro-repaired.json` prints all three `[BLOCKED]` messages and exits 1. Source inspection of `repro.py` corroborates that these cover SQL injection, unauthorized document read, and sibling-directory traversal; the nonzero exit alone would not establish all three. All three entries in `findings.json` are supported and there are no added findings.
+
+3. In that same run, `service.py` uses `if root != target and root not in target.parents:`. This establishes resolved containment but accepts an absolute name inside root. The contract explicitly disallows all absolute names. `independent-check.json` fails `path_contract` with `AssertionError: expected PermissionError`. The final answer nevertheless says absolute-name rejection was already correct. Its own absolute-path probe used `/etc/passwd`, which is outside root and was denied; that probe did not test the in-root case. No contents of that system file were returned.
+
+4. For the matched second attempt pair, compare `runs/security-flash-02/workspace/service.py` and `runs/security-pro-02/workspace/service.py`. Flash explicitly rejects `name.is_absolute()` before resolved containment; Pro repeats containment alone. Independent results are 10/10 versus 9/10. Both are selected exploratory traces and both used fixed external temporary helpers, so show that scope caveat. Their native IDs are `40e0a1653b74411bbc8bf36029a29c86` (Flash) and `50cb905a6a614518bc6442db73e65b14` (Pro); staged HTML and native histories use those IDs.
+
+5. The first Flash security attempt remains a provider timeout, not evidence of failure to reason about the security fixture. Use `errors.json` to show the `LLMTimeoutError`, not as a quality ranking. Later fresh attempts remain in the matrix regardless of outcome.
+
+The full per-run independent-check details and reproduction outputs are collected in `TEACHING-EVIDENCE.md`.
+
+## Proposed headlines and narration
+
+- Baseline: **Both models can pass the repair.** &quot;Flash and Pro both meet the counter contract. Compare the assumptions behind their fixes before paying for an escalation.&quot;
+- Review task: **Turn each finding into a local reproduction.** &quot;This fixture has a known answer key. We can count supported findings, false positives, attacks blocked, and valid behavior preserved.&quot;
+- Acceptance: **Blocking the exploit can still miss the contract.** &quot;Pro blocked the three demonstrated attacks but missed the absolute-name rule. Its final statement was broader than its test evidence.&quot;
+- Summary: **Choose with checks, then verify the escalation.** &quot;An accepted cheaper-model repair is useful evidence. A stronger-model label is not an acceptance test. We have not yet measured an escalation policy.&quot;
+
+If the curriculum requires a reliable stronger-model win, this work does not justify that claim. Use the scored task to teach model selection under checks, or run a separately preregistered confirmatory study on fresh tasks and fixed acceptance rules. Do not tune examples until Pro wins.
+
+## Configuration, context and scope audit
+
+Producing stack: Canvas 1.27.1; SDK, agent-server, tools and workspace 1.53.0, verified from server_info and installed package metadata. Requested models: `openhands/deepseek-v4-flash` and `openhands/deepseek-v4-pro`; resolution verified from persisted agent LLM configuration. The gateway exposes aliases, not immutable provider snapshot versions, so exact underlying model revisions could not be pinned. Tools were terminal and file_editor, no MCP tools, reasoning_effort none, max_output_tokens 16,384 per response, two retries, 120-second request timeout, 40 max iterations and a 600-second wall deadline. The 30-tool-call instruction was a prompt budget, not a hard call limiter. See requested `config.json` and persisted `actual-config.json` per run. The persisted LLM base_url is null even though the request specifies the workshop gateway; the alias and receipt do not independently prove the final upstream routing details.
+
+Workspaces, prompts and budgets were matched across models within each candidate. There was one pilot conversation at a time; any peer conversations observed at creation are retained in the matrix. No existing conversation or service was stopped. LocalWorkspace is not OS filesystem isolation; this is a local fixture exercise with instruction-based scope plus a trace audit.
+
+Actual SystemPromptEvent inspection found ambient MEMORY_CONTEXT, SKILLS and SOUL sections despite requested context load flags being false; persisted actual-config.json has load_memory=true. The server materialized a different memory setting from the submitted request. All eight runs had identical section hashes for MEMORY_CONTEXT, SKILLS and SOUL. `context-audit.json` retains section hashes and read requests without personal memory text. Do not describe these as memory-disabled runs.
+
+No grader read was observed in the audited requests. Flash attempt 3 also created `/Users/instructor/.openhands/memory/2026-10-18.md` despite the workspace restriction. The tool recorded prev_exist=false. After the runs, its bytes still exactly matched the experiment-created text; a conditional hash-checked rollback removed that new file. `memory-side-effect.json` preserves the evidence and cleanup status. The last Pro attempt still received the same MEMORY_CONTEXT hash as the prior runs, so no initial-context contamination from that new file was observed. Flash attempt 3 remains a material scope violation, not a fully accepted run. Some security attempts wrote fixed `/tmp/*.py` source or check helpers outside their workspace. These are protocol deviations even though the audited commands construct fixture-only files. `scope_audit.fixed_external_python_helpers` records each path; the actual model file requests and shell commands are retained for review. Reproduction scripts also use generated temporary directories, which should be explicitly distinguished from forbidden external reads in a future prompt. Preserve the current v1 outcomes instead of retroactively relaxing the rule. Scope issues prevent labeling a run fully accepted even if all behavior checks pass.
+
+`RUNNER-NOTES.md` records the first-run model-resolution guard correction, resumed unstarted lanes, guidance-refresh limitation and credential-name preflight. No silent model switch occurred. No live deck, established student package, AWS, security settings or external service was changed.
+
+## History and packaging status
+
+Separate staging package: 7 finished native histories, 359 events. Manifest hashes, event-parent topology, event schemas and known-secret scans pass. Ambient system/context text and private reasoning fields are omitted recursively. An initial staging schema failure caused by redacting a ThinkAction string to a list was repaired without changing model evidence; the failed stage is preserved under `staging-repairs/`. Failed attempts remain in run evidence and live Canvas, not relabeled as finished native histories.
+
+The staging directory is ready for the established package workflow. Read-only API acceptance was also tested against the existing archive app without initializing an agent or making a model call. Actual browser acceptance now passes for all seven native histories and all seven portable HTML pages, with documented archive UX and source-content caveats. See `BROWSER-ACCEPTANCE.md` and `browser-acceptance/browser-checks.json`. It remains separate and unapproved for student distribution pending teaching/content review. The existing student package and live deck were untouched. `history-readiness.json`, `history-provenance.json` and `archive-api-check.json` record the checks performed.
+</pre>

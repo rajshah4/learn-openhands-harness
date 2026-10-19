@@ -10,10 +10,10 @@ Start with [setup](/workshops/odsc-2026/setup), then open the
 |---|---|
 | [1. Harness choice](/workshops/odsc-2026/exercises/00-working-harness) | Repair the same pagination bug in separate harnesses |
 | [2. Tool design](/workshops/odsc-2026/exercises/01-add-harness-capability) | Explain a PR with different GitHub tool surfaces |
-| [3. Memory](/workshops/odsc-2026/exercises/02-place-context) | Add next-page browsing with different project notes |
-| [4. Model routing](/workshops/odsc-2026/exercises/03-model-routing) | Compare models on four tasks and choose an escalation rule |
-| [5. Goals and stopping](/workshops/odsc-2026/exercises/04-let-it-run) | Fix dot preservation and inspect goal audits |
-| [6. Delegation](/workshops/odsc-2026/exercises/05-multi-agent) | Compare one repair owner with owner plus validator |
+| [3. Memory](/workshops/odsc-2026/exercises/02-place-context) | Recover a prior customer agreement from different supplied notes |
+| [4. Model routing](/workshops/odsc-2026/exercises/03-model-routing) | Compare counter and controlled security repairs; verify before escalating |
+| [5. Goals and stopping](/workshops/odsc-2026/exercises/04-let-it-run) | Inspect a staged report checkpoint, rejection and continuation |
+| [6. Delegation](/workshops/odsc-2026/exercises/05-multi-agent) | Compare one reservation owner with independent adversarial discovery |
 
 You can run the exercises yourself or inspect saved traces from my agent runs.
 Use the [worksheet](/workshops/odsc-2026/worksheet) to record your predictions and observations.

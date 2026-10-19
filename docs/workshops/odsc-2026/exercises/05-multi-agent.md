@@ -1,87 +1,39 @@
-# Exercise 6: Compare one agent with a validator
+# Exercise 6: Inspect the second context's contribution
 
-## What Problem Are You Solving?
+Compare a single owner with an owner that requests one independent adversarial review. Both receive the same reservation contract. Predict what independent discovery would add when the single owner can already solve the task.
 
-Start by comparing one repair agent against multiple agents. Both approaches must fix a counter so 50 concurrent jobs produce 50 while keeping the work concurrent. See what the validator adds after the repair.
-
-1. Predict what changes before running or reading results.
-2. Try a single agent and a fresh validator, or use the saved examples.
-3. Record evidence and a decision in the [worksheet](/workshops/odsc-2026/worksheet).
-
-## Start With These Files
-
-Follow [setup](/workshops/odsc-2026/setup) first. If you ran `lab.py prepare-all` during setup, the workspaces below are already prepared inside your session folder. Use its `WORKSPACES.txt` for the exact workspace paths and check commands. Copy the task prompt from this page.
-
-The individual commands below are an alternative for preparing one run at a time. The portable package is `workshops/odsc-2026/labs/` in the course checkout. Its `starters/` hold only student inputs; `prompts/` hold full tasks; `checks/` and `evidence/` stay outside the agent workspace.
-
-For the native validator lane, open **Settings → Agent → Add agent profile** in Canvas. Name it `Workshop-Validator`, choose **OpenHands**, and select the same **Workshop-DeepSeek** LLM profile. Under **Tools → Choose tools**, enable only `terminal`, `file_editor`, and `task_tool_set`. Set **MCP servers** to **Choose servers** with all servers off, and **Secrets** to **Choose secrets** with only `ODSC_LLM_API_KEY` enabled. Save.
-
-Use `Workshop-OpenHands` for the single-agent run and `Workshop-Validator` for the native validator run. Before that run, open a fresh conversation with `Workshop-Validator` and ask:
-
-```text
-List the tool names available to you without calling them or changing files. Is there a native task or delegation tool that can return a child result?
-```
-
-Inspect the response and your profile's tool configuration. Start another fresh conversation for the exercise. Confirm that the run contains an actual child tool call and returned result before describing it as native delegation.
-
-If your profile has no delegation tool, use two conversations: let the first repair the task, then open the same workspace in a fresh conversation and ask for read-only validation. Give it the file, required behavior, test command, and a brief return format. Bring its findings back to the repair owner. This lets you explore fresh context; label it manual validation rather than native delegation.
+Run these commands from the course checkout after [setup](../setup). Keep the course checkout and checkers outside the agent workspace. Preparation refuses an existing directory and makes no model requests. New conversations may produce different results from the saved examples. Path instructions are not filesystem isolation.
 
 ```bash
-.workshop-venv/bin/python workshops/odsc-2026/labs/lab.py prepare w6-single --workspace ../odsc-runs/w6-single
-.workshop-venv/bin/python workshops/odsc-2026/labs/lab.py prepare w6-validator --workspace ../odsc-runs/w6-validator
+.workshop-venv/bin/python workshops/odsc-2026/labs/classroom.py prepare w6-reservation-single --workspace ../odsc-runs/w6-reservation-single
+.workshop-venv/bin/python workshops/odsc-2026/labs/classroom.py check w6-reservation-single --workspace ../odsc-runs/w6-reservation-single
 ```
 
-Use the same model if you want to focus on the effect of adding a context. If you record usage, include the owner and validator.
-
-## Try A Variation
-
-Try the single-agent repair first. Then add a fresh validator, using native delegation or the two-conversation fallback below. Compare what the second context notices and what the owner has to explain again.
-
-Change the validator's brief: ask it to check concurrency, then ask it to critique the evidence. Notice how the handoff changes. You are exploring the cost and usefulness of another context, so a full orchestration system is optional.
-
-## Run It And Explore
-
-Copy the task prompt below. Replace its Python interpreter placeholder with the path printed by `prepare-all`. The optional local prompt files already include that path. Use only the prepared workspace for editing.
-
-### w6-single
-
-```text
-Debug the async race in toyapp/async_jobs.py. Fifty concurrent jobs must reliably produce 50. Simulated async work must remain concurrent rather than being serialized behind one long lock.
-
-Do not modify tests. Work only inside the current repository. Before finishing, run /absolute/path/to/.workshop-venv/bin/python -m pytest -q, inspect the final git status and diff, and report files changed, checks run, and remaining uncertainty. Do not install dependencies or make git commits.
-
-Use one agent. Do not delegate or call a subagent tool. Complete the objective and verify the result.
-```
-
-### w6-validator
-
-```text
-Debug the async race in toyapp/async_jobs.py. Fifty concurrent jobs must reliably produce 50. Simulated async work must remain concurrent rather than being serialized behind one long lock.
-
-Do not modify tests. Work only inside the current repository. Before finishing, run /absolute/path/to/.workshop-venv/bin/python -m pytest -q, inspect the final git status and diff, and report files changed, checks run, and remaining uncertainty. Do not install dependencies or make git commits.
-
-First repair and check the task yourself. Then invoke your harness's native task/delegation tool exactly once for a fresh independent validator of the current result. Do not delegate implementation. If no native delegation tool is available, report that limitation and stop this comparison lane.
-The validator must inspect and test only. Pass these requirements explicitly to it: do not edit source or tests, create output files, revert source, or redirect shell output. Run Python with PYTHONDONTWRITEBYTECODE=1 and pytest -p no:cacheprovider. Use subprocess.run with capture_output=True for repeated checks and print results. Return at most 250 words containing commands/results, uncertainty, and PASS/REJECT. Count words before returning.
-Do not modify files while the validator runs. After its return, address rejected requirements and report initial and final verdicts. The parent owns the final synthesis.
-```
-
-## Optional Checks
-
-After the agent stops, run this command yourself from the course checkout. For other lanes replace both the case and workspace. Preserve the checker outside the editing workspace.
+Send the printed prompt to the agent after preparation. Run the check command yourself after it stops.
 
 ```bash
-.workshop-venv/bin/python workshops/odsc-2026/labs/lab.py check w6-single --workspace ../odsc-runs/w6-single
+.workshop-venv/bin/python workshops/odsc-2026/labs/classroom.py prepare w6-reservation-team --workspace ../odsc-runs/w6-reservation-team
+.workshop-venv/bin/python workshops/odsc-2026/labs/classroom.py check w6-reservation-team --workspace ../odsc-runs/w6-reservation-team
 ```
 
-Use this check as feedback on your experiment. Exit 0 means the example's behavior checks passed; exit 1 explains what needs inspection. Unexpected file edits appear as notes. Add `--strict-scope` if you want to reproduce the supplied editing scope. The check is optional; inspect the agent's actual test output and final diff either way.
+Send the printed prompt to the agent after preparation. Run the check command yourself after it stops.
 
-Look through the conversation details. What did the fresh context add? Did the child return usable commands and results? Who owns synthesis? What could be checked more cheaply with deterministic code?
+For the team, enable the native task tool and define an `adversary` subagent using terminal and file editor, inheriting the model, with no nested delegation. Its role is to read README.md and inventory.py independently, run read-only probes and return exact input/expected/observed evidence with contract clauses. It must not edit files or suggest code. Keep both runs bounded: the recorded comparison allowed 30 total iterations (single 30; team owner 18 plus child 12), a 360-second parent stop and a $1 total batch receipt stop. That allocation itself can affect the outcome.
 
-## Record What You Notice
+### w6-reservation-single
 
-| Run | What changed? | What did the agent do differently? | What did I learn? |
-|---|---|---|---|
-| One agent | | | |
-| Owner plus validator | | | |
+```text
+Work only in this workspace; no parent directories, other conversations, grading artifacts, network, credentials or installs. No commits or memory files. Use PYTHONDONTWRITEBYTECODE=1. README.md is the complete acceptance contract, existing tests are smoke tests. Implement and verify every requirement, add regression tests, then report concrete checks and changed files. Path constraints are instructions, not filesystem isolation. Finish the prepared project against README.md. Complete all review, implementation, testing and integration yourself without delegation. You may use any local standard-library probes and all information in the workspace.
+```
 
-Time, calls, and provider usage are optional. Record unavailable numbers as unknown. Repeated runs are useful if you want to make a performance claim.
+### w6-reservation-team
+
+```text
+Work only in this workspace; no parent directories, other conversations, grading artifacts, network, credentials or installs. No commits or memory files. Use PYTHONDONTWRITEBYTECODE=1. README.md is the complete acceptance contract, existing tests are smoke tests. Implement and verify every requirement, add regression tests, then report concrete checks and changed files. Path constraints are instructions, not filesystem isolation. Finish the prepared project against README.md. Before reading inventory.py or tests or proposing any defect hypothesis, delegate exactly once to adversary. The delegation prompt must contain only the workspace path and "Read README.md and independently test inventory.py against it. Return concrete input/expected/observed evidence. Do not edit files." Wait for returned evidence. Then inspect the code, repair it, add tests and verify. Do not supply suspected bugs or test examples to the child.
+```
+
+## Inspect saved evidence
+
+<a href="/learn-openhands-harness/workshop-examples/2026-10-18-v3/classroom/06C.html" target="_self">06C</a> and <a href="/learn-openhands-harness/workshop-examples/2026-10-18-v3/classroom/06D.html" target="_self">06D</a> both pass the independent product and scope checks. The untipped reviewer executes real failures, but its reporting errors and temporary probe-file scope violation remain visible. This is independent discovery with no demonstrated correctness gain over the baseline.
+
+Optional: use `classroom.py prepare w6-ledger-single` or `w6-ledger-team` with a fresh `--workspace` and print/check the matching case. Define codec-specialist and reducer-specialist roles with disjoint module ownership as specified by the prompt, parent cap 14 and child caps 8 each. <a href="/learn-openhands-harness/workshop-examples/2026-10-18-v3/classroom/06E.html" target="_self">06E</a> completes; <a href="/learn-openhands-harness/workshop-examples/2026-10-18-v3/classroom/06F.html" target="_self">06F</a> times out before owner integration. Both pass the original checker, while a separately labeled post-hoc newline probe exposes the team's handoff contract drift. The split budget is a confound. All six new outcomes, including scheduling reserve and workflow failures, remain in the <a href="/learn-openhands-harness/workshop-examples/2026-10-18-v3/reports/workshop6.html" target="_self">complete W6 report</a>. Original counter and cache examples remain reserves.
