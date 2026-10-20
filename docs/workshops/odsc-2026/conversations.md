@@ -31,6 +31,8 @@ These steps put the saved histories into a dedicated, read-only Canvas archive. 
 
 4. Open **http://127.0.0.1:28080**. The connection is named **ODSC lecture examples**. Choose a `Workshop N · scenario · description` conversation in the sidebar. The archive contains 16 histories, including the three team workers. Workshop 4's two animations open from the HTML index instead.
 
+If you already have Canvas open at `http://localhost:8000`, you can use its existing window: open **Manage Backends → Add Backend → Agent-server → Local**. Enter **ODSC lecture examples** for Host Name and `http://127.0.0.1:28080` for Host, leave API Key blank, and click **Connect**. Select that backend to see only the lecture histories. For Canvas running on another port, use the archive's own browser tab directly.
+
 Each history has collection, workshop-number and scenario tags. The “sandbox no longer available” message is expected: you can inspect all recorded messages and tool results, but cannot resume these archived agents. Stop the viewer with Ctrl-C.
 
 This opens a separate lecture archive rather than merging old recordings into your normal Canvas history. If the destination already exists, reuse its viewer or choose a fresh folder; the installer will not overwrite it. If port 28080 is occupied, change `--port` and open that port instead. On Windows, run these commands in WSL.
