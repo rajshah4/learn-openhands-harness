@@ -6,6 +6,8 @@ Choose how you want to view the lecture examples below. To run the exercises you
 
 ## Using Agent Canvas? Open the lecture examples there
 
+New to Canvas? Start with the official [Agent Canvas installation guide](https://docs.openhands.dev/openhands/usage/agent-canvas/setup) and [first-time setup guide](https://docs.openhands.dev/openhands/usage/agent-canvas/first-time-setup). Then follow the steps below to add the lecture examples.
+
 [Download the lecture examples ZIP](https://github.com/rajshah4/learn-openhands-harness/releases/download/odsc-lecture-conversations-2026-10-19-v2/harness-lecture-conversations-2026-10-19-v2.zip). It contains only the examples shown in the lecture: 16 complete conversation histories, including the team example's three workers. Older experiments and reserves are excluded.
 
 Viewing these saved conversations needs **Python 3.13 and Node.js/npm**, but no model key. On Windows, use WSL.
@@ -81,7 +83,7 @@ agent-canvas
 
 Open the URL printed in your terminal. Leave Canvas running and open a **second terminal** for the remaining commands.
 
-Use the local npm installation for this workshop. Canvas and the lab's Python environment need access to the same local files. The [Canvas installation docs](https://github.com/OpenHands/docs/blob/main/openhands/usage/agent-canvas/setup.mdx) cover other installation options.
+Use the local npm installation for this workshop. Canvas and the lab's Python environment need access to the same local files. The [Canvas installation docs](https://docs.openhands.dev/openhands/usage/agent-canvas/setup) cover other installation options.
 
 ## 3. Download the workshop materials
 
@@ -119,6 +121,8 @@ This writes provider settings in `~/.openhands/odsc-2026/` and prints **two Comm
 This step asks for no key and makes no changes to Canvas. The files contain secret references, not credential values.
 
 ## 5. Add your key and model in Canvas
+
+The official [first-time setup guide](https://docs.openhands.dev/openhands/usage/agent-canvas/first-time-setup) explains the initial Canvas configuration. Use the workshop-specific key and model settings below for these exercises.
 
 Sign in to [OpenHands Cloud](https://app.all-hands.dev). Open **Settings → API Keys** and copy your **LLM API Key**. A Cloud API Key is a different credential and will not work here.
 
@@ -165,6 +169,8 @@ Open **Settings → Agent → Add agent profile** and fill in:
 For this initial setup, set **MCP servers** to **Choose servers** and turn every server off. Under **Secrets**, select **Choose secrets** and enable only `ODSC_LLM_API_KEY`. Click **Save**.
 
 ### Pi
+
+See the official [ACP agents guide](https://docs.openhands.dev/openhands/usage/agent-canvas/acp-agents) for how Canvas connects to external agents such as Pi and OpenCode. The settings below use the workshop’s shared model configuration.
 
 Click **Add agent profile** again and fill in:
 
