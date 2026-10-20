@@ -2,39 +2,56 @@
 
 <a href="/learn-openhands-harness/slides/odsc-draft/s/odsc-cut-review/" target="_blank" rel="noreferrer">Full slide deck (draft, October 19)</a>
 
-## Read the lecture examples
+Choose how you want to view the lecture examples below. To run the exercises yourself, continue to [the exercise setup](#run-new-exercises) on this page.
 
-[Open the lecture examples](/workshop-examples/2026-10-19-lecture/index.html) or [download them as one ZIP](https://github.com/rajshah4/learn-openhands-harness/releases/download/odsc-lecture-conversations-2026-10-19-v2/harness-lecture-conversations-2026-10-19-v2.zip). These are the examples shown in the lecture, with complete histories and the team example's worker conversations. Older experiments and reserves are excluded.
+## Using Agent Canvas? Open the lecture examples there
 
-No API key or installation is needed to read them. After unzipping, open `harness-lecture-conversations/package/index.html`. To inspect the conversations in Canvas, follow the commands below.
+[Download the lecture examples ZIP](https://github.com/rajshah4/learn-openhands-harness/releases/download/odsc-lecture-conversations-2026-10-19-v2/harness-lecture-conversations-2026-10-19-v2.zip). It contains only the examples shown in the lecture: 16 complete conversation histories, including the team example's three workers. Older experiments and reserves are excluded.
 
-## Open the examples in Agent Canvas
+Viewing these saved conversations needs **Python 3.13 and Node.js/npm**, but no model key. On Windows, use WSL.
 
-These steps put the saved histories into a dedicated, read-only Canvas archive. They need **Python 3.13 and Node.js/npm**. No model key is needed, and you do not need to launch your regular Canvas first.
-
-1. Download and unzip the lecture ZIP above. Open a terminal in the extracted `harness-lecture-conversations` folder.
-2. Install the histories into a new archive folder and prepare the pinned viewer:
+1. Unzip the download and open a terminal in the extracted `harness-lecture-conversations` folder.
+2. Prepare the saved conversations and viewer:
 
    ```bash
    python3.13 setup_examples.py --destination "$PWD/lecture-store" --install
    python3.13 prepare_runtime.py --store "$PWD/lecture-store" --install
    ```
 
-3. Start the viewer from the same folder:
+3. Start the local viewer and leave this terminal running:
 
    ```bash
    ./lecture-store/.venv/bin/python view_w3.py --store "$PWD/lecture-store" --canvas "$PWD/lecture-store/ui/node_modules/@openhands/agent-canvas" --port 28080
    ```
 
-4. Open **http://127.0.0.1:28080**. The connection is named **ODSC lecture examples**. Choose a `Workshop N · scenario · description` conversation in the sidebar. The archive contains 16 histories, including the three team workers. Workshop 4's two animations open from the HTML index instead.
+4. In your existing Canvas at `http://localhost:8000`, open **Manage Backends → Add Backend → Agent-server → Local**. Enter:
 
-If you already have Canvas open at `http://localhost:8000`, you can use its existing window: open **Manage Backends → Add Backend → Agent-server → Local**. Enter **ODSC lecture examples** for Host Name and `http://127.0.0.1:28080` for Host, leave API Key blank, and click **Connect**. Select that backend to see only the lecture histories. For Canvas running on another port, use the archive's own browser tab directly.
+   | Field | Value |
+   |---|---|
+   | Host Name | `ODSC lecture examples` |
+   | Host | `http://127.0.0.1:28080` |
+   | API Key | Leave blank |
 
-Each history has collection, workshop-number and scenario tags. The “sandbox no longer available” message is expected: you can inspect all recorded messages and tool results, but cannot resume these archived agents. Stop the viewer with Ctrl-C.
+   Click **Connect**, then select **ODSC lecture examples**. Choose a `Workshop N · scenario · description` conversation in the sidebar.
 
-This opens a separate lecture archive rather than merging old recordings into your normal Canvas history. If the destination already exists, reuse its viewer or choose a fresh folder; the installer will not overwrite it. If port 28080 is occupied, change `--port` and open that port instead. On Windows, run these commands in WSL.
+The local address serves the saved examples to Canvas. They appear in their own read-only collection, separate from your existing conversations. You can inspect the recorded messages and tool results; you cannot resume these agents. The “sandbox no longer available” message is expected. Workshop 4's two animations open from the [HTML examples](/workshop-examples/2026-10-19-lecture/index.html).
 
-## Run new exercises
+<details>
+<summary>No Canvas window open, or need troubleshooting?</summary>
+
+Open **http://127.0.0.1:28080** directly to use the included Canvas viewer. This also works if your existing Canvas runs on a port other than 8000.
+
+Stop the viewer with Ctrl-C. To reopen the examples, run the command in step 3 again. The setup commands refuse to overwrite an existing `lecture-store`; reuse it rather than reinstalling. If port 28080 is occupied, change `--port` and use that same port in the browser address or Canvas Host field.
+
+</details>
+
+## Not using Agent Canvas? Read the HTML examples
+
+[Open the lecture examples in your browser](/workshop-examples/2026-10-19-lecture/index.html). These are the same complete conversations, plus Workshop 4's animations. No installation, download or API key is needed.
+
+For offline reading, download the ZIP above, unzip it and open `harness-lecture-conversations/package/index.html`.
+
+## Want to run the exercises yourself? {#run-new-exercises}
 
 The workshop uses Agent Canvas because it's open source and flexible. You can also try some of these exercises in another harness.
 
