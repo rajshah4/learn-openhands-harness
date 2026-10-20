@@ -6,6 +6,7 @@ export default defineConfig({
     "A hands-on course for learning harness engineering with OpenHands, Agent Canvas, the SDK, traces, metrics, and model routing.",
   base: "/learn-openhands-harness/",
   cleanUrls: true,
+  srcExclude: ["public/slides/**"],
   themeConfig: {
     siteTitle: "Learn Harness Engineering",
     nav: [

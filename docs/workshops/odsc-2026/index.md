@@ -1,5 +1,7 @@
 # Engineering the Harness: six practical labs
 
+<a href="/learn-openhands-harness/slides/odsc-draft/s/odsc-cut-review/" target="_blank" rel="noreferrer">Full slide deck (draft, October 19)</a>
+
 These are the instructions for the Harness Engineering in-class workshop. Each lab
 gives you a small task to try, a harness choice to change, and a trace to inspect.
 

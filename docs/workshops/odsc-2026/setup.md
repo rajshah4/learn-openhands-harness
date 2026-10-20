@@ -1,5 +1,7 @@
 # Get started for the workshop
 
+<a href="/learn-openhands-harness/slides/odsc-draft/s/odsc-cut-review/" target="_blank" rel="noreferrer">Full slide deck (draft, October 19)</a>
+
 ## Read the lecture examples
 
 [Open the lecture examples](/workshop-examples/2026-10-19-lecture/index.html) or [download them as one ZIP](https://github.com/rajshah4/learn-openhands-harness/releases/download/odsc-lecture-conversations-2026-10-19-v2/harness-lecture-conversations-2026-10-19-v2.zip). These are the examples shown in the lecture, with complete histories and the team example's worker conversations. Older experiments and reserves are excluded.
