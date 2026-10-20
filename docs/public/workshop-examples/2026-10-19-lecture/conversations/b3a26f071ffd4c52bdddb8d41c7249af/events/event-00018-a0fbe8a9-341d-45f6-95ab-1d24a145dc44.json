@@ -1,0 +1,35 @@
+{
+  "id": "a0fbe8a9-341d-45f6-95ab-1d24a145dc44",
+  "timestamp": "2026-10-19T08:11:01.472297",
+  "source": "agent",
+  "parent_id": "0f286232-13cb-466b-8f50-847d61b42ac9",
+  "thought": [
+    {
+      "cache_prompt": false,
+      "type": "text",
+      "text": "Now I understand the codebase fully. The issue is in `routekit/zones.py`. The current `canonical_zone` only strips and lowercases, but doesn't collapse/replace internal whitespace runs with hyphens.\n\nCurrent: `return value.strip().lower()`\nRequired: lowercase, strip, replace each run of internal whitespace with a single hyphen, preserve hyphens and digits.\n\nThe Python subset allows `re` imports and `re.sub` with whitespace patterns only. Let me write the fix.\n\n```python\n\"\"\"Shared zone-key normalization.\"\"\"\nimport re\n\n\ndef canonical_zone(value):\n    collapsed = re.sub(r\"\\s+\", \"-\", value.strip().lower())\n    return collapsed\n```\n\nWait, but I need to be careful. `.strip()` first removes leading/trailing whitespace. Then `re.sub(r\"\\s+\", \"-\", ...)` replaces internal whitespace runs with hyphens. But I should ensure leading/trailing whitespace only. Actually .strip() handles that. Using `\\s+` catches all whitespace including internal runs. Since we already stripped, the `\\s+` only matches internal ones. Good.\n\nLet me verify the four cases:\n1. \" North\\tDock \" -> strip -> \"North\\tDock\" -> lower -> \"north\\tdock\" -> re.sub \\s+ -> \"north-dock\" ✓\n2. \" East \\n Gate \" -> \"east \\n gate\" -> \"east-gate\" ✓\n3. \" West  Wing \" -> \"west  wing\" -> \"west-wing\" ✓\n4. \" SOUTH-2 \" -> \"south-2\" -> \"south-2\" (hyphen preserved, no whitespace changed) ✓\n\nThis uses `re.sub` with a whitespace pattern `\\s+`, which is allowed (\"re.sub with whitespace patterns only\"). Let me write it.\n\n"
+    }
+  ],
+  "reasoning_content": null,
+  "thinking_blocks": [],
+  "responses_reasoning_item": null,
+  "action": {
+    "path": "routekit/zones.py",
+    "source": "\"\"\"Shared zone-key normalization.\"\"\"\nimport re\n\n\ndef canonical_zone(value):\n    return re.sub(r\"\\s+\", \"-\", value.strip().lower())",
+    "kind": "WriteAction"
+  },
+  "tool_name": "write_source",
+  "tool_call_id": "call_b179cd5585204504a5d51154",
+  "tool_call": {
+    "id": "call_b179cd5585204504a5d51154",
+    "responses_item_id": null,
+    "name": "write_source",
+    "arguments": "{\"path\": \"routekit/zones.py\", \"source\": \"\\\"\\\"\\\"Shared zone-key normalization.\\\"\\\"\\\"\\nimport re\\n\\n\\ndef canonical_zone(value):\\n    return re.sub(r\\\"\\\\s+\\\", \\\"-\\\", value.strip().lower())\", \"security_risk\": \"MEDIUM\", \"summary\": \"Fix zone key normalization\"}",
+    "origin": "completion"
+  },
+  "llm_response_id": "gen-1792415457-8XRifFz0y5P0X2B02Bmm",
+  "security_risk": "UNKNOWN",
+  "critic_result": null,
+  "summary": "Fix zone key normalization",
+  "kind": "ActionEvent"
+}

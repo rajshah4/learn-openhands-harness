@@ -1,0 +1,22 @@
+{
+  "id": "0f286232-13cb-466b-8f50-847d61b42ac9",
+  "timestamp": "2026-10-19T08:10:56.807996",
+  "source": "environment",
+  "parent_id": "f6039057-13a7-4b43-8091-498ca789d3b8",
+  "tool_name": "read_files",
+  "tool_call_id": "call_71da394ee4374063bd43f9f5",
+  "observation": {
+    "content": [
+      {
+        "cache_prompt": false,
+        "type": "text",
+        "text": "[{\"path\": \"routekit/cli.py\", \"sha256\": \"b7e22987f129bb82feda05a294a577f82c2eaf9c870b5a859a742e6ec106924d\", \"text\": \"\\\"\\\"\\\"Command-line entry point for warehouse manifests.\\\"\\\"\\\"\\nimport argparse\\nimport json\\nfrom routekit.manifest import build_manifest\\n\\n\\ndef main(argv=None):\\n    parser = argparse.ArgumentParser(prog=\\\"routekit\\\")\\n    commands = parser.add_subparsers(dest=\\\"command\\\", required=True)\\n    manifest = commands.add_parser(\\\"manifest\\\")\\n    manifest.add_argument(\\\"zone\\\")\\n    args = parser.parse_args(argv)\\n    print(json.dumps(build_manifest(args.zone), sort_keys=True))\\n    return 0\\n\\n\\nif __name__ == \\\"__main__\\\":\\n    raise SystemExit(main())\\n\", \"utf8_bytes\": 526}, {\"path\": \"routekit/labels.py\", \"sha256\": \"e58576cab1bd4aa15d91c184fdd8d2c4147458ea93824de71d44d5756fde960e\", \"text\": \"\\\"\\\"\\\"Format the zone label printed on a shipment sticker.\\\"\\\"\\\"\\nfrom routekit.zones import canonical_zone\\n\\n\\ndef zone_label(zone):\\n    return \\\"zone:\\\" + canonical_zone(zone)\\n\", \"utf8_bytes\": 167}, {\"path\": \"routekit/manifest.py\", \"sha256\": \"733dc57fc22c9a1466c21bd458911865b5bc074b146691c680065907d494a2da\", \"text\": \"\\\"\\\"\\\"Build the payload consumed by the dispatch system.\\\"\\\"\\\"\\nfrom routekit.zones import canonical_zone\\n\\n\\ndef build_manifest(zone):\\n    return {\\\"zone_key\\\": canonical_zone(zone)}\\n\", \"utf8_bytes\": 173}]"
+      }
+    ],
+    "is_error": false,
+    "kind": "RouteObservation"
+  },
+  "action_id": "f6039057-13a7-4b43-8091-498ca789d3b8",
+  "extended_content": [],
+  "kind": "ObservationEvent"
+}

@@ -1,0 +1,36 @@
+{
+  "id": "92a5a0e3-6c13-42ba-979a-c6de39211ccd",
+  "timestamp": "2026-10-17T16:32:15.419303",
+  "source": "environment",
+  "parent_id": "26fb8abb-e00d-43ac-9b7b-f6ec272b25d8",
+  "tool_name": "terminal",
+  "tool_call_id": "call_9c4123e060bc4f148851318a",
+  "observation": {
+    "content": [
+      {
+        "cache_prompt": false,
+        "type": "text",
+        "text": "import React from \"react\";\nimport { useTranslation } from \"react-i18next\";\nimport { useActiveBackend } from \"#/contexts/active-backend-context\";\nimport { useSaveSettings } from \"#/hooks/mutation/use-save-settings\";\nimport { useSettings } from \"#/hooks/query/use-settings\";\nimport { I18nKey } from \"#/i18n/declaration\";\nimport type { Settings, SkillInfo } from \"#/types/settings\";\nimport { displayErrorToast } from \"#/utils/custom-toast-handlers\";\nimport { retrieveAxiosErrorMessage } from \"#/utils/retrieve-axios-error-message\";\nimport {\n  buildSkillEnablementFilter,\n  CATALOG_SKILL_NAMES,\n  isCatalogSkill,\n  resolveEnabledCatalogSkills,\n  type SkillEnablement,\n} from \"#/utils/skill-enablement\";\n\n/**\n * Settings → the two lists. Cloud creates conversations from its own\n * server-side catalog and never reads `enabled_skills`, so the catalog stays\n * deny-list governed there.\n */\nfunction readSkillEnablement(\n  settings: Settings | undefined,\n  usesCatalogAllowList: boolean,\n): SkillEnablement {\n  return {\n    enabledSkills: usesCatalogAllowList\n      ? settings?.enabled_skills\n      : [...CATALOG_SKILL_NAMES],\n    disabledSkills: settings?.disabled_skills ?? [],\n  };\n}\n\n/** Read-only view of the rule, for surfaces that list skills without toggling. */\nexport function useSkillEnabledFilter(): (skill: SkillInfo) => boolean {\n  const { backend } = useActiveBackend();\n  const { data: settings } = useSettings();\n  const usesCatalogAllowList = backend.kind !== \"cloud\";\n\n  return React.useMemo(() => {\n    const isEnabled = buildSkillEnablementFilter(\n      readSkillEnablement(settings, usesCatalogAllowList),\n    );\n    return (skill: SkillInfo) => isEnabled(skill.name);\n  }, [\n    settings?.enabled_skills,\n    settings?.disabled_skills,\n    usesCatalogAllowList,\n  ]);\n}\n\nexport interface SkillEnablementController {\n  isEnabled: (skill: SkillInfo) => boolean;\n  setEnabled: (skillName: string, enabled: boolean) => void;\n}\n\n/** Stable form of both lists, so an unchanged set can skip the save. */\nfunction snapshot(enablement: SkillEnablement): string {\n  return JSON.stringify(["
+      }
+    ],
+    "is_error": false,
+    "command": "curl -s \"https://raw.githubusercontent.com/OpenHands/OpenHands/fae6ad8a0ccaaa5ec8f87aac36abe321e72fbb2c/src/hooks/use-skill-enablement.ts\" | head -60",
+    "exit_code": 0,
+    "timeout": false,
+    "metadata": {
+      "exit_code": 0,
+      "pid": -1,
+      "username": "instructor",
+      "hostname": "rajivshah-MacBook-Pro",
+      "working_dir": "/instructor-path",
+      "py_interpreter_path": "/instructor-path",
+      "prefix": "",
+      "suffix": "\n[The command completed with exit code 0.]"
+    },
+    "full_output_save_dir": "/instructor-path",
+    "kind": "TerminalObservation"
+  },
+  "action_id": "e3bc66e8-9736-4bd6-9ad9-a69f19026926",
+  "extended_content": [],
+  "kind": "ObservationEvent"
+}

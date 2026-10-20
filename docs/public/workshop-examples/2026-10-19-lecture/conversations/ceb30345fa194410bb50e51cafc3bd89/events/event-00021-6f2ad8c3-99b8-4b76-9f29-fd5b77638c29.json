@@ -1,0 +1,22 @@
+{
+  "id": "6f2ad8c3-99b8-4b76-9f29-fd5b77638c29",
+  "timestamp": "2026-10-19T19:32:24.322811",
+  "source": "environment",
+  "parent_id": "50af8f64-f2ac-4d3d-b9f9-6f7386563552",
+  "tool_name": "finish",
+  "tool_call_id": "call_f73c25093cb042559e91aa59",
+  "observation": {
+    "content": [
+      {
+        "cache_prompt": false,
+        "type": "text",
+        "text": "Repaired RouteKit's zone-key behavior.\n\n## Files changed\n- `routekit/zones.py` — the single implementation change. Added an `import re` and a compiled `_WHITESPACE_RUN = re.compile(r\"\\s+\")`, and updated `canonical_zone` to: `return _WHITESPACE_RUN.sub(\"-\", value.strip().lower())`. This adds the missing hyphen-replacement step on top of the existing strip/lower. Because `labels.py` (`zone_label`) and `manifest.py` (`build_manifest`, used by the CLI) both call `canonical_zone`, the CLI manifest output and shipment labels now share the identical behavior with zero changes to those files. The CLI command name (`manifest`) and JSON field name (`zone_key`) are untouched.\n\n## Behavior verified\n- Lowercase keys, strip leading/trailing whitespace, collapse every run of internal whitespace to a single hyphen, preserve existing hyphens and digits.\n- All four acceptance examples confirmed via CLI and direct calls:\n  1. `\" North\\tDock \"` → `north-dock`\n  2. `canonical_zone(\" East \\n Gate \")` → `east-gate`\n  3. `zone_label(\" West  Wing \")` → `zone:west-wing`\n  4. `\" SOUTH-2 \"` → `south-2`\n- Extra edge cases checked: multiple mixed whitespace runs (`a-b-c`), preserved hyphens (`already-here`), preserved digits (`zone-123-4x`), and whitespace-only / leading-trailing padding cases.\n\n## Tests run and outcome\nRan the existing command from the repo root, before and after the change:\n`python3 -B -m unittest discover -s tests -v`\n\n- Before: 4 tests ran, 3 FAILED (cli, labels, internal-whitespace), 1 ok.\n- After: 4 tests ran, 4 passed — **Ran 4 tests, OK** (test_manifest_whitespace, test_shared_zone_normalization, test_existing_hyphenated_key, test_internal_whitespace).\n\n## Notes / uncertainty\n- The `\\s+` regex matches whitespace (space, tab, newline, etc.) but not hyphens or digits, so it satisfies the \"preserve existing hyphens and digits\" requirement.\n- One caveat during manual CLI checks in the shell: single-quoted arguments pass literal backslash sequences (`\\t`, `\\n`) rather than real control characters, so I re-ran the CLI verification through Python with actual tab/newline characters in the input strings — those confirmed the same results as the automated test suite. No functional uncertainty remains; the full suite passes."
+      }
+    ],
+    "is_error": false,
+    "kind": "FinishObservation"
+  },
+  "action_id": "50af8f64-f2ac-4d3d-b9f9-6f7386563552",
+  "extended_content": [],
+  "kind": "ObservationEvent"
+}

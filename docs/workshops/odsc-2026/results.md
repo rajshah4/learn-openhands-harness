@@ -1,19 +1,12 @@
-# Saved results and limits
+# Results from the lecture examples
 
-The updated <a href="/learn-openhands-harness/workshop-examples/2026-10-18-v3/index.html" target="_self">saved conversations</a> contain 18 classroom selections, two optional ledger examples and 33 reserve histories. Read the <a href="/learn-openhands-harness/workshop-examples/2026-10-18-v3/outcomes.html" target="_self">complete outcome tables</a> before comparing selected traces. Download all 53 parents and seven child histories from the [v3 release](https://github.com/rajshah4/learn-openhands-harness/releases/tag/odsc-conversations-2026-10-18-v3). No model key is needed to inspect them.
+[Open the lecture examples](/workshop-examples/2026-10-19-lecture/index.html) to inspect the full prompts, actions and returned evidence. Only the current lecture selections are included.
 
-| Workshop | Selected evidence | Interpretation |
-|---|---|---|
-| 1 | 01A/01B/01C | Preserved published harness traces, v4.1 Flash |
-| 2 | 02A/02B/02C/02D | Preserved published tool surfaces |
-| 3 | 03D/03E/03F | Missing and provisional notes prompt clarification; accepted supplied note enables repair |
-| 4 | 04C/04G and 04I/04J | Counter baseline and controlled security attempt 2; no security attempt fully accepted |
-| 5 | 05D/05E | Staged 4/8 checkpoint, ordinary feedback versus native rejection and continuation, final 8/8 |
-| 6 | 06C/06D | Independent discovery; both products pass, no team correctness gain |
-| 6 optional | 06E/06F | Ledger team timeout; post-hoc newline failure and split-budget confound |
+- **Workshop 1:** compare how OpenHands, OpenCode and Pi inspect and check the same repair.
+- **Workshop 2:** compare terminal retrieval, GitHub operation catalogs and a custom evidence-bundling tool.
+- **Workshop 3:** both the no-memory and useful-memory runs pass all four final tests. The saved note changes the first check selected, not a demonstrated speedup. The stale-memory example is an earlier take with a different reuse-first workflow.
+- **Workshop 4:** both models produce animated SVGs, and both outputs have motion flaws. One pair does not establish a general model ranking.
+- **Workshop 5:** external feedback identifies a deliberately missing report record. The agent repairs the report and the finish-time check passes. This demonstrates external verification; it does not establish a benefit over a baseline or native goal persistence.
+- **Workshop 6:** inspect the single-owner run alongside the lead and three workers. Both saved patches pass checks, but the team lead reaches a capped stop. That is not a completed team workflow.
 
-Full matrices appear before selected traces in the archive. Reserves retain unsuccessful and superseded outcomes, not just highlights. Results are small exploratory observations under recorded budgets, fixed ordering, shared ambient context and provider aliases. Timing and SDK receipts are descriptive, not independently verified billing or estimates of model quality. Privacy-only redactions remove personal context without rerunning or rewriting task evidence.
-
-The <a href="/learn-openhands-harness/workshop-examples/2026-10-18-v3/reserve.html" target="_self">reserve index</a> retains every published original and redesign attempt. The [instructor talk track](https://github.com/rajshah4/harness-engineering/blob/codex/odsc-open-slide-deck/talks/ODSC_2026/storyboard/talk-track-cut.md) is aligned to the current deck.
-
-[Original results and metrics](./reserves/results) and the archived [W3](./reserves/02-place-context), [W4](./reserves/03-model-routing), [W5](./reserves/04-let-it-run) and [W6](./reserves/05-multi-agent) exercise pages remain available.
+Full selected histories, documented redactions, original model labels and task-specific evidence are included in the [lecture download](./conversations). Use these observations to design your own comparison rather than treating a selected example as a general performance claim.

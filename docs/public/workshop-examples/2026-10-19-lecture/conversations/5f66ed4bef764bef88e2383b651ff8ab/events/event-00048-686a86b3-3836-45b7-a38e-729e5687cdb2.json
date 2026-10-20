@@ -1,0 +1,32 @@
+{
+  "id": "686a86b3-3836-45b7-a38e-729e5687cdb2",
+  "timestamp": "2026-10-19T08:28:50.733797",
+  "source": "agent",
+  "parent_id": "bce4dd8d-28c2-4e57-adda-661512883871",
+  "responses_reasoning_item": null,
+  "action": {
+    "command": "str_replace",
+    "path": "/workspace/test_checkpoint.py",
+    "file_text": null,
+    "old_str": "def test_rejects_unaggregated_reserve_seen(self):\n        st = empty_state()\n        st = apply_event(st, parse_event('{\"id\":\"r\",\"op\":\"restock\",\"sku\":\"A\",\"qty\":3}'))\n        st = apply_event(st, parse_event(\n            '{\"id\":\"v\",\"op\":\"reserve\",\"request\":\"Q\",\"lines\":[[\"B\",1]]}'))\n        st2 = deepcopy(st)\n        st2['seen']['v']['lines'] = [['A', 1], ['A', 2]]\n        with self.assertRaises(ValueError):\n            dump_state(st2)",
+    "new_str": "def test_rejects_unaggregated_reserve_seen(self):\n        st = empty_state()\n        st = apply_event(st, parse_event('{\"id\":\"r\",\"op\":\"restock\",\"sku\":\"A\",\"qty\":3}'))\n        st = apply_event(st, parse_event(\n            '{\"id\":\"v\",\"op\":\"reserve\",\"request\":\"Q\",\"lines\":[[\"A\",3]]}'))\n        st2 = deepcopy(st)\n        # seen value must remain aggregated; an unaggregated form is invalid\n        st2['seen']['v']['lines'] = [['A', 1], ['A', 2]]\n        with self.assertRaises(ValueError):\n            dump_state(st2)",
+    "insert_line": null,
+    "view_range": null,
+    "kind": "FileEditorAction"
+  },
+  "tool_name": "file_editor",
+  "tool_call_id": "call_70fe3ecfafe3471fb325da3c",
+  "tool_call": {
+    "id": "call_70fe3ecfafe3471fb325da3c",
+    "responses_item_id": null,
+    "name": "file_editor",
+    "arguments": "{\"command\": \"str_replace\", \"path\": \"/workspace/test_checkpoint.py\", \"old_str\": \"def test_rejects_unaggregated_reserve_seen(self):\\n        st = empty_state()\\n        st = apply_event(st, parse_event('{\\\"id\\\":\\\"r\\\",\\\"op\\\":\\\"restock\\\",\\\"sku\\\":\\\"A\\\",\\\"qty\\\":3}'))\\n        st = apply_event(st, parse_event(\\n            '{\\\"id\\\":\\\"v\\\",\\\"op\\\":\\\"reserve\\\",\\\"request\\\":\\\"Q\\\",\\\"lines\\\":[[\\\"B\\\",1]]}'))\\n        st2 = deepcopy(st)\\n        st2['seen']['v']['lines'] = [['A', 1], ['A', 2]]\\n        with self.assertRaises(ValueError):\\n            dump_state(st2)\", \"new_str\": \"def test_rejects_unaggregated_reserve_seen(self):\\n        st = empty_state()\\n        st = apply_event(st, parse_event('{\\\"id\\\":\\\"r\\\",\\\"op\\\":\\\"restock\\\",\\\"sku\\\":\\\"A\\\",\\\"qty\\\":3}'))\\n        st = apply_event(st, parse_event(\\n            '{\\\"id\\\":\\\"v\\\",\\\"op\\\":\\\"reserve\\\",\\\"request\\\":\\\"Q\\\",\\\"lines\\\":[[\\\"A\\\",3]]}'))\\n        st2 = deepcopy(st)\\n        # seen value must remain aggregated; an unaggregated form is invalid\\n        st2['seen']['v']['lines'] = [['A', 1], ['A', 2]]\\n        with self.assertRaises(ValueError):\\n            dump_state(st2)\"}",
+    "origin": "completion"
+  },
+  "llm_response_id": "gen-1792416523-ldCyr7mE4Ex4lxO0QKlU",
+  "security_risk": "UNKNOWN",
+  "critic_result": null,
+  "summary": "file_editor: {\"command\": \"str_replace\", \"path\": \"/workspace/test_checkpoint.py\", \"old_str\": \"def test_rejects_unaggregated_reserve_seen(self):\\n        st = empty_state()\\n        st = apply_event(st, parse_event('{\\\"id\\\":\\\"r\\\",\\\"op\\\":\\\"restock\\\",\\\"sku\\\":\\\"A\\\",\\\"qty\\\":3}'))\\n        st = apply_event(st, parse_event(\\n            '{\\\"id\\\":\\\"v\\\",\\\"op\\\":\\\"reserve\\\",\\\"request\\\":\\\"Q\\\",\\\"lines\\\":[[\\\"B\\\",1]]}'))\\n        st2 = deepcopy(st)\\n        st2['seen']['v']['lines'] = [['A', 1], ['A', 2]]\\n        with self.assertRaises(ValueError):\\n            dump_state(st2)\", \"new_str\": \"def test_rejects_unaggregated_reserve_seen(self):\\n        st = empty_state()\\n        st = apply_event(st, parse_event('{\\\"id\\\":\\\"r\\\",\\\"op\\\":\\\"restock\\\",\\\"sku\\\":\\\"A\\\",\\\"qty\\\":3}'))\\n        st = apply_event(st, parse_event(\\n            '{\\\"id\\\":\\\"v\\\",\\\"op\\\":\\\"reserve\\\",\\\"request\\\":\\\"Q\\\",\\\"lines\\\":[[\\\"A\\\",3]]}'))\\n        st2 = deepcopy(st)\\n        # seen value must remain aggregated; an unaggregated form is invalid\\n        st2['seen']['v']['lines'] = [['A', 1], ['A', 2]]\\n        with self.assertRaises(ValueError):\\n            dump_state(st2)\"}",
+  "kind": "ActionEvent",
+  "thought": []
+}

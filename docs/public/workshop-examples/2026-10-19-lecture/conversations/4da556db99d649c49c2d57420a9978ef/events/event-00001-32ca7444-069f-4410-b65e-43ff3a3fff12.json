@@ -1,0 +1,28 @@
+{
+  "id": "32ca7444-069f-4410-b65e-43ff3a3fff12",
+  "timestamp": "2026-10-19T08:44:19.191820",
+  "source": "user",
+  "parent_id": "94f9f46d-be26-4c6a-bbb3-d2aa9e45db42",
+  "llm_message": {
+    "role": "user",
+    "content": [
+      {
+        "cache_prompt": false,
+        "type": "text",
+        "text": "You are the checkpoint-worker in a synthetic durable reservation importer exercise. You own EXACTLY two files: /workspace/checkpoint.py and /workspace/test_checkpoint.py. Do not edit any other files. You may add regression tests in test_checkpoint.py.\n\nHere is the COMPLETE acceptance contract (README.md):\n\nA synthetic durable reservation importer. Use Python standard library only.\n\nShared interfaces: codec.parse_event(line) returns a canonical event dictionary from a JSON string. reducer.empty_state() returns {\"stock\": {}, \"requests\": {}, \"seen\": {}}. reducer.apply_event(state, event) takes a valid state and a canonical event and returns a NEW state. checkpoint.dump_state(state) returns canonical JSON text; checkpoint.load_state(text) returns a validated state. pipeline.import_batch(state, lines) takes a one-pass iterable of JSON strings and returns a new state. pipeline.resume(text, lines) loads a checkpoint, imports a batch, and returns the new canonical checkpoint text.\n\nThe exact state shape is:\n- stock: dictionary of nonempty string SKU to nonnegative integer quantity.\n- requests: dictionary of nonempty string request ID to dictionary of nonempty SKU to positive integer quantity. Empty request dictionaries are allowed.\n- seen: dictionary of nonempty string event ID to canonical event dictionary. Each key equals that event's id. A seen record persists after cancellation.\n\nBooleans are never integer quantities. Identifiers may contain whitespace, pipes, backslashes and Unicode; preserve exact content. No Unicode normalization or stripping. Empty strings forbidden; a space alone is nonempty.\n\nCheckpoints:\n- The exact wrapper is {\"version\": 1, \"state\": STATE}.\n- dump_state validates state, then uses json.dumps with ensure_ascii=False, sort_keys=True, separators=(',', ':'), plus exactly one final newline.\n- load_state accepts surrounding JSON whitespace and validates the wrapper and complete state. Reject duplicate JSON keys, extra/missing wrapper or state keys, a boolean or non-1 version, malformed JSON and invalid field types/quantities with ValueError.\n- For seen values, call parse_event on their JSON representation and require equality with the original value. Thus a checkpoint with unaggregated/reordered reserve lines is invalid; loading must not silently repair it.\n- Validate all nested state fields. Structural validation is required; reconstructing historical stock or proving seen/request consistency is out of scope.\n- Dumping an invalid state also raises ValueError.\n- Loading/dumping must not mutate input data.\n- Two equal valid states with different dictionary insertion order produce exactly equal checkpoint text.\n- Loading a dumped state preserves all three state fields and their replay behavior, including seen IDs of cancelled requests.\n- Floats and booleans are invalid quantities anywhere in state.\n- dump_state must NOT discard or empty the seen field; it must dump the full state including all seen records.\n- Input state and every nested input object must remain unchanged.\n\nRegression tests needed (add to test_checkpoint.py using unittest):\n- round-trip dump->load preserves all three state fields and replay behavior including seen of cancelled requests\n- exact wrapper text {\"version\":1,\"state\":...} and exact dump format (ensure_ascii=False, sort_keys=True, separators=(',',':'), single trailing newline)\n- reordered dict insertion order gives byte-identical dump text\n- load_state accepts surrounding whitespace\n- rejects: duplicate JSON keys, extra/missing wrapper or state keys, boolean or non-1 version (e.g. 0, 2, True), malformed JSON, invalid field types/quantities\n- rejects invalid seen: unaggregated/reordered reserve lines, seen id mismatch\n- rejects float and boolean quantities in stock/requests/seen anywhere\n- dump_state of invalid state raises ValueError\n- dump/load do not mutate input data\n\nThe starter checkpoint.py may have seeded defects. Inspect it, fix all defects so it satisfies the contract above, and add comprehensive regression tests to test_checkpoint.py. Do not modify public interface names (dump_state, load_state). You may import from codec.py for validation helpers but must ensure bool/floats are rejected as quantities everywhere in state (be careful: bool is a subclass of int).\n\nRun your tests only on checkpoint (e.g. cd /workspace && python3 -m unittest -v). You cannot use external files/network/installations; only the listed modules. Report exactly what you changed and the test command/results."
+      }
+    ],
+    "tool_calls": null,
+    "tool_call_id": null,
+    "name": null,
+    "reasoning_content": null,
+    "thinking_blocks": [],
+    "responses_reasoning_item": null
+  },
+  "llm_response_id": null,
+  "activated_skills": [],
+  "extended_content": [],
+  "sender": null,
+  "critic_result": null,
+  "kind": "MessageEvent"
+}

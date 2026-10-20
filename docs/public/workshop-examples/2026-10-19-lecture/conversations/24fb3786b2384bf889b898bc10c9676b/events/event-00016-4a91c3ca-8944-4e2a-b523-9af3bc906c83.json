@@ -1,0 +1,30 @@
+{
+  "id": "4a91c3ca-8944-4e2a-b523-9af3bc906c83",
+  "timestamp": "2026-10-19T19:32:51.981448",
+  "source": "agent",
+  "parent_id": "d2a9cb26-e59d-40b2-9bf9-f2e497ac308a",
+  "thought": [
+    {
+      "cache_prompt": false,
+      "type": "text",
+      "text": "The repair is complete. Let me summarize.\n\n"
+    }
+  ],
+  "thinking_blocks": [],
+  "action": {
+    "message": "Repaired RouteKit's zone-key behavior with a minimal change.\n\n**File changed:**\n- `routekit/zones.py` — `canonical_zone` changed from `value.strip().lower()` to `\"-\".join(value.strip().lower().split())`. `str.split()` collapses each run of internal whitespace (spaces, tabs, newlines) into a single separator token, and `\"-\".join(...)` renders each run as one hyphen. Existing hyphens and digits are preserved (non-whitespace tokens are untouched), and the input is still lowercase-stripped.\n\nSince both `routekit/manifest.py:build_manifest` and `routekit/labels.py:zone_label` delegate to this shared helper, CLI manifest output and shipment labels automatically share the corrected behavior. No CLI command or JSON field names changed.\n\n**Verification:**\n- Confirmed the bug first: `python3 -B -m unittest -v tests.test_zones` failed (`'east \\n gate' != 'east-gate'`).\n- After the fix, the four public acceptance examples from `docs/behavior.md` produce:\n  - `build_manifest(' North\\tDock ')` → `{'zone_key': 'north-dock'}`\n  - `canonical_zone(' East \\n Gate ')` → `east-gate`\n  - `zone_label(' West  Wing ')` → `zone:west-wing`\n  - `build_manifest(' SOUTH-2 ')` → `{'zone_key': 'south-2'}`\n\n**Full suite run:** `python3 -B -m unittest discover -s tests -v` → **Ran 4 tests, OK** (exit 0). All passed:\n- test_cli.CliTests.test_manifest_whitespace — ok\n- test_labels.LabelTests.test_shared_zone_normalization — ok\n- test_zones.ZoneTests.test_existing_hyphenated_key — ok\n- test_zones.ZoneTests.test_internal_whitespace — ok\n\n**Uncertainty:** None. Tests are unchanged, no tests or docs were edited, no new files created. This synthetic repo is not a git repository, so there is no git diff to report; the single source file edit is the entire change.",
+    "kind": "FinishAction"
+  },
+  "tool_name": "finish",
+  "tool_call_id": "call_f0ea0602ea7e47b49584e796",
+  "tool_call": {
+    "id": "call_f0ea0602ea7e47b49584e796",
+    "name": "finish",
+    "arguments": "{\"message\": \"Repaired RouteKit's zone-key behavior with a minimal change.\\n\\n**File changed:**\\n- `routekit/zones.py` \\u2014 `canonical_zone` changed from `value.strip().lower()` to `\\\"-\\\".join(value.strip().lower().split())`. `str.split()` collapses each run of internal whitespace (spaces, tabs, newlines) into a single separator token, and `\\\"-\\\".join(...)` renders each run as one hyphen. Existing hyphens and digits are preserved (non-whitespace tokens are untouched), and the input is still lowercase-stripped.\\n\\nSince both `routekit/manifest.py:build_manifest` and `routekit/labels.py:zone_label` delegate to this shared helper, CLI manifest output and shipment labels automatically share the corrected behavior. No CLI command or JSON field names changed.\\n\\n**Verification:**\\n- Confirmed the bug first: `python3 -B -m unittest -v tests.test_zones` failed (`'east \\\\n gate' != 'east-gate'`).\\n- After the fix, the four public acceptance examples from `docs/behavior.md` produce:\\n  - `build_manifest(' North\\\\tDock ')` \\u2192 `{'zone_key': 'north-dock'}`\\n  - `canonical_zone(' East \\\\n Gate ')` \\u2192 `east-gate`\\n  - `zone_label(' West  Wing ')` \\u2192 `zone:west-wing`\\n  - `build_manifest(' SOUTH-2 ')` \\u2192 `{'zone_key': 'south-2'}`\\n\\n**Full suite run:** `python3 -B -m unittest discover -s tests -v` \\u2192 **Ran 4 tests, OK** (exit 0). All passed:\\n- test_cli.CliTests.test_manifest_whitespace \\u2014 ok\\n- test_labels.LabelTests.test_shared_zone_normalization \\u2014 ok\\n- test_zones.ZoneTests.test_existing_hyphenated_key \\u2014 ok\\n- test_zones.ZoneTests.test_internal_whitespace \\u2014 ok\\n\\n**Uncertainty:** None. Tests are unchanged, no tests or docs were edited, no new files created. This synthetic repo is not a git repository, so there is no git diff to report; the single source file edit is the entire change.\", \"summary\": \"Repaired zone-key behavior and verified full suite passes\"}",
+    "origin": "completion"
+  },
+  "llm_response_id": "gen-1792456368-Bcf3M1NoT4rZpxV0Pwba",
+  "security_risk": "UNKNOWN",
+  "summary": "Repaired zone-key behavior and verified full suite passes",
+  "kind": "ActionEvent"
+}

@@ -1,0 +1,36 @@
+{
+  "id": "87b2768e-ca30-4143-a827-a639a7b60df9",
+  "timestamp": "2026-10-17T16:32:21.538621",
+  "source": "environment",
+  "parent_id": "45e70eae-3059-4ef3-b7ca-e18881a7ac34",
+  "tool_name": "terminal",
+  "tool_call_id": "call_1cf9b9a31f0c4159b6ca4ad9",
+  "observation": {
+    "content": [
+      {
+        "cache_prompt": false,
+        "type": "text",
+        "text": "...existingSkills.filter(\n      (skill) =>\n        typeof skill.name !== \"string\" || !disabledSkillNames.has(skill.name),\n    ),\n    ...buildBundledSkills().filter(\n      (skill) =>\n        skill.name === invokedCatalogSkill || isSkillEnabled(skill.name),\n    ),\n  ];\n\n  return {\n    ...existingContext,\n    // Public skills are bundled at build time from the @openhands/extensions\n    // npm package and passed directly in agent_context.skills. Setting\n    // load_public_skills to false tells the agent-server SDK to skip its own\n    // extensions-repo clone — the frontend is the sole source of public\n    // skills now.\n    //\n    // Migration: the former VITE_LOAD_PUBLIC_SKILLS env var was removed\n    // because bundled skills have no clone latency. Users who previously set\n    // VITE_LOAD_PUBLIC_SKILLS=false to avoid clone delays no longer need it.\n    skills: mergedSkills,\n    load_public_skills: false,\n    load_user_skills: true,\n    load_project_skills: true,\n    // The backend also auto-loads user/project skills; the deny-list must\n    // travel with the context so those skills are excluded from the system\n    // prompt too. The allow-list has no counterpart to send: the backend\n    // loads no catalog skills of its own (`load_public_skills` is false).\n    disabled_skills: disabledSkills,\n    ...(runtimeServicesSuffix\n      ? { system_message_suffix: runtimeServicesSuffix }\n      : {}),\n  };\n}\n\nfunction isAcpAgent(settings: Settings): boolean {\n  const agentSettings = toRecord(settings.agent_settings);\n  return agentSettings.agent_kind === \"acp\";\n}\n\nfunction getAcpServerTag(settings: Settings): string | undefined {\n  const agentSettings = toRecord(settings.agent_settings);\n  const value = agentSettings.acp_server;\n  return typeof value === \"string\" && value.length > 0 ? value : undefined;\n}\n\nfunction resolveAcpCommand(agentSettings: SettingsRecord): unknown {\n  const cmd = agentSettings.acp_command;\n  const isEmpty = Array.isArray(cmd) && cmd.length === 0;\n  const noCommand = cmd === undefined;\n  if (!isEmpty && !noCommand) {\n    return cmd;\n  }\n\n  const serverKey =\n    typeof agentSettings.acp_server === \"string\"\n      ? agentSettings.acp_server\n      : undefined;\n  const provider = getAcpProvider(serverKey);\n  return provider ? [...provider.default_command] : cmd;\n}\n\nfunction buildConfiguredAcpAgentSettings(\n  settings: Settings,\n  runtimeServicesInfo?: RuntimeServicesInfo | null,\n  query?: string,\n): AgentSettingsPayload {\n  const agentSettings = toRecord(settings.agent_settings);\n  const payload: AgentSettingsPayload = {\n    agent_kind: \"acp\",\n    agent_context: buildAgentContext(\n      agentSettings,\n      runtimeServicesInfo,\n      toSkillEnablement(settings),\n      findInvokedCatalogSkill(query),\n    ),\n  };\n\n  // TODO(#1019): set ``acp_isolate_data_dir: true`` here for a containerized\n  // backend so concurrent same-provider conversations don't race on a shared\n  // HOME. The SDK supports it (software-agent-sdk#3492), but the released\n  // ``@openhands/typescript-client`` (1.24.3) doesn't surface it on\n  // ``ACPAgentSettings`` yet, so sending it risks a validation error on older\n  // servers. Cloud grouping isolation is separate (agent-canvas#1016).\n\n  for (const key of ACP_SETTINGS_KEYS) {\n    // ``acp_model`` is resolved separately below so a saved ``null`` still\n    // falls back to the provider's default rather than being dropped.\n    if (key === \"acp_model\") continue;\n    // ``acp_env`` is deprecated — provider creds now route via ``request.secrets``.\n    if (key === \"acp_env\") continue;\n    const value =\n      key === \"acp_command\"\n        ? resolveAcpCommand(agentSettings)\n        : agentSettings[key];\n    if (value !== undefined && value !== null) {\n      payload[key] = value;\n    }\n  }\n\n  // ``mcp_config`` is a shared field (not in ACP_SETTINGS_KEYS): forward it\n  // so the ACP subprocess connects to the configured MCP servers at session\n  // creation. Only include it when it actually carries servers — an empty or\n  // malformed value is dropped rather than sending ``mcp_config: {}``.\n  const mcpConfig = toRecord(agentSettings.mcp_config);\n  if (Object.keys(mcpConfig).length > 0) {\n    payload.mcp_config = mcpConfig;\n  }\n\n  // Saved settings may carry ``acp_model: null`` (existing users predating\n  // the default-model registry, or saved fields the agent-server stripped).\n  // Fall back to the *preferred* default (Vertex-safe for Gemini) so the\n  // conversation starts with whatever the Settings → Agent UI shows — without\n  // that, the form's displayed default would silently not take effect at\n  // runtime until the user re-saved the page.\n  const serverKey =\n    typeof agentSettings.acp_server === \"string\"\n      ? agentSettings.acp_server\n      : undefined;\n  const effectiveModel = resolveEffectiveAcpModel({"
+      }
+    ],
+    "is_error": false,
+    "command": "curl -s \"https://raw.githubusercontent.com/OpenHands/OpenHands/fae6ad8a0ccaaa5ec8f87aac36abe321e72fbb2c/src/api/agent-server-adapter.ts\" | sed -n '780,900p'",
+    "exit_code": 0,
+    "timeout": false,
+    "metadata": {
+      "exit_code": 0,
+      "pid": -1,
+      "username": "instructor",
+      "hostname": "rajivshah-MacBook-Pro",
+      "working_dir": "/instructor-path",
+      "py_interpreter_path": "/instructor-path",
+      "prefix": "",
+      "suffix": "\n[The command completed with exit code 0.]"
+    },
+    "full_output_save_dir": "/instructor-path",
+    "kind": "TerminalObservation"
+  },
+  "action_id": "45e70eae-3059-4ef3-b7ca-e18881a7ac34",
+  "extended_content": [],
+  "kind": "ObservationEvent"
+}

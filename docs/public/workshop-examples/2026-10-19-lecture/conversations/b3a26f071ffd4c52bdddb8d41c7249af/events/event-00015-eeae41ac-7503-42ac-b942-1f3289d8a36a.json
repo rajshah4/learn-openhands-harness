@@ -1,0 +1,22 @@
+{
+  "id": "eeae41ac-7503-42ac-b942-1f3289d8a36a",
+  "timestamp": "2026-10-19T08:10:54.893149",
+  "source": "environment",
+  "parent_id": "3974aa19-f658-4644-bcbf-cf060c89c8b7",
+  "tool_name": "read_files",
+  "tool_call_id": "call_de7301ab34dc42f3aa7fd231",
+  "observation": {
+    "content": [
+      {
+        "cache_prompt": false,
+        "type": "text",
+        "text": "[{\"path\": \"tests/test_zones.py\", \"sha256\": \"f518e3122e8c99bca782c5617a62ea7c414a431e1a7c6d90887927d8ea0b3d10\", \"text\": \"import unittest\\nfrom routekit.zones import canonical_zone\\n\\n\\nclass ZoneTests(unittest.TestCase):\\n    def test_internal_whitespace(self):\\n        self.assertEqual(canonical_zone(\\\" East \\\\n Gate \\\"), \\\"east-gate\\\")\\n\\n    def test_existing_hyphenated_key(self):\\n        self.assertEqual(canonical_zone(\\\" SOUTH-2 \\\"), \\\"south-2\\\")\\n\", \"utf8_bytes\": 318}, {\"path\": \"tests/test_cli.py\", \"sha256\": \"2c3e2b8fa4c400524dc082b62cf70e3207b95b38f7c8e6df65acb63f9eb804a8\", \"text\": \"import contextlib\\nimport io\\nimport json\\nimport unittest\\nfrom routekit.cli import main\\n\\n\\nclass CliTests(unittest.TestCase):\\n    def test_manifest_whitespace(self):\\n        output = io.StringIO()\\n        with contextlib.redirect_stdout(output):\\n            code = main([\\\"manifest\\\", \\\" North\\\\tDock \\\"])\\n        self.assertEqual(code, 0)\\n        self.assertEqual(json.loads(output.getvalue()), {\\\"zone_key\\\": \\\"north-dock\\\"})\\n\", \"utf8_bytes\": 416}, {\"path\": \"tests/test_labels.py\", \"sha256\": \"a6156150e0c791b66be7ae4df780639a6245e2bcf1de76b85086a6dd1e8e9742\", \"text\": \"import unittest\\nfrom routekit.labels import zone_label\\n\\n\\nclass LabelTests(unittest.TestCase):\\n    def test_shared_zone_normalization(self):\\n        self.assertEqual(zone_label(\\\" West  Wing \\\"), \\\"zone:west-wing\\\")\\n\", \"utf8_bytes\": 211}]"
+      }
+    ],
+    "is_error": false,
+    "kind": "RouteObservation"
+  },
+  "action_id": "e76abb34-81f6-48b4-8ffe-e504b1d27c12",
+  "extended_content": [],
+  "kind": "ObservationEvent"
+}

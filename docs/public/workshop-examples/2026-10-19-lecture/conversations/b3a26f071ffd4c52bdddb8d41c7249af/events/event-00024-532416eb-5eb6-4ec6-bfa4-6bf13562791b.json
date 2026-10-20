@@ -1,0 +1,28 @@
+{
+  "id": "532416eb-5eb6-4ec6-bfa4-6bf13562791b",
+  "timestamp": "2026-10-19T08:11:12.519064",
+  "source": "agent",
+  "parent_id": "e769c519-6223-43e6-8dd4-4f851b53df40",
+  "llm_message": {
+    "role": "assistant",
+    "content": [
+      {
+        "cache_prompt": false,
+        "type": "text",
+        "text": "The full test suite passes. Let me summarize.\n\n## Summary\n\n### Log of verification\n\n**Saved check command attempt:** The supplied `python3 -B -m unittest -v tests.test_zone_smoke` produced `ModuleNotFoundError: tests.test_zone_smoke` (loader error, 0 behavior cases executed). That module does not exist in this repository — it was historical navigation from an earlier snapshot. I did not report this as a passing behavior case; the tests are actually `tests.test_zones`, `tests.test_cli`, `tests.test_labels`.\n\n### Files changed\n- `routekit/zones.py` — the only change. Replaced:\n  ```python\n  def canonical_zone(value):\n      return value.strip().lower()\n  ```\n  with:\n  ```python\n  import re\n  def canonical_zone(value):\n      return re.sub(r\"\\s+\", \"-\", value.strip().lower())\n  ```\n  This adds the missing step: after stripping and lowercasing, each run of internal whitespace is replaced by a single hyphen, while existing hyphens and digits are preserved. Because `routekit/cli.py` → `manifest.build_manifest` and `labels.zone_label` both already delegate to `canonical_zone`, CLI manifests and shipment labels automatically share the behavior. CLI command and JSON field names (`manifest`, `zone_key`) are unchanged.\n\n### Tests run and outcomes\n- **Focused suite** (`tests/test_zones.py`, 2 tests): passed ✅\n- **Full suite** (4 tests across `test_zones`, `test_cli`, `test_labels`): **Ran 4 tests, all OK** ✅\n  - `test_internal_whitespace` → \"east-gate\" ✓\n  - `test_existing_hyphenated_key` → \"south-2\" ✓\n  - `test_manifest_whitespace` (CLI) → `{\"zone_key\": \"north-dock\"}` ✓\n  - `test_shared_zone_normalization` (label) → `zone:west-wing` ✓\n\nAll four public acceptance examples (south-2, east-gate, zone:west-wing, north-dock) verified against the fixed `canonical_zone`.\n\n### Uncertainty\n- No production-level uncertainty. One note: the saved check command was obsolete (referenced a non-existent test module), consistent with the task's \"saved command may be obsolete\" guidance; I recovered using the current tests."
+      }
+    ],
+    "tool_calls": null,
+    "tool_call_id": null,
+    "name": null,
+    "reasoning_content": null,
+    "thinking_blocks": [],
+    "responses_reasoning_item": null
+  },
+  "llm_response_id": "gen-1792415467-2zENDlYNBbnnW5kopI5W",
+  "activated_skills": [],
+  "extended_content": [],
+  "sender": null,
+  "critic_result": null,
+  "kind": "MessageEvent"
+}

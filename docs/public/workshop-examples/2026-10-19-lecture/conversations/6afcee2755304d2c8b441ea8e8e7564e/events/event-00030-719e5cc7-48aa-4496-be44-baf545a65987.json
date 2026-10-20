@@ -1,0 +1,36 @@
+{
+  "id": "719e5cc7-48aa-4496-be44-baf545a65987",
+  "timestamp": "2026-10-17T16:32:38.661937",
+  "source": "environment",
+  "parent_id": "0fc03353-3230-4342-8a8f-1b4a6473678d",
+  "tool_name": "terminal",
+  "tool_call_id": "call_79bf7622f4c841c4b8a16f55",
+  "observation": {
+    "content": [
+      {
+        "cache_prompt": false,
+        "type": "text",
+        "text": "word count: 237"
+      }
+    ],
+    "is_error": false,
+    "command": "python3 - <<'EOF'\ntext = \"\"\"1. **Allow-list change.** PR #16860 (\"feat(skills): replace the all-on skill catalog with an explicit allow-list\", VascoSch92; merged 2026-08-24 as c4c5bb74, fixes #16302) stops baking the entire @openhands/extensions catalog (59 skills) into every agent_context. A persisted `enabled_skills` allow-list now gates bundled catalog skills, defaulting to the 11 entries the catalog flags `defaultEnabled`; `disabled_skills` survives only for user/project-authored skills from `.agents/skills/`.\n2. **Core rule — src/utils/skill-enablement.ts.** The single decision point: `resolveEnabledCatalogSkills` (allow-list or curated default), `buildSkillEnablementFilter` (deny-list still vetoes pre-migration), `migrateSkillEnablement` (one-shot; persisting an explicit list stops later `defaultEnabled` additions from self-enabling), and `findInvokedCatalogSkill` so an opening `/command` loads its skill regardless of the lists. https://github.com/OpenHands/OpenHands/blob/fae6ad8a0ccaaa5ec8f87aac36abe321e72fbb2c/src/utils/skill-enablement.ts\n3. **Adapter + migration.** src/api/agent-server-adapter.ts merges only allowed bundled skills (`skill.name === invokedCatalogSkill || isSkillEnabled(name)`), drops `load_public_skills`, and still sends `disabled_skills`; a new `useMigrateEnabledSkills` hook runs the one-shot migration at the app root, preserving pre-existing deny-list workspaces and gating cloud out. https://github.com/OpenHands/OpenHands/commit/b28af79ef06f\n4. **Runner + new tests (per upstream report).** The PR itself reports `npx vitest run` → 5064 passed, `npm run lint` clean, and `npm run check-translation-completeness` clean (4 new keys in all 15 locales). New files include `__tests__/utils/skill-enablement.test.ts` and `__tests__/hooks/use-migrate-enabled-skills.test.tsx`; adapter tests flipped to assert `add-javadoc` is NOT in agent context. https://github.com/OpenHands/OpenHands/blob/fae6ad8a0ccaaa5ec8f87aac36abe321e72fbb2c/src/api/agent-server-adapter.test.ts\n5. **Uncertainty.** Cloud keeps deny-list behavior; per-workspace scoping awaits an SDK `WorkspacesClient` schema change; allow-list versus agent-profile deny-list precedence is unresolved; two pre-existing failures (`dev-with-automation` SIGHUP, `mock-llm-automation.spec.ts` flake) reportedly reproduce on `main`. I personally ran no tests. PR: https://github.com/OpenHands/OpenHands/pull/16860\"\"\"\nwords = text.split()\nprint(\"word count:\", len(words))\nEOF",
+    "exit_code": 0,
+    "timeout": false,
+    "metadata": {
+      "exit_code": 0,
+      "pid": 5942,
+      "username": "instructor",
+      "hostname": "rajivshah-MacBook-Pro",
+      "working_dir": "/instructor-path",
+      "py_interpreter_path": "/instructor-path",
+      "prefix": "",
+      "suffix": "\n[The command completed with exit code 0.]"
+    },
+    "full_output_save_dir": "/instructor-path",
+    "kind": "TerminalObservation"
+  },
+  "action_id": "0fc03353-3230-4342-8a8f-1b4a6473678d",
+  "extended_content": [],
+  "kind": "ObservationEvent"
+}

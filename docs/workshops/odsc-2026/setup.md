@@ -1,10 +1,10 @@
 # Get started for the workshop
 
-## Start with the saved conversations
+## Read the lecture examples
 
-The updated <a href="/learn-openhands-harness/workshop-examples/2026-10-18-v3/index.html" target="_self">saved conversations</a> contain 18 classroom selections, two optional ledger examples and 33 reserve histories. Read the <a href="/learn-openhands-harness/workshop-examples/2026-10-18-v3/outcomes.html" target="_self">complete outcome tables</a> before comparing selected traces. Download all 53 parents and seven child histories from the [v3 release](https://github.com/rajshah4/learn-openhands-harness/releases/tag/odsc-conversations-2026-10-18-v3). No model key is needed to inspect them.
+[Open the lecture examples](/workshop-examples/2026-10-19-lecture/index.html) or [download them as one ZIP](https://github.com/rajshah4/learn-openhands-harness/releases/download/odsc-lecture-conversations-2026-10-19/harness-lecture-conversations-2026-10-19.zip). These are the examples shown in the lecture, with complete histories and the team example's worker conversations. Older experiments and reserves are excluded.
 
-Unzip the named student ZIP and follow its README. See [conversation viewer directions](./conversations).
+No API key or installation is needed to read them. After unzipping, open `harness-lecture-conversations/package/index.html`. See [viewer directions](./conversations) if you want the optional read-only Canvas view.
 
 ## Run new exercises
 

@@ -1,0 +1,29 @@
+{
+  "id": "57c141e8-4832-4efc-a9c9-95d3ffabca2b",
+  "timestamp": "2026-10-19T08:49:12.593587",
+  "source": "agent",
+  "parent_id": "fc15fd29-9391-4cc3-9702-5aefa29bb2a8",
+  "responses_reasoning_item": null,
+  "action": {
+    "command": "cd /workspace && PYTHONDONTWRITEBYTECODE=1 python3 -c \"\nimport json, copy\nfrom pipeline import import_batch, resume\nfrom reducer import empty_state\nfrom checkpoint import dump_state, load_state\nfrom codec import parse_event\n\n# Complex scenario with unicode/pipes/whitespace IDs, split reserve, reuse, replay.\nevents = [\n    {'id': 'e1', 'op': 'restock', 'sku': 'A B', 'qty': 10},\n    {'id': 'e2', 'op': 'restock', 'sku': 'caf\\u00e9|x\\\\y', 'qty': 5},\n    {'id': 'e3', 'op': 'reserve', 'request': 'req #1', 'lines': [['caf\\u00e9|x\\\\\\\\y', 2], ['A B', 2], ['caf\\u00e9|x\\\\\\\\y', 1]]},\n    {'id': 'e4', 'op': 'cancel', 'request': 'req #1'},\n    {'id': 'e5', 'op': 'reserve', 'request': 'req #1', 'lines': [['A B', 3]]},\n    {'id': 'e3', 'op': 'reserve', 'request': 'req #1', 'lines': [['A B', 2], ['caf\\u00e9|x\\\\\\\\y', 3]]},  # replay old\n]\ntexts = [json.dumps(e, ensure_ascii=False) for e in events]\n\n# uninterrupted\nunint = import_batch(empty_state(), texts)\nunint_dump = dump_state(unint)\n\n# restart at each boundary\naccum = dump_state(empty_state())\nfor i in range(1, len(texts)+1):\n    accum = resume(accum, [texts[i-1]])\n    assert accum == dump_state(import_batch(empty_state(), texts[:i])), 'boundary %d mismatch' % i\nassert accum == unint_dump, 'final mismatch'\nprint('restart equivalence: OK')\nprint('final checkpoint:', accum)\nprint('final stock:', load_state(accum)['stock'])\nprint('final requests:', load_state(accum)['requests'])\n\n# caller preservation: import_batch must not mutate input state\nsrc = {'stock': {'X': 7}, 'requests': {'q': {'X': 2}}, 'seen': {'s1': parse_event(json.dumps({'id':'s1','op':'restock','sku':'X','qty':1}))}}\nsnap = copy.deepcopy(src)\ntry:\n    import_batch(src, ['garbage'])\nexcept ValueError:\n    pass\nassert src == snap, 'input mutated'\nprint('failed batch caller preservation: OK')\n\"",
+    "is_input": false,
+    "timeout": null,
+    "reset": false,
+    "kind": "TerminalAction"
+  },
+  "tool_name": "terminal",
+  "tool_call_id": "call_515fc9076f3b4fb6ac74bcfe",
+  "tool_call": {
+    "id": "call_515fc9076f3b4fb6ac74bcfe",
+    "responses_item_id": null,
+    "name": "terminal",
+    "arguments": "{\"command\": \"cd /workspace && PYTHONDONTWRITEBYTECODE=1 python3 -c \\\"\\nimport json, copy\\nfrom pipeline import import_batch, resume\\nfrom reducer import empty_state\\nfrom checkpoint import dump_state, load_state\\nfrom codec import parse_event\\n\\n# Complex scenario with unicode/pipes/whitespace IDs, split reserve, reuse, replay.\\nevents = [\\n    {'id': 'e1', 'op': 'restock', 'sku': 'A B', 'qty': 10},\\n    {'id': 'e2', 'op': 'restock', 'sku': 'caf\\\\u00e9|x\\\\\\\\y', 'qty': 5},\\n    {'id': 'e3', 'op': 'reserve', 'request': 'req #1', 'lines': [['caf\\\\u00e9|x\\\\\\\\\\\\\\\\y', 2], ['A B', 2], ['caf\\\\u00e9|x\\\\\\\\\\\\\\\\y', 1]]},\\n    {'id': 'e4', 'op': 'cancel', 'request': 'req #1'},\\n    {'id': 'e5', 'op': 'reserve', 'request': 'req #1', 'lines': [['A B', 3]]},\\n    {'id': 'e3', 'op': 'reserve', 'request': 'req #1', 'lines': [['A B', 2], ['caf\\\\u00e9|x\\\\\\\\\\\\\\\\y', 3]]},  # replay old\\n]\\ntexts = [json.dumps(e, ensure_ascii=False) for e in events]\\n\\n# uninterrupted\\nunint = import_batch(empty_state(), texts)\\nunint_dump = dump_state(unint)\\n\\n# restart at each boundary\\naccum = dump_state(empty_state())\\nfor i in range(1, len(texts)+1):\\n    accum = resume(accum, [texts[i-1]])\\n    assert accum == dump_state(import_batch(empty_state(), texts[:i])), 'boundary %d mismatch' % i\\nassert accum == unint_dump, 'final mismatch'\\nprint('restart equivalence: OK')\\nprint('final checkpoint:', accum)\\nprint('final stock:', load_state(accum)['stock'])\\nprint('final requests:', load_state(accum)['requests'])\\n\\n# caller preservation: import_batch must not mutate input state\\nsrc = {'stock': {'X': 7}, 'requests': {'q': {'X': 2}}, 'seen': {'s1': parse_event(json.dumps({'id':'s1','op':'restock','sku':'X','qty':1}))}}\\nsnap = copy.deepcopy(src)\\ntry:\\n    import_batch(src, ['garbage'])\\nexcept ValueError:\\n    pass\\nassert src == snap, 'input mutated'\\nprint('failed batch caller preservation: OK')\\n\\\"\", \"summary\": \"Probe restart equivalence and caller preservation\"}",
+    "origin": "completion"
+  },
+  "llm_response_id": "gen-1792417744-nD1HfGqldMrTSvXa4qdX",
+  "security_risk": "UNKNOWN",
+  "critic_result": null,
+  "summary": "Probe restart equivalence and caller preservation",
+  "kind": "ActionEvent",
+  "thought": []
+}

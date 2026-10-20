@@ -1,0 +1,27 @@
+{
+  "id": "97d28e4d-a94f-4c31-b854-b12cfa667bcc",
+  "timestamp": "2026-10-19T08:47:45.289364",
+  "source": "environment",
+  "parent_id": "5d4919fc-41cf-4c44-9c4a-eb5ea54ee6c8",
+  "tool_name": "file_editor",
+  "tool_call_id": "call_35c7fd32137c4b229bc00a03",
+  "observation": {
+    "content": [
+      {
+        "cache_prompt": false,
+        "type": "text",
+        "text": "1\tfrom copy import deepcopy\n2\t\n3\t\n4\tdef empty_state():\n5\t    return {'stock': {}, 'requests': {}, 'seen': {}}\n6\t\n7\t\n8\tdef apply_event(state, event):\n9\t    result = deepcopy(state)\n10\t    stock, requests, seen = result['stock'], result['requests'], result['seen']\n11\t    event_id = event['id']\n12\t    if event_id in seen:\n13\t        if seen[event_id] != event:\n14\t            raise ValueError('conflicting event id')\n15\t        return result\n16\t    if event['op'] == 'restock':\n17\t        stock[event['sku']] = stock.get(event['sku'], 0) + event['qty']\n18\t    elif event['op'] == 'reserve':\n19\t        request = event['request']\n20\t        lines = dict(event['lines'])\n21\t        if request in requests or any(sku not in stock or stock[sku] < qty for sku, qty in lines.items()):\n22\t            raise ValueError('cannot reserve')\n23\t        for sku, qty in lines.items():\n24\t            stock[sku] -= qty\n25\t        requests[request] = lines\n26\t    else:\n27\t        request = event['request']\n28\t        if request not in requests:\n29\t            raise ValueError('inactive request')\n30\t        for sku, qty in requests[request].items():\n31\t            stock[sku] += qty\n32\t        del requests[request]\n33\t    seen[event_id] = deepcopy(event)\n34\t    return result"
+      }
+    ],
+    "is_error": false,
+    "command": "view",
+    "path": "/workspace/reducer.py",
+    "prev_exist": true,
+    "old_content": null,
+    "new_content": null,
+    "kind": "FileEditorObservation"
+  },
+  "action_id": "1d0d0bf3-24c1-4383-9517-cd5048ee21b2",
+  "extended_content": [],
+  "kind": "ObservationEvent"
+}

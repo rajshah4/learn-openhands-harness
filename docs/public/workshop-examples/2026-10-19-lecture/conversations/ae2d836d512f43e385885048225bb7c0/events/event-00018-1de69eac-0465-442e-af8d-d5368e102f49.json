@@ -1,0 +1,28 @@
+{
+  "id": "1de69eac-0465-442e-af8d-d5368e102f49",
+  "timestamp": "2026-10-17T16:32:41.396435",
+  "source": "environment",
+  "parent_id": "ae37ac4f-e72a-4d0a-a821-2524b49f2b19",
+  "tool_name": "get_file_at_revision",
+  "tool_call_id": "call_3f77a682da8745ff95ebd7be",
+  "observation": {
+    "content": [
+      {
+        "cache_prompt": false,
+        "type": "text",
+        "text": "[Tool 'get_file_at_revision' executed.]"
+      },
+      {
+        "cache_prompt": false,
+        "type": "text",
+        "text": "{\"path\":\"src/hooks/use-migrate-enabled-skills.ts\",\"sha\":\"e2a6300819aebe2f078728480a31b15cafe4fa7a\",\"content\":\"import { useEffect, useRef } from \\\"react\\\";\\nimport { isNoBackend } from \\\"#/api/backend-registry/active-store\\\";\\nimport { useActiveBackend } from \\\"#/contexts/active-backend-context\\\";\\nimport { useSaveSettings } from \\\"#/hooks/mutation/use-save-settings\\\";\\nimport { useSettings } from \\\"#/hooks/query/use-settings\\\";\\nimport {\\n  migrateSkillEnablement,\\n  toSkillEnablement,\\n} from \\\"#/utils/skill-enablement\\\";\\n\\n/**\\n * Move a workspace to an explicit `enabled_skills` allow-list, once.\\n *\\n * It runs at the app root, not on the Customize page: until it has run the\\n * resolver falls back to the curated default, which would silently drop\\n * catalog skills an existing workspace had switched on. Local only — cloud\\n * never reads the field.\\n */\\nexport function useMigrateEnabledSkills(): void {\\n  const { backend } = useActiveBackend();\\n  const isLocal = backend.kind === \\\"local\\\" && !isNoBackend(backend);\\n  const { data: settings, isLoading, isError } = useSettings();\\n  const { mutate: saveSettings } = useSaveSettings();\\n\\n  // One attempt per backend: the save invalidates the settings query, so\\n  // without this the refetch would re-enter before the write is visible.\\n  const migratedBackendRef = useRef<string | null>(null);\\n\\n  useEffect(() => {\\n    migratedBackendRef.current = null;\\n  }, [backend.id]);\\n\\n  useEffect(() => {\\n    if (!isLocal || isLoading || isError || !settings) return;\\n    if (migratedBackendRef.current === backend.id) return;\\n\\n    migratedBackendRef.current = backend.id;\\n    const migrated = migrateSkillEnablement(toSkillEnablement(settings));\\n    // Silent on failure: the resolver's fallback keeps the session working and\\n    // the next app load retries.\\n    if (migrated) saveSettings(migrated);\\n  }, [isLocal, isLoading, isError, settings, backend.id, saveSettings]);\\n}\\n\",\"truncated\":false,\"html_url\":\"https://github.com/OpenHands/OpenHands/blob/fae6ad8a0ccaaa5ec8f87aac36abe321e72fbb2c/src/hooks/use-migrate-enabled-skills.ts\"}"
+      }
+    ],
+    "is_error": false,
+    "tool_name": "get_file_at_revision",
+    "kind": "MCPToolObservation"
+  },
+  "action_id": "66234c42-5f3e-4138-b599-d747705c1dbb",
+  "extended_content": [],
+  "kind": "ObservationEvent"
+}

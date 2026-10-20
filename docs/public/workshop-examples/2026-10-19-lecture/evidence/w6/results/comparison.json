@@ -1,0 +1,297 @@
+[
+  {
+    "version": "v10",
+    "condition": "single-baseline",
+    "status": "finished",
+    "correctness": true,
+    "checks": 33,
+    "seconds": 243.8188160000136,
+    "total_elapsed_through_external_check": 243.935166958021,
+    "cost_usd": 0.05508895,
+    "input_tokens": 630007,
+    "output_tokens": 17907,
+    "roles": [
+      {
+        "id": "5f66ed4b-ef76-4bef-88e2-383b651ff8ab",
+        "role": "single",
+        "prompt_tokens": 630007,
+        "completion_tokens": 17907,
+        "cache_read_tokens": 530432,
+        "cache_write_tokens": 0,
+        "cost_usd": 0.05508895,
+        "responses": 27,
+        "first_event": "2026-10-19T08:25:57.181905",
+        "last_event": "2026-10-19T08:30:00.814985",
+        "finish_events": [
+          "52468d03-dd81-4feb-9a97-cc9a262bf5db"
+        ],
+        "errors": []
+      }
+    ],
+    "three_way_provider_overlap_seconds": 0,
+    "same_response_dispatch": false,
+    "task_events": [],
+    "boundary_aborted": false,
+    "boundary_errors": [],
+    "harness_error": null,
+    "active_owned_conversations": [],
+    "total_tokens": 647914,
+    "first_correct_code_seconds": 80.475889,
+    "first_correct_code_event_id": "360593b1-c89e-4db0-814e-8a27782685ae",
+    "later_regression_after_first_pass": false,
+    "children": [],
+    "completed": true,
+    "bounded_outcome_valid": true,
+    "parent_terminal_errors": [],
+    "parent_local_test_runs": [
+      {
+        "event_id": "1799814e-83fb-4054-91e6-488ec6aadd2b",
+        "command": "cd /workspace && python3 -m unittest -v",
+        "exit_code": 1,
+        "summary": "Traceback (most recent call last):\n  File \"/workspace/test_reducer.py\", line 112, in test_returned_seen_event_detached\n    self.assertEqual(self.state['seen'], {})\nAssertionError: {'r1': {'id': 'r1', 'op': 'restock', 'sku'[72 chars]: 2}} != {}\n+ {}\n- {'r1': {'id': 'r1', 'op': 'restock', 'qty': 10, 'sku': 'A'},\n-  'r2': {'id': 'r2', 'op': 'restock', 'qty': 2, 'sku': 'B'}}\n\n----------------------------------------------------------------------\nRan 53 tests in 0.003s\n\nFAILED (failures=3, errors=2)\n"
+      },
+      {
+        "event_id": "bce4dd8d-28c2-4e57-adda-661512883871",
+        "command": "cd /workspace && python3 -m unittest -v",
+        "exit_code": 1,
+        "summary": "checkpoint.CheckpointTests)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/test_checkpoint.py\", line 100, in test_rejects_unaggregated_reserve_seen\n    st = apply_event(st, parse_event(\n  File \"/workspace/reducer.py\", line 22, in apply_event\n    raise ValueError('cannot reserve')\nValueError: cannot reserve\n\n----------------------------------------------------------------------\nRan 53 tests in 0.003s\n\nFAILED (errors=1)\n"
+      },
+      {
+        "event_id": "ec17ce87-3782-406b-9505-8ee9388c99aa",
+        "command": "cd /workspace && python3 -m unittest -v",
+        "exit_code": 0,
+        "summary": "icient_rejected (test_reducer.ApplyEventTests) ... ok\ntest_reserve_unknown_sku_rejected (test_reducer.ApplyEventTests) ... ok\ntest_restock_adds (test_reducer.ApplyEventTests) ... ok\ntest_returned_seen_event_detached (test_reducer.ApplyEventTests) ... ok\ntest_seen_persists_after_cancel (test_reducer.ApplyEventTests) ... ok\ntest_seen_replay_equal_event_no_change (test_reducer.ApplyEventTests) ... ok\n\n----------------------------------------------------------------------\nRan 53 tests in 0.003s\n\nOK\n"
+      },
+      {
+        "event_id": "ec937ed8-c40c-45a3-bd30-c161f8e6bad2",
+        "command": "cd /workspace && PYTHONDONTWRITEBYTECODE=1 python3 -m unittest -v",
+        "exit_code": 0,
+        "summary": "icient_rejected (test_reducer.ApplyEventTests) ... ok\ntest_reserve_unknown_sku_rejected (test_reducer.ApplyEventTests) ... ok\ntest_restock_adds (test_reducer.ApplyEventTests) ... ok\ntest_returned_seen_event_detached (test_reducer.ApplyEventTests) ... ok\ntest_seen_persists_after_cancel (test_reducer.ApplyEventTests) ... ok\ntest_seen_replay_equal_event_no_change (test_reducer.ApplyEventTests) ... ok\n\n----------------------------------------------------------------------\nRan 53 tests in 0.002s\n\nOK\n"
+      }
+    ]
+  },
+  {
+    "version": "v12",
+    "condition": "parallel-three-workers",
+    "status": "error",
+    "correctness": true,
+    "checks": 33,
+    "seconds": 368.5139059580397,
+    "total_elapsed_through_external_check": 368.6145661660703,
+    "cost_usd": 0.10359105999999998,
+    "input_tokens": 966566,
+    "output_tokens": 41891,
+    "roles": [
+      {
+        "id": "9306e21d-a18f-4dce-bf50-3612a8c83627",
+        "role": "lead",
+        "prompt_tokens": 248412,
+        "completion_tokens": 13083,
+        "cache_read_tokens": 157440,
+        "cache_write_tokens": 0,
+        "cost_usd": 0.026510399999999996,
+        "responses": 15,
+        "first_event": "2026-10-19T08:43:18.787231",
+        "last_event": "2026-10-19T08:49:27.108680",
+        "finish_events": [],
+        "errors": [
+          {
+            "id": "2f13e96c-d812-4b4a-b096-b540e62c3bbc",
+            "kind": "ConversationErrorEvent",
+            "error": "Agent reached maximum iterations limit (15)."
+          }
+        ]
+      },
+      {
+        "id": "76a689a3-63b8-43cf-8b76-3a61847eb742",
+        "role": "codec-worker",
+        "prompt_tokens": 102733,
+        "completion_tokens": 7035,
+        "cache_read_tokens": 52224,
+        "cache_write_tokens": 0,
+        "cost_usd": 0.012191649999999998,
+        "responses": 10,
+        "first_event": "2026-10-19T08:44:19.191448",
+        "last_event": "2026-10-19T08:45:44.335192",
+        "finish_events": [
+          "1ea24463-d9e5-478d-9cc9-2fdf0b58957e"
+        ],
+        "errors": []
+      },
+      {
+        "id": "4da556db-99d6-49c4-9c2d-57420a9978ef",
+        "role": "checkpoint-worker",
+        "prompt_tokens": 272968,
+        "completion_tokens": 11516,
+        "cache_read_tokens": 131328,
+        "cache_write_tokens": 0,
+        "cost_usd": 0.03083064,
+        "responses": 15,
+        "first_event": "2026-10-19T08:44:19.191820",
+        "last_event": "2026-10-19T08:47:40.478776",
+        "finish_events": [
+          "e28b97f9-ed15-458c-aac4-6f93f8c10439"
+        ],
+        "errors": []
+      },
+      {
+        "id": "0810e617-45d2-41bb-b6dd-61ed63d591ed",
+        "role": "reducer-worker",
+        "prompt_tokens": 342453,
+        "completion_tokens": 10257,
+        "cache_read_tokens": 222208,
+        "cache_write_tokens": 0,
+        "cost_usd": 0.03405837,
+        "responses": 15,
+        "first_event": "2026-10-19T08:44:19.191562",
+        "last_event": "2026-10-19T08:46:59.282185",
+        "finish_events": [],
+        "errors": [
+          {
+            "id": "626c73a8-443b-4e27-bcda-70537c594fc5",
+            "kind": "ConversationErrorEvent",
+            "error": "Agent reached maximum iterations limit (15)."
+          }
+        ]
+      }
+    ],
+    "three_way_provider_overlap_seconds": 83.30605466419365,
+    "same_response_dispatch": true,
+    "task_events": [
+      {
+        "id": "28703c25-f07d-43f5-9b0c-8ec25fee1dc6",
+        "llm_response_id": "gen-1792417411-fz4ANE7CCvSco5DWSHnh",
+        "timestamp": "2026-10-19T08:44:19.156639"
+      },
+      {
+        "id": "86f790ef-d21d-4534-8508-2688e9847d14",
+        "llm_response_id": "gen-1792417411-fz4ANE7CCvSco5DWSHnh",
+        "timestamp": "2026-10-19T08:44:19.161686"
+      },
+      {
+        "id": "f8f313d5-1896-4384-bda1-b73e27be63a9",
+        "llm_response_id": "gen-1792417411-fz4ANE7CCvSco5DWSHnh",
+        "timestamp": "2026-10-19T08:44:19.164402"
+      }
+    ],
+    "boundary_aborted": false,
+    "boundary_errors": [],
+    "harness_error": null,
+    "active_owned_conversations": [],
+    "total_tokens": 1008457,
+    "first_correct_code_seconds": 115.103174,
+    "first_correct_code_event_id": "a4b74348-19eb-4f7c-b827-b8526ad4a32d",
+    "later_regression_after_first_pass": false,
+    "children": [
+      {
+        "id": "76a689a3-63b8-43cf-8b76-3a61847eb742",
+        "role": "codec-worker",
+        "terminal": true,
+        "stop_requested": false
+      },
+      {
+        "id": "0810e617-45d2-41bb-b6dd-61ed63d591ed",
+        "role": "reducer-worker",
+        "terminal": true,
+        "stop_requested": false
+      },
+      {
+        "id": "4da556db-99d6-49c4-9c2d-57420a9978ef",
+        "role": "checkpoint-worker",
+        "terminal": true,
+        "stop_requested": true
+      }
+    ],
+    "completed": false,
+    "bounded_outcome_valid": true,
+    "parent_terminal_errors": [
+      {
+        "id": "2f13e96c-d812-4b4a-b096-b540e62c3bbc",
+        "kind": "ConversationErrorEvent",
+        "error": "Agent reached maximum iterations limit (15)."
+      }
+    ],
+    "parent_local_test_runs": [
+      {
+        "event_id": "a0681ba6-19cf-4189-8a91-c7e09b4ee1d9",
+        "command": "cd /workspace && PYTHONDONTWRITEBYTECODE=1 python3 -m unittest -v",
+        "exit_code": 0,
+        "summary": "est_restock_aliasing_does_not_affect_input (test_reducer.ReducerTest) ... ok\ntest_restock_introduces_and_adds (test_reducer.ReducerTest) ... ok\ntest_seen_check_before_business_preconditions (test_reducer.ReducerTest) ... ok\ntest_seen_conflicting_event_raises_even_after_cancel (test_reducer.ReducerTest) ... ok\ntest_seen_replay_equal_event_returns_no_change_detached (test_reducer.ReducerTest) ... ok\n\n----------------------------------------------------------------------\nRan 91 tests in 0.003s\n\nOK\n"
+      },
+      {
+        "event_id": "8e29a377-5835-445b-9143-80a807aff4e1",
+        "command": "cd /workspace && PYTHONDONTWRITEBYTECODE=1 python3 -m unittest -v",
+        "exit_code": 0,
+        "summary": "st_restock_aliasing_does_not_affect_input (test_reducer.ReducerTest) ... ok\ntest_restock_introduces_and_adds (test_reducer.ReducerTest) ... ok\ntest_seen_check_before_business_preconditions (test_reducer.ReducerTest) ... ok\ntest_seen_conflicting_event_raises_even_after_cancel (test_reducer.ReducerTest) ... ok\ntest_seen_replay_equal_event_returns_no_change_detached (test_reducer.ReducerTest) ... ok\n\n----------------------------------------------------------------------\nRan 106 tests in 0.006s\n\nOK\n"
+      },
+      {
+        "event_id": "7fd66a0b-9f90-4e21-a4c3-c9ad2af34f91",
+        "command": "cd /workspace && PYTHONDONTWRITEBYTECODE=1 python3 -m unittest test_codec -v",
+        "exit_code": 0,
+        "summary": ") ... ok\ntest_unsupported_op_raises (test_codec.NonObjectAndUnsupportedTests) ... ok\ntest_boolean_quantity_rejected (test_codec.QuantityTests) ... ok\ntest_empty_request_forbidden (test_codec.QuantityTests) ... ok\ntest_empty_sku_forbidden (test_codec.QuantityTests) ... ok\ntest_float_quantity_rejected (test_codec.QuantityTests) ... ok\ntest_zero_and_negative_rejected (test_codec.QuantityTests) ... ok\n\n----------------------------------------------------------------------\nRan 26 tests in 0.001s\n\nOK\n"
+      },
+      {
+        "event_id": "7848255c-b875-4c98-9cb6-ae9c3b802974",
+        "command": "cd /workspace && PYTHONDONTWRITEBYTECODE=1 python3 -m unittest test_reducer -v",
+        "exit_code": 0,
+        "summary": "est_restock_aliasing_does_not_affect_input (test_reducer.ReducerTest) ... ok\ntest_restock_introduces_and_adds (test_reducer.ReducerTest) ... ok\ntest_seen_check_before_business_preconditions (test_reducer.ReducerTest) ... ok\ntest_seen_conflicting_event_raises_even_after_cancel (test_reducer.ReducerTest) ... ok\ntest_seen_replay_equal_event_returns_no_change_detached (test_reducer.ReducerTest) ... ok\n\n----------------------------------------------------------------------\nRan 20 tests in 0.001s\n\nOK\n"
+      },
+      {
+        "event_id": "632a9412-7b0e-4669-a9e4-9a2383f23b38",
+        "command": "cd /workspace && PYTHONDONTWRITEBYTECODE=1 python3 -m unittest test_checkpoint -v",
+        "exit_code": 0,
+        "summary": "invalid_sku_boolean (test_checkpoint.CheckpointRejectTest) ... ok\ntest_stock_invalid_sku_empty (test_checkpoint.CheckpointRejectTest) ... ok\ntest_version_boolean (test_checkpoint.CheckpointRejectTest) ... ok\ntest_version_string (test_checkpoint.CheckpointRejectTest) ... ok\ntest_version_two (test_checkpoint.CheckpointRejectTest) ... ok\ntest_version_zero (test_checkpoint.CheckpointRejectTest) ... ok\n\n----------------------------------------------------------------------\nRan 44 tests in 0.002s\n\nOK\n"
+      },
+      {
+        "event_id": "fc15fd29-9391-4cc3-9702-5aefa29bb2a8",
+        "command": "cd /workspace && PYTHONDONTWRITEBYTECODE=1 python3 -m unittest test_importer -v",
+        "exit_code": 0,
+        "summary": "le_resume_idempotent_state (test_importer.RestartEquivalenceTest) ... ok\ntest_replay_after_restart_returns_detached (test_importer.RestartEquivalenceTest) ... ok\ntest_restart_of_entire_workflow_matches_uninterrupted (test_importer.RestartEquivalenceTest) ... ok\ntest_uninterrupted_matches_interrupted_with_replay (test_importer.RestartEquivalenceTest) ... ok\ntest_imports (test_importer.Smoke) ... ok\n\n----------------------------------------------------------------------\nRan 16 tests in 0.003s\n\nOK\n"
+      },
+      {
+        "event_id": "6bf5ffec-8747-428b-9dae-6eaf4236026d",
+        "command": "cd /workspace && PYTHONDONTWRITEBYTECODE=1 python3 -m unittest -q",
+        "exit_code": 0,
+        "summary": "----------------------------------------------------------------------\nRan 106 tests in 0.005s\n\nOK\n"
+      }
+    ],
+    "lead_seconds_after_last_worker_event": 106.629904,
+    "lead_editor_actions_after_last_worker_event": [
+      {
+        "event_id": "59fceb99-9c08-4ef5-9503-eb6c5f0f4b47",
+        "path": "/workspace/codec.py",
+        "command": "view"
+      },
+      {
+        "event_id": "a6dc4400-b59d-4517-a42a-cfd0884c1b04",
+        "path": "/workspace/checkpoint.py",
+        "command": "view"
+      },
+      {
+        "event_id": "1d0d0bf3-24c1-4383-9517-cd5048ee21b2",
+        "path": "/workspace/reducer.py",
+        "command": "view"
+      },
+      {
+        "event_id": "96d5eb87-b095-4f95-8e9a-61bfa776c4f6",
+        "path": "/workspace/codec.py",
+        "command": "view"
+      },
+      {
+        "event_id": "7b8333e0-9d32-444b-9ed3-f990868bccf4",
+        "path": "/workspace/pipeline.py",
+        "command": "view"
+      },
+      {
+        "event_id": "43ea7c9f-7ebc-40c9-a48c-fdb7217d1e8e",
+        "path": "/workspace/test_importer.py",
+        "command": "view"
+      },
+      {
+        "event_id": "638d4103-317b-4b18-9a67-ee705885e5b2",
+        "path": "/workspace/test_importer.py",
+        "command": "str_replace"
+      }
+    ]
+  }
+]

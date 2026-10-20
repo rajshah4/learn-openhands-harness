@@ -1,0 +1,36 @@
+{
+  "id": "e5de4a51-115e-459a-8253-f7418723e960",
+  "timestamp": "2026-10-19T08:46:58.764333",
+  "source": "environment",
+  "parent_id": "2f8b786c-f375-4729-abcd-4dc222fa65dd",
+  "tool_name": "terminal",
+  "tool_call_id": "call_a2c7818c0b8a4c5ab1f6da14",
+  "observation": {
+    "content": [
+      {
+        "cache_prompt": false,
+        "type": "text",
+        "text": "'{\"state\":{\"requests\":{},\"seen\":{\"e1\":{\"id\":\"e1\",\"op\":\"restock\",\"qty\":5,\"sku\":\"A\"}},\"stock\":{\"A\":5}},\"version\":1}\\n'\nseen in dump: True\nseen preserved: True\n"
+      }
+    ],
+    "is_error": false,
+    "command": "cd /workspace && PYTHONDONTWRITEBYTECODE=1 python3 -c \"from reducer import empty_state,apply_event; from checkpoint import dump_state,load_state; from codec import parse_event\ns=empty_state(); s=apply_event(s,parse_event('{\\\"id\\\":\\\"e1\\\",\\\"op\\\":\\\"restock\\\",\\\"sku\\\":\\\"A\\\",\\\"qty\\\":5}'))\nt=dump_state(s); print(repr(t)); print('seen in dump:', '\\\"seen\\\"' in t and 'e1' in t)\nl=load_state(t); print('seen preserved:', l['seen']==s['seen'])\"",
+    "exit_code": 0,
+    "timeout": false,
+    "metadata": {
+      "exit_code": -1,
+      "pid": -1,
+      "username": null,
+      "hostname": null,
+      "working_dir": null,
+      "py_interpreter_path": null,
+      "prefix": "",
+      "suffix": ""
+    },
+    "full_output_save_dir": null,
+    "kind": "TerminalObservation"
+  },
+  "action_id": "2f8b786c-f375-4729-abcd-4dc222fa65dd",
+  "extended_content": [],
+  "kind": "ObservationEvent"
+}

@@ -1,0 +1,27 @@
+{
+  "id": "202189da-a772-4397-9be0-2554d35878c1",
+  "timestamp": "2026-10-19T08:27:11.040290",
+  "source": "environment",
+  "parent_id": "62762f5a-c1b1-4fec-a924-8f02f37a11b4",
+  "tool_name": "file_editor",
+  "tool_call_id": "call_0d2232366926454ca46e7601",
+  "observation": {
+    "content": [
+      {
+        "cache_prompt": false,
+        "type": "text",
+        "text": "Updated /workspace/codec.py\nimport json\n\n\ndef unique_object(pairs):\n    result = {}\n    for key, value in pairs:\n        if key in result:\n            raise ValueError('duplicate key')\n        result[key] = value\n    return result\n\n\ndef read_json(text):\n    if not isinstance(text, str):\n        raise ValueError('text required')\n    try:\n        return json.loads(text, object_pairs_hook=unique_object)\n    except (TypeError, json.JSONDecodeError) as exc:\n        raise ValueError('invalid JSON') from exc\n\n\ndef string(value):\n    return isinstance(value, str) and bool(value)\n\n\ndef integer(value, minimum):\n    return (isinstance(value, int) and not isinstance(value, bool)\n            and value >= minimum)\n\n\ndef parse_event(line):\n    event = read_json(line)\n    if not isinstance(event, dict) or not string(event.get('id')):\n        raise ValueError('event object and id required')\n    op = event.get('op')\n    fields = {'restock': {'id', 'op', 'sku', 'qty'},\n              'reserve': {'id', 'op', 'request', 'lines'},\n              'cancel': {'id', 'op', 'request'}}\n    if not isinstance(op, str) or op not in fields or set(event) != fields[op]:\n        raise ValueError('operation or fields')\n    if op == 'restock':\n        if not string(event['sku']) or not integer(event['qty'], 1):\n            raise ValueError('restock fields')\n    elif not string(event['request']):\n        raise ValueError('request')\n    if op == 'reserve':\n        if not isinstance(event['lines'], list):\n            raise ValueError('lines')\n        quantities = {}\n        for pair in event['lines']:\n            if not isinstance(pair, list) or len(pair) != 2:\n                raise ValueError('pair')\n            sku, qty = pair\n            if not string(sku) or not integer(qty, 1):\n                raise ValueError('quantity')\n            quantities[sku] = quantities.get(sku, 0) + qty\n        event['lines'] = [[sku, qty] for sku, qty in sorted(quantities.items())]\n    return event\n"
+      }
+    ],
+    "is_error": false,
+    "command": "str_replace",
+    "path": "/workspace/codec.py",
+    "prev_exist": true,
+    "old_content": null,
+    "new_content": null,
+    "kind": "FileEditorObservation"
+  },
+  "action_id": "62762f5a-c1b1-4fec-a924-8f02f37a11b4",
+  "extended_content": [],
+  "kind": "ObservationEvent"
+}

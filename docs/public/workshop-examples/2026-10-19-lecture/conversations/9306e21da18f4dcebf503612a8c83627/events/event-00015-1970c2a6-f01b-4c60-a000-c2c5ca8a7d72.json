@@ -1,0 +1,27 @@
+{
+  "id": "1970c2a6-f01b-4c60-a000-c2c5ca8a7d72",
+  "timestamp": "2026-10-19T08:43:30.847885",
+  "source": "environment",
+  "parent_id": "f0b72f23-895b-4706-bcec-8088cf72b0fc",
+  "tool_name": "file_editor",
+  "tool_call_id": "call_66fc6cf1dd9243388986e331",
+  "observation": {
+    "content": [
+      {
+        "cache_prompt": false,
+        "type": "text",
+        "text": "1\timport json\n2\t\n3\t\n4\tdef unique_object(pairs):\n5\t    result = {}\n6\t    for key, value in pairs:\n7\t        if key in result:\n8\t            raise ValueError('duplicate key')\n9\t        result[key] = value\n10\t    return result\n11\t\n12\t\n13\tdef read_json(text):\n14\t    if not isinstance(text, str):\n15\t        raise ValueError('text required')\n16\t    try:\n17\t        return json.loads(text, object_pairs_hook=unique_object)\n18\t    except (TypeError, json.JSONDecodeError) as exc:\n19\t        raise ValueError('invalid JSON') from exc\n20\t\n21\t\n22\tdef string(value):\n23\t    return isinstance(value, str) and bool(value)\n24\t\n25\t\n26\tdef integer(value, minimum):\n27\t    return isinstance(value, int) and value >= minimum\n28\t\n29\t\n30\tdef parse_event(line):\n31\t    event = read_json(line)\n32\t    if not isinstance(event, dict) or not string(event.get('id')):\n33\t        raise ValueError('event object and id required')\n34\t    op = event.get('op')\n35\t    fields = {'restock': {'id', 'op', 'sku', 'qty'},\n36\t              'reserve': {'id', 'op', 'request', 'lines'},\n37\t              'cancel': {'id', 'op', 'request'}}\n38\t    if not isinstance(op, str) or op not in fields or set(event) != fields[op]:\n39\t        raise ValueError('operation or fields')\n40\t    if op == 'restock':\n41\t        if not string(event['sku']) or not integer(event['qty'], 1):\n42\t            raise ValueError('restock fields')\n43\t    elif not string(event['request']):\n44\t        raise ValueError('request')\n45\t    if op == 'reserve':\n46\t        if not isinstance(event['lines'], list):\n47\t            raise ValueError('lines')\n48\t        quantities = {}\n49\t        for pair in event['lines']:\n50\t            if not isinstance(pair, list) or len(pair) != 2:\n51\t                raise ValueError('pair')\n52\t            sku, qty = pair\n53\t            if not string(sku) or not integer(qty, 1):\n54\t                raise ValueError('quantity')\n55\t            quantities[sku] = qty\n56\t        event['lines'] = [[sku, qty] for sku, qty in sorted(quantities.items())]\n57\t    return event"
+      }
+    ],
+    "is_error": false,
+    "command": "view",
+    "path": "/workspace/codec.py",
+    "prev_exist": true,
+    "old_content": null,
+    "new_content": null,
+    "kind": "FileEditorObservation"
+  },
+  "action_id": "fc718ca8-9150-4488-8cc8-e8b8f2b681ca",
+  "extended_content": [],
+  "kind": "ObservationEvent"
+}

@@ -1,0 +1,36 @@
+{
+  "id": "63946aa0-7a23-4bae-a663-7a063e57afe9",
+  "timestamp": "2026-10-19T08:46:03.336934",
+  "source": "environment",
+  "parent_id": "ed8609b7-b419-46e0-991c-78225e9a78ce",
+  "tool_name": "terminal",
+  "tool_call_id": "call_eff2684a31b84d08b23d1b7b",
+  "observation": {
+    "content": [
+      {
+        "cache_prompt": false,
+        "type": "text",
+        "text": "test_canonical_dump_of_seen_restock (test_checkpoint.CheckpointConsistencyTest) ... ok\ntest_empty_request_allowed (test_checkpoint.CheckpointConsistencyTest) ... ok\ntest_loaded_state_verified_equal (test_checkpoint.CheckpointConsistencyTest) ... ok\ntest_space_skus_valid_and_preserved (test_checkpoint.CheckpointConsistencyTest) ... ok\ntest_unicode_preserved (test_checkpoint.CheckpointConsistencyTest) ... ok\ntest_dump_does_not_mutate_input (test_checkpoint.CheckpointDumpRoundTripTest) ... ok\ntest_exact_dump_format (test_checkpoint.CheckpointDumpRoundTripTest) ... FAIL\ntest_insertion_order_byte_identical (test_checkpoint.CheckpointDumpRoundTripTest) ... FAIL\ntest_load_accepts_surrounding_whitespace (test_checkpoint.CheckpointDumpRoundTripTest) ... ok\ntest_load_does_not_mutate_text (test_checkpoint.CheckpointDumpRoundTripTest) ... ok\ntest_load_returns_detached_data (test_checkpoint.CheckpointDumpRoundTripTest) ... FAIL\ntest_round_trip_preserves_fields_and_replay (test_checkpoint.CheckpointDumpRoundTripTest) ... ok\ntest_dump_invalid_state_raises (test_checkpoint.CheckpointRejectTest) ... ok\ntest_duplicate_nested_key (test_checkpoint.CheckpointRejectTest) ... ok\ntest_duplicate_wrapper_key (test_checkpoint.CheckpointRejectTest) ... ok\ntest_extra_state_field (test_checkpoint.CheckpointRejectTest) ... ok\ntest_extra_wrapper_key (test_checkpoint.CheckpointRejectTest) ... ok\ntest_malformed_json (test_checkpoint.CheckpointRejectTest) ... ok\ntest_missing_state_field (test_checkpoint.CheckpointRejectTest) ... ok\ntest_missing_wrapper_key (test_checkpoint.CheckpointRejectTest) ... ok\ntest_request_empty_id (test_checkpoint.CheckpointRejectTest) ... ok\ntest_request_invalid_quantity_boolean (test_checkpoint.CheckpointRejectTest) ... ok\ntest_request_invalid_quantity_float (test_checkpoint.CheckpointRejectTest) ... ok\ntest_request_invalid_quantity_zero (test_checkpoint.CheckpointRejectTest) ... ok\ntest_request_lines_not_dict (test_checkpoint.CheckpointRejectTest) ... ok\ntest_seen_extra_field (test_checkpoint.CheckpointRejectTest) ... ok\ntest_seen_id_mismatch (test_checkpoint.CheckpointRejectTest) ... ok\ntest_seen_missing_id (test_checkpoint.CheckpointRejectTest) ... ok\ntest_seen_reordered_reserve (test_checkpoint.CheckpointRejectTest) ... ok\ntest_seen_reserve_boolean_qty (test_checkpoint.CheckpointRejectTest) ... ok\ntest_seen_restock_boolean_qty (test_checkpoint.CheckpointRejectTest) ... ok\ntest_seen_restock_float_qty (test_checkpoint.CheckpointRejectTest) ... ok\ntest_seen_unaggregated_reserve (test_checkpoint.CheckpointRejectTest) ... ok\ntest_seen_unknown_op (test_checkpoint.CheckpointRejectTest) ... ok\ntest_state_not_dict (test_checkpoint.CheckpointRejectTest) ... ok\ntest_stock_invalid_quantity_boolean (test_checkpoint.CheckpointRejectTest) ... ok\ntest_stock_invalid_quantity_float (test_checkpoint.CheckpointRejectTest) ... ok\ntest_stock_invalid_quantity_negative (test_checkpoint.CheckpointRejectTest) ... ok\ntest_stock_invalid_sku_boolean (test_checkpoint.CheckpointRejectTest) ... ok\ntest_stock_invalid_sku_empty (test_checkpoint.CheckpointRejectTest) ... ok\ntest_version_boolean (test_checkpoint.CheckpointRejectTest) ... ok\ntest_version_string (test_checkpoint.CheckpointRejectTest) ... ok\ntest_version_two (test_checkpoint.CheckpointRejectTest) ... ok\ntest_version_zero (test_checkpoint.CheckpointRejectTest) ... ok\n\n======================================================================\nFAIL: test_exact_dump_format (test_checkpoint.CheckpointDumpRoundTripTest)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/./test_checkpoint.py\", line 55, in test_exact_dump_format\n    self.assertEqual(text, expected)\nAssertionError: '{\"state\":{\"requests\":{},\"seen\":{},\"stock\":{}},\"version\":1}\\n' != '{\"version\":1,\"state\":{\"requests\":{},\"seen\":{},\"stock\":{}}}\\n'\n- {\"state\":{\"requests\":{},\"seen\":{},\"stock\":{}},\"version\":1}\n?                                              ------------\n+ {\"version\":1,\"state\":{\"requests\":{},\"seen\":{},\"stock\":{}}}\n?  ++++++++++++\n\n\n======================================================================\nFAIL: test_insertion_order_byte_identical (test_checkpoint.CheckpointDumpRoundTripTest)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/./test_checkpoint.py\", line 69, in test_insertion_order_byte_identical\n    self.assertEqual(dump_state(state1), dump_state(state2))\nAssertionError: '{\"st[13 chars]ts\":{\"r\":{\"a\":1}},\"seen\":{\"e\":{\"id\":\"e\",\"op\":\"[62 chars]1}\\n' != '{\"st[13 chars]ts\":{},\"seen\":{\"e\":{\"id\":\"e\",\"op\":\"restock\",\"q[51 chars]1}\\n'\n- {\"state\":{\"requests\":{\"r\":{\"a\":1}},\"seen\":{\"e\":{\"id\":\"e\",\"op\":\"restock\",\"qty\":1,\"sku\":\"a\"}},\"stock\":{\"a\":1,\"b\":2}},\"version\":1}\n?                       -----------\n+ {\"state\":{\"requests\":{},\"seen\":{\"e\":{\"id\":\"e\",\"op\":\"restock\",\"qty\":1,\"sku\":\"a\"}},\"stock\":{\"a\":1,\"b\":2}},\"version\":1}\n\n\n======================================================================\nFAIL: test_load_returns_detached_data (test_checkpoint.CheckpointDumpRoundTripTest)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/./test_checkpoint.py\", line 82, in test_load_returns_detached_data\n    self.assertEqual(load_state(text)['stock']['A'], 7)  # 10-3 from e3\nAssertionError: 10 != 7\n\n----------------------------------------------------------------------\nRan 44 tests in 0.002s\n\nFAILED (failures=3)\n"
+      }
+    ],
+    "is_error": false,
+    "command": "cd /workspace && PYTHONDONTWRITEBYTECODE=1 python3 -m unittest test_checkpoint -v",
+    "exit_code": 1,
+    "timeout": false,
+    "metadata": {
+      "exit_code": -1,
+      "pid": -1,
+      "username": null,
+      "hostname": null,
+      "working_dir": null,
+      "py_interpreter_path": null,
+      "prefix": "",
+      "suffix": ""
+    },
+    "full_output_save_dir": null,
+    "kind": "TerminalObservation"
+  },
+  "action_id": "ed8609b7-b419-46e0-991c-78225e9a78ce",
+  "extended_content": [],
+  "kind": "ObservationEvent"
+}

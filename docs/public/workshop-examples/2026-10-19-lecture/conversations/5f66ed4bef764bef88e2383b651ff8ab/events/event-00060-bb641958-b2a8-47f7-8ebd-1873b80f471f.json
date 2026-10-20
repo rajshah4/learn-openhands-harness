@@ -1,0 +1,27 @@
+{
+  "id": "bb641958-b2a8-47f7-8ebd-1873b80f471f",
+  "timestamp": "2026-10-19T08:29:34.270751",
+  "source": "environment",
+  "parent_id": "792cb5af-8d9b-4a28-806b-c6367184421c",
+  "tool_name": "file_editor",
+  "tool_call_id": "call_30e5330952ec4d6785de0bd4",
+  "observation": {
+    "content": [
+      {
+        "cache_prompt": false,
+        "type": "text",
+        "text": "1\timport json\n2\tfrom copy import deepcopy\n3\tfrom codec import parse_event, read_json, string, integer\n4\t\n5\t\n6\tdef validate(state):\n7\t    if not isinstance(state, dict) or set(state) != {'stock', 'requests', 'seen'}:\n8\t        raise ValueError('state fields')\n9\t    if not all(isinstance(state[key], dict) for key in state):\n10\t        raise ValueError('state mappings')\n11\t    for sku, qty in state['stock'].items():\n12\t        if not string(sku) or not integer(qty, 0):\n13\t            raise ValueError('stock')\n14\t    for request, lines in state['requests'].items():\n15\t        if not string(request) or not isinstance(lines, dict):\n16\t            raise ValueError('requests')\n17\t        for sku, qty in lines.items():\n18\t            if not string(sku) or not integer(qty, 1):\n19\t                raise ValueError('request quantity')\n20\t    for event_id, event in state['seen'].items():\n21\t        if not string(event_id) or not isinstance(event, dict):\n22\t            raise ValueError('seen')\n23\t        try:\n24\t            canonical = parse_event(json.dumps(event, ensure_ascii=False))\n25\t        except (TypeError, ValueError) as exc:\n26\t            raise ValueError('seen event') from exc\n27\t        if canonical != event or event_id != event['id']:\n28\t            raise ValueError('noncanonical seen event')\n29\t    return state\n30\t\n31\t\n32\tdef dump_state(state):\n33\t    validate(state)\n34\t    return json.dumps({'version': 1, 'state': state}, ensure_ascii=False,\n35\t                      sort_keys=True, separators=(',', ':')) + '\\n'\n36\t\n37\t\n38\tdef load_state(text):\n39\t    wrapper = read_json(text)\n40\t    if not isinstance(wrapper, dict) or set(wrapper) != {'version', 'state'}:\n41\t        raise ValueError('wrapper')\n42\t    if type(wrapper['version']) is not int or wrapper['version'] != 1:\n43\t        raise ValueError('version')\n44\t    return deepcopy(validate(wrapper['state']))"
+      }
+    ],
+    "is_error": false,
+    "command": "view",
+    "path": "/workspace/checkpoint.py",
+    "prev_exist": true,
+    "old_content": null,
+    "new_content": null,
+    "kind": "FileEditorObservation"
+  },
+  "action_id": "6f6a06e5-a9c1-4f92-9c81-1d4586ba09a5",
+  "extended_content": [],
+  "kind": "ObservationEvent"
+}

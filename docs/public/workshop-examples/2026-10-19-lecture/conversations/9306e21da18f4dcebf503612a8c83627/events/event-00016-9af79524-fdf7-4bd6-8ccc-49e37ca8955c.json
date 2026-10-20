@@ -1,0 +1,27 @@
+{
+  "id": "9af79524-fdf7-4bd6-8ccc-49e37ca8955c",
+  "timestamp": "2026-10-19T08:43:30.917736",
+  "source": "environment",
+  "parent_id": "1970c2a6-f01b-4c60-a000-c2c5ca8a7d72",
+  "tool_name": "file_editor",
+  "tool_call_id": "call_c2a54ff35c6b4a6295619170",
+  "observation": {
+    "content": [
+      {
+        "cache_prompt": false,
+        "type": "text",
+        "text": "1\tfrom copy import deepcopy\n2\t\n3\t\n4\tdef empty_state():\n5\t    return {'stock': {}, 'requests': {}, 'seen': {}}\n6\t\n7\t\n8\tdef apply_event(state, event):\n9\t    result = dict(state)\n10\t    event_id = event['id']\n11\t    if event_id in result['seen']:\n12\t        if result['seen'][event_id] != event:\n13\t            raise ValueError('conflicting event id')\n14\t        return result\n15\t    stock, requests = result['stock'], result['requests']\n16\t    if event['op'] == 'restock':\n17\t        stock[event['sku']] = stock.get(event['sku'], 0) + event['qty']\n18\t    elif event['op'] == 'reserve':\n19\t        request = event['request']\n20\t        lines = dict(event['lines'])\n21\t        if request in requests or any(sku not in stock or stock[sku] < qty for sku, qty in lines.items()):\n22\t            raise ValueError('cannot reserve')\n23\t        for sku, qty in lines.items():\n24\t            stock[sku] -= qty\n25\t        requests[request] = lines\n26\t    else:\n27\t        request = event['request']\n28\t        if request not in requests:\n29\t            raise ValueError('inactive request')\n30\t        for sku, qty in requests[request].items():\n31\t            stock[sku] += qty\n32\t    result['seen'][event_id] = deepcopy(event)\n33\t    return result"
+      }
+    ],
+    "is_error": false,
+    "command": "view",
+    "path": "/workspace/reducer.py",
+    "prev_exist": true,
+    "old_content": null,
+    "new_content": null,
+    "kind": "FileEditorObservation"
+  },
+  "action_id": "c738b9aa-cefd-4ed0-8c33-a551c6f113e1",
+  "extended_content": [],
+  "kind": "ObservationEvent"
+}

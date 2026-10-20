@@ -1,0 +1,27 @@
+{
+  "id": "35a58f1c-7dbe-42d0-9229-18292c9e6f40",
+  "timestamp": "2026-10-19T08:27:26.948167",
+  "source": "environment",
+  "parent_id": "5cf0e3ac-8b56-46cf-ae8f-6e074f78c7e0",
+  "tool_name": "file_editor",
+  "tool_call_id": "call_c644882ee3654ba99a3a7967",
+  "observation": {
+    "content": [
+      {
+        "cache_prompt": false,
+        "type": "text",
+        "text": "Updated /workspace/test_codec.py\nimport unittest\nimport codec\n\n\nclass ParseEventTests(unittest.TestCase):\n    def test_restock(self):\n        ev = codec.parse_event('{\"id\":\"a\",\"op\":\"restock\",\"sku\":\"S\",\"qty\":5}')\n        self.assertEqual(ev, {'id': 'a', 'op': 'restock', 'sku': 'S', 'qty': 5})\n\n    def test_whitespace_surrounding(self):\n        ev = codec.parse_event('  {\"id\":\"a\",\"op\":\"restock\",\"sku\":\"S\",\"qty\":1}  ')\n        self.assertEqual(ev['id'], 'a')\n\n    def test_reserve_sorts_and_aggregates(self):\n        ev = codec.parse_event(\n            '{\"id\":\"r\",\"op\":\"reserve\",\"request\":\"req\",\"lines\":[[\"b\",2],[\"a\",1],[\"b\",3]]}')\n        self.assertEqual(ev['lines'], [['a', 1], ['b', 5]])\n\n    def test_reserve_empty_lines(self):\n        ev = codec.parse_event('{\"id\":\"r\",\"op\":\"reserve\",\"request\":\"req\",\"lines\":[]}')\n        self.assertEqual(ev['lines'], [])\n\n    def test_cancel(self):\n        ev = codec.parse_event('{\"id\":\"c\",\"op\":\"cancel\",\"request\":\"req\"}')\n        self.assertEqual(ev, {'id': 'c', 'op': 'cancel', 'request': 'req'})\n\n    def test_preserves_strings_exactly(self):\n        ev = codec.parse_event(\n            '{\"id\":\"a b\\\\\\\\c|d\",\"op\":\"restock\",\"sku\":\" x | \\\\u00e9 \",\"qty\":1}')\n        self.assertEqual(ev['id'], 'a b\\\\c|d')\n        self.assertEqual(ev['sku'], ' x | \\u00e9 ')\n\n    def test_rejects_non_string(self):\n        with self.assertRaises(ValueError):\n            codec.parse_event(42)\n\n    def test_rejects_malformed_json(self):\n        with self.assertRaises(ValueError):\n            codec.parse_event('{bad')\n\n    def test_rejects_non_object(self):\n        with self.assertRaises(ValueError):\n            codec.parse_event('[1,2]')\n\n    def test_rejects_extra_field(self):\n        with self.assertRaises(ValueError):\n            codec.parse_event('{\"id\":\"a\",\"op\":\"restock\",\"sku\":\"S\",\"qty\":1,\"x\":2}')\n\n    def test_rejects_missing_field(self):\n        with self.assertRaises(ValueError):\n            codec.parse_event('{\"id\":\"a\",\"op\":\"restock\",\"qty\":1}')\n\n    def test_rejects_unknown_op(self):\n        with self.assertRaises(ValueError):\n            codec.parse_event('{\"id\":\"a\",\"op\":\"nope\",\"sku\":\"S\",\"qty\":1}')\n\n    def test_rejects_duplicate_keys(self):\n        with self.assertRaises(ValueError):\n            codec.parse_event('{\"id\":\"a\",\"id\":\"b\",\"op\":\"restock\",\"sku\":\"S\",\"qty\":1}')\n\n    def test_rejects_boolean_quantity(self):\n        with self.assertRaises(ValueError):\n            codec.parse_event('{\"id\":\"a\",\"op\":\"restock\",\"sku\":\"S\",\"qty\":true}')\n\n    def test_rejects_float_quantity(self):\n        with self.assertRaises(ValueError):\n            codec.parse_event('{\"id\":\"a\",\"op\":\"restock\",\"sku\":\"S\",\"qty\":1.5}')\n\n    def test_rejects_zero_or_negative_quantity(self):\n        with self.assertRaises(ValueError):\n            codec.parse_event('{\"id\":\"a\",\"op\":\"restock\",\"sku\":\"S\",\"qty\":0}')\n\n    def test_rejects_empty_id(self):\n        with self.assertRaises(ValueError):\n            codec.parse_event('{\"id\":\"\",\"op\":\"restock\",\"sku\":\"S\",\"qty\":1}')\n\n    def test_space_is_nonempty_id(self):\n        ev = codec.parse_event('{\"id\":\" \",\"op\":\"restock\",\"sku\":\"S\",\"qty\":1}')\n        self.assertEqual(ev['id'], ' ')\n\n    def test_rejects_reserve_bad_pair(self):\n        with self.assertRaises(ValueError):\n            codec.parse_event('{\"id\":\"r\",\"op\":\"reserve\",\"request\":\"q\",\"lines\":[[\"a\"]]}')\n\n    def test_rejects_reserve_non_list_lines(self):\n        with self.assertRaises(ValueError):\n            codec.parse_event('{\"id\":\"r\",\"op\":\"reserve\",\"request\":\"q\",\"lines\":\"x\"}')\n\n\nif __name__ == '__main__':\n    unittest.main()"
+      }
+    ],
+    "is_error": false,
+    "command": "create",
+    "path": "/workspace/test_codec.py",
+    "prev_exist": true,
+    "old_content": null,
+    "new_content": null,
+    "kind": "FileEditorObservation"
+  },
+  "action_id": "5cf0e3ac-8b56-46cf-ae8f-6e074f78c7e0",
+  "extended_content": [],
+  "kind": "ObservationEvent"
+}

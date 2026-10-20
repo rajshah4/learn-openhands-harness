@@ -1,0 +1,28 @@
+{
+  "id": "138d12db-fb19-45da-9069-03790744d7d3",
+  "timestamp": "2026-10-19T08:44:19.191448",
+  "source": "user",
+  "parent_id": "c59f8333-312f-45b7-8a5c-c994b3986270",
+  "llm_message": {
+    "role": "user",
+    "content": [
+      {
+        "cache_prompt": false,
+        "type": "text",
+        "text": "You are the codec-worker in a synthetic durable reservation importer exercise. You own EXACTLY two files: /workspace/codec.py and /workspace/test_codec.py. Do not edit any other files. You may add regression tests in test_codec.py.\n\nHere is the COMPLETE acceptance contract (README.md):\n\nA synthetic durable reservation importer. Use Python standard library only.\n\nShared interfaces: codec.parse_event(line) returns a canonical event dictionary from a JSON string. reducer.empty_state() returns {\"stock\": {}, \"requests\": {}, \"seen\": {}}. reducer.apply_event(state, event) takes a valid state and a canonical event and returns a NEW state. checkpoint.dump_state(state) returns canonical JSON text; checkpoint.load_state(text) returns a validated state. pipeline.import_batch(state, lines) takes a one-pass iterable of JSON strings and returns a new state. pipeline.resume(text, lines) loads a checkpoint, imports a batch, and returns the new canonical checkpoint text.\n\nEvents and canonicalization:\n- Accept precisely these object shapes, rejecting extra or missing fields with ValueError:\n  - {\"id\": ID, \"op\": \"restock\", \"sku\": SKU, \"qty\": Q} where Q is a positive integer.\n  - {\"id\": ID, \"op\": \"reserve\", \"request\": REQUEST, \"lines\": [[SKU, Q], ...]}. Each input line is a JSON array of exactly two items. Q is a positive integer. Aggregate duplicate SKU quantities and sort by SKU using Python string ordering. Canonical lines are arrays of two items, never tuples. Empty lines are allowed.\n  - {\"id\": ID, \"op\": \"cancel\", \"request\": REQUEST}.\n- IDs, SKU and REQUEST are nonempty strings. Reject malformed JSON, duplicate JSON object keys at any depth, non-object events and unsupported operations. Whitespace surrounding JSON text is accepted. Preserve ID/string values. Reject invalid input with ValueError, including non-string input to parse_event. Only parse_event must validate raw events; apply_event may assume its event is already canonical.\n- Booleans are never integer quantities. Identifiers may contain whitespace, pipes, backslashes and Unicode; preserve their exact content. No Unicode normalization or stripping. Empty strings are forbidden, but a space alone is a nonempty string.\n- parse_event must return a detached/canonical dictionary; it must not alias or mutate the input string (it returns a fresh dict).\n\nRegression tests needed (add to test_codec.py using unittest):\n- malformed JSON and non-string input raise ValueError\n- duplicate JSON object keys at any depth raise ValueError\n- non-object events and unsupported ops raise ValueError\n- extra/missing fields raise ValueError\n- restock/reserve/cancel canonicalization\n- reserve duplicate SKU aggregation across lines and Python string sort ordering, arrays not tuples, empty lines\n- preserve whitespace/backslash/Unicode in identifiers, no stripping/normalization\n- boolean quantity rejected; float rejected; zero/negative rejected; nonempty checks (a lone space is valid nonempty string)\n\nThe starter codec.py may have seeded defects. Inspect it, fix all defects so it satisfies the contract above, and add comprehensive regression tests to test_codec.py. Ensure parse_event returns detached data and never raises anything but ValueError on invalid input. Do not modify public interface names.\n\nRun your tests only on codec (e.g. cd /workspace && python3 -m unittest -v). You cannot use external files/network/installations; only the listed modules. Report exactly what you changed and the test command/results."
+      }
+    ],
+    "tool_calls": null,
+    "tool_call_id": null,
+    "name": null,
+    "reasoning_content": null,
+    "thinking_blocks": [],
+    "responses_reasoning_item": null
+  },
+  "llm_response_id": null,
+  "activated_skills": [],
+  "extended_content": [],
+  "sender": null,
+  "critic_result": null,
+  "kind": "MessageEvent"
+}

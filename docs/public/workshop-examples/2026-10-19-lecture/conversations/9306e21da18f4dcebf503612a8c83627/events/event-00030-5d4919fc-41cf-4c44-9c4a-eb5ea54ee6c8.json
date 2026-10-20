@@ -1,0 +1,27 @@
+{
+  "id": "5d4919fc-41cf-4c44-9c4a-eb5ea54ee6c8",
+  "timestamp": "2026-10-19T08:47:45.141979",
+  "source": "environment",
+  "parent_id": "3fbc216d-5d9b-4b10-a567-08457a7110f9",
+  "tool_name": "file_editor",
+  "tool_call_id": "call_a1bc5e469b4b4f1181cfb935",
+  "observation": {
+    "content": [
+      {
+        "cache_prompt": false,
+        "type": "text",
+        "text": "1\timport json\n2\tfrom copy import deepcopy\n3\tfrom codec import parse_event, read_json, string, integer\n4\t\n5\t\n6\tdef _validate_seen_event_quantities(event):\n7\t    \"\"\"Reject bool/float quantities inside a canonical seen event.\n8\t\n9\t    Booleans are a subclass of int, so codec.integer alone would accept them;\n10\t    floats fail isinstance(x, int) but are validated here for completeness.\n11\t    \"\"\"\n12\t    op = event.get('op')\n13\t    if op == 'restock':\n14\t        if isinstance(event['qty'], bool):\n15\t            raise ValueError('boolean quantity')\n16\t    elif op == 'reserve':\n17\t        for pair in event['lines']:\n18\t            if isinstance(pair, (list, tuple)) and len(pair) == 2:\n19\t                sku, qty = pair\n20\t                if not string(sku) or isinstance(qty, bool) or not integer(qty, 1):\n21\t                    raise ValueError('reserve line quantity')\n22\t            else:\n23\t                raise ValueError('reserve line shape')\n24\t\n25\t\n26\tdef validate(state):\n27\t    if not isinstance(state, dict) or set(state) != {'stock', 'requests', 'seen'}:\n28\t        raise ValueError('state fields')\n29\t    if not all(isinstance(state[key], dict) for key in state):\n30\t        raise ValueError('state mappings')\n31\t    for sku, qty in state['stock'].items():\n32\t        if not string(sku) or isinstance(qty, bool) or not integer(qty, 0):\n33\t            raise ValueError('stock')\n34\t    for request, lines in state['requests'].items():\n35\t        if not string(request) or not isinstance(lines, dict):\n36\t            raise ValueError('requests')\n37\t        for sku, qty in lines.items():\n38\t            if not string(sku) or isinstance(qty, bool) or not integer(qty, 1):\n39\t                raise ValueError('request quantity')\n40\t    for event_id, event in state['seen'].items():\n41\t        if not string(event_id) or not isinstance(event, dict):\n42\t            raise ValueError('seen')\n43\t        if event.get('id') != event_id:\n44\t            raise ValueError('seen id mismatch')\n45\t        try:\n46\t            canonical = parse_event(json.dumps(event, ensure_ascii=False))\n47\t        except (TypeError, ValueError) as exc:\n48\t            raise ValueError('seen event') from exc\n49\t        if canonical != event:\n50\t            raise ValueError('noncanonical seen event')\n51\t        _validate_seen_event_quantities(event)\n52\t    return state\n53\t\n54\t\n55\tdef dump_state(state):\n56\t    validate(state)\n57\t    state = deepcopy(state)\n58\t    return json.dumps({'version': 1, 'state': state}, ensure_ascii=False,\n59\t                      sort_keys=True, separators=(',', ':')) + '\\n'\n60\t\n61\t\n62\tdef load_state(text):\n63\t    wrapper = read_json(text)\n64\t    if not isinstance(wrapper, dict) or set(wrapper) != {'version', 'state'}:\n65\t        raise ValueError('wrapper')\n66\t    if type(wrapper['version']) is not int or wrapper['version'] != 1:\n67\t        raise ValueError('version')\n68\t    return deepcopy(validate(wrapper['state']))"
+      }
+    ],
+    "is_error": false,
+    "command": "view",
+    "path": "/workspace/checkpoint.py",
+    "prev_exist": true,
+    "old_content": null,
+    "new_content": null,
+    "kind": "FileEditorObservation"
+  },
+  "action_id": "a6dc4400-b59d-4517-a42a-cfd0884c1b04",
+  "extended_content": [],
+  "kind": "ObservationEvent"
+}
