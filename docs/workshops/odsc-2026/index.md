@@ -2,11 +2,15 @@
 
 <a href="/learn-openhands-harness/slides/odsc-draft/s/odsc-cut-review/" target="_blank" rel="noreferrer">Full slide deck (draft, October 19)</a>
 
-These are the instructions for the Harness Engineering in-class workshop. Each lab
-gives you a small task to try, a harness choice to change, and a trace to inspect.
+Choose how you want to participate. **We recommend inspecting the saved conversations in your own Agent Canvas.** You can follow the recorded decisions and tool results without waiting for a new run or paying for model calls.
 
-Start with [setup](/workshops/odsc-2026/setup), then open the
-[prompt index](/workshops/odsc-2026/prompts).
+| Option | What you do | When to choose it |
+|---|---|---|
+| [1. Read the HTML](/workshop-examples/2026-10-19-lecture/index.html) | Open the saved transcripts in your browser. | Quick access with no Canvas setup. |
+| **[2. Inspect in Agent Canvas (recommended)](./conversations#inspect-the-conversations-in-your-own-canvas)** | Import the lecture histories, filter the conversation list, and expand tool calls and results. | Follow along with the instructor and investigate the traces yourself. |
+| [3. Run the full exercises](./setup#run-new-exercises) | Start fresh conversations and perform the tasks with your own model access. | You have time to configure the tools and compare new runs. |
+
+Follow [Get started](./setup) to choose your path. Use [saved-conversation directions](./conversations) for the recommended Canvas import, or [Exercise prompts](./prompts) to run the work yourself.
 
 | Lab | What you do |
 |---|---|

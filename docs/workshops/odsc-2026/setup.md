@@ -2,58 +2,17 @@
 
 <a href="/learn-openhands-harness/slides/odsc-draft/s/odsc-cut-review/" target="_blank" rel="noreferrer">Full slide deck (draft, October 19)</a>
 
-Choose how you want to view the lecture examples below. To run the exercises yourself, continue to [the exercise setup](#run-new-exercises) on this page.
+Choose how you want to participate. **We recommend inspecting the saved conversations in your own Agent Canvas.** You can follow the recorded decisions and tool results without waiting for a new run or paying for model calls.
 
-## Using Agent Canvas? Open the lecture examples there
+| Option | What you do | When to choose it |
+|---|---|---|
+| [1. Read the HTML](/workshop-examples/2026-10-19-lecture/index.html) | Open the saved transcripts in your browser. | Quick access with no Canvas setup. |
+| **[2. Inspect in Agent Canvas (recommended)](./conversations#inspect-the-conversations-in-your-own-canvas)** | Import the lecture histories, filter the conversation list, and expand tool calls and results. | Follow along with the instructor and investigate the traces yourself. |
+| [3. Run the full exercises](#run-new-exercises) | Start fresh conversations and perform the tasks with your own model access. | You have time to configure the tools and compare new runs. |
 
-New to Canvas? Start with the official [Agent Canvas installation guide](https://docs.openhands.dev/openhands/usage/agent-canvas/setup) and [first-time setup guide](https://docs.openhands.dev/openhands/usage/agent-canvas/first-time-setup). Then follow the steps below to add the lecture examples.
+Download the [lecture examples](https://github.com/rajshah4/learn-openhands-harness/releases/download/odsc-lecture-conversations-2026-10-21/harness-lecture-conversations-2026-10-21.zip) and unzip the student ZIP. See [saved-conversation directions](./conversations) for the recommended Canvas import.
 
-[Download the lecture examples ZIP](https://github.com/rajshah4/learn-openhands-harness/releases/download/odsc-lecture-conversations-2026-10-19-v2/harness-lecture-conversations-2026-10-19-v2.zip). It contains only the examples shown in the lecture: 16 complete conversation histories, including the team example's three workers. Older experiments and reserves are excluded.
-
-Viewing these saved conversations needs **Python 3.13 and Node.js/npm**, but no model key. On Windows, use WSL.
-
-1. Unzip the download and open a terminal in the extracted `harness-lecture-conversations` folder.
-2. Prepare the saved conversations and viewer:
-
-   ```bash
-   python3.13 setup_examples.py --destination "$PWD/lecture-store" --install
-   python3.13 prepare_runtime.py --store "$PWD/lecture-store" --install
-   ```
-
-3. Start the local viewer and leave this terminal running:
-
-   ```bash
-   ./lecture-store/.venv/bin/python view_w3.py --store "$PWD/lecture-store" --canvas "$PWD/lecture-store/ui/node_modules/@openhands/agent-canvas" --port 28080
-   ```
-
-4. In your existing Canvas at `http://localhost:8000`, open **Manage Backends → Add Backend → Agent-server → Local**. Enter:
-
-   | Field | Value |
-   |---|---|
-   | Host Name | `ODSC lecture examples` |
-   | Host | `http://127.0.0.1:28080` |
-   | API Key | Leave blank |
-
-   Click **Connect**, then select **ODSC lecture examples**. Choose a `Workshop N · scenario · description` conversation in the sidebar.
-
-The local address serves the saved examples to Canvas. They appear in their own read-only collection, separate from your existing conversations. You can inspect the recorded messages and tool results; you cannot resume these agents. The “sandbox no longer available” message is expected. Workshop 4's two animations open from the [HTML examples](/workshop-examples/2026-10-19-lecture/index.html).
-
-<details>
-<summary>No Canvas window open, or need troubleshooting?</summary>
-
-Open **http://127.0.0.1:28080** directly to use the included Canvas viewer. This also works if your existing Canvas runs on a port other than 8000.
-
-Stop the viewer with Ctrl-C. To reopen the examples, run the command in step 3 again. The setup commands refuse to overwrite an existing `lecture-store`; reuse it rather than reinstalling. If port 28080 is occupied, change `--port` and use that same port in the browser address or Canvas Host field.
-
-</details>
-
-## Not using Agent Canvas? Read the HTML examples
-
-[Open the lecture examples in your browser](/workshop-examples/2026-10-19-lecture/index.html). These are the same complete conversations, plus Workshop 4's animations. No installation, download or API key is needed.
-
-For offline reading, download the ZIP above, unzip it and open `harness-lecture-conversations/package/index.html`.
-
-## Want to run the exercises yourself? {#run-new-exercises}
+## Run the full exercises {#run-new-exercises}
 
 The workshop uses Agent Canvas because it's open source and flexible. You can also try some of these exercises in another harness.
 
@@ -77,7 +36,7 @@ Use Node.js 22.19 or newer, Python 3.11 or newer, and Git. If a command is missi
 Install the tested versions of Canvas and the two additional harnesses:
 
 ```bash
-npm install -g @openhands/agent-canvas@1.27.1 @earendil-works/pi-coding-agent@0.83.0 pi-acp@0.0.33 opencode-ai@1.18.23
+npm install -g @openhands/agent-canvas@1.29.0 @earendil-works/pi-coding-agent@0.83.0 pi-acp@0.0.33 opencode-ai@1.18.23
 agent-canvas
 ```
 

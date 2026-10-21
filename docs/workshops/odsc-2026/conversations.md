@@ -1,40 +1,61 @@
-# Lecture conversation examples
+# Choose your workshop path
 
-These are the examples shown in the lecture, organized by workshop. The download excludes reserves and superseded experiments.
+Choose how you want to participate. **We recommend inspecting the saved conversations in your own Agent Canvas.** You can follow the recorded decisions and tool results without waiting for a new run or paying for model calls.
 
-## Read online or offline
+| Option | What you do | When to choose it |
+|---|---|---|
+| 1. Read the HTML | Open the saved transcripts in your browser. | Quick access with no Canvas setup. |
+| **2. Inspect in Agent Canvas (recommended)** | Import the lecture histories, filter the conversation list, and expand tool calls and results. | Follow along with the instructor and investigate the traces yourself. |
+| 3. Run the full exercises | Start fresh conversations and perform the tasks with your own model access. | You have time to configure the tools and compare new runs. |
 
-- [Open the lecture examples](/workshop-examples/2026-10-19-lecture/index.html).
-- [Download all lecture examples in one ZIP](https://github.com/rajshah4/learn-openhands-harness/releases/download/odsc-lecture-conversations-2026-10-19-v2/harness-lecture-conversations-2026-10-19-v2.zip). Unzip it and open `harness-lecture-conversations/package/index.html`.
+Download the [lecture examples ZIP](https://github.com/rajshah4/learn-openhands-harness/releases/download/odsc-lecture-conversations-2026-10-21/harness-lecture-conversations-2026-10-21.zip) and extract it. The selection contains 13 lecture conversations, three worker histories and two original animation outputs.
 
-No API key or Canvas installation is required. The two Workshop 4 animations are included as model outputs. The Workshop 6 team example includes its three worker histories.
+## Read the HTML
 
-Each selected conversation includes its full recorded history, including later repairs or failures. Private context and credentials have been removed; the evidence documents those redactions. These are teaching examples, not a representative benchmark.
+[Open the HTML examples online](/workshop-examples/2026-10-19-lecture/index.html), or open `harness-lecture-conversations/package/index.html` from the extracted ZIP. If local files are restricted, run `python3 serve_transcripts.py` inside the extracted folder and open the printed URL. No model key is needed.
 
-## Open the examples in Agent Canvas
+## Inspect the conversations in your own Canvas
 
-These steps put the saved histories into a dedicated, read-only Canvas archive. They need **Python 3.13 and Node.js/npm**. No model key is needed, and you do not need to launch your regular Canvas first.
+These directions are for a **local npm installation of Agent Canvas 1.29.0**, using Agent Server 1.56.0. The import was tested on macOS with a fresh Canvas store. Windows, Linux, Docker and remote-backend imports have not been verified; use the HTML option if this local setup does not match yours.
 
-1. Download and unzip the lecture ZIP above. Open a terminal in the extracted `harness-lecture-conversations` folder.
-2. Install the histories into a new archive folder and prepare the pinned viewer:
+1. Install the tested Canvas version, or check your existing version:
 
-   ```bash
-   python3.13 setup_examples.py --destination "$PWD/lecture-store" --install
-   python3.13 prepare_runtime.py --store "$PWD/lecture-store" --install
+   ```sh
+   npm install -g @openhands/agent-canvas@1.29.0
+   agent-canvas --version
    ```
 
-3. Start the viewer from the same folder:
+   Follow the [Canvas installation prerequisites](https://docs.openhands.dev/openhands/usage/agent-canvas/setup) if Node.js or uv is missing.
 
-   ```bash
-   ./lecture-store/.venv/bin/python view_w3.py --store "$PWD/lecture-store" --canvas "$PWD/lecture-store/ui/node_modules/@openhands/agent-canvas" --port 28080
+2. **Stop Agent Canvas with Ctrl-C** in its terminal. Keep the backend stopped during import.
+
+3. Open a terminal in the extracted `harness-lecture-conversations` folder. Preview the import, check the printed destination, then install:
+
+   ```sh
+   python3 import_into_canvas.py
+   python3 import_into_canvas.py --install
    ```
 
-4. Open **http://127.0.0.1:28080**. The connection is named **ODSC lecture examples**. Choose a `Workshop N · scenario · description` conversation in the sidebar. The archive contains 16 histories, including the three team workers. Workshop 4's two animations open from the HTML index instead.
+   No model key or Canvas session credential is needed. The importer checks the package hashes, refuses conflicting conversation IDs, and adds 16 histories: 13 lecture conversations and three team-worker histories. It preserves their 526 recorded events. Repeating the same import verifies the installed files without duplicating them.
 
-If you already have Canvas open at `http://localhost:8000`, you can use its existing window: open **Manage Backends → Add Backend → Agent-server → Local**. Enter **ODSC lecture examples** for Host Name and `http://127.0.0.1:28080` for Host, leave API Key blank, and click **Connect**. Select that backend to see only the lecture histories. For Canvas running on another port, use the archive's own browser tab directly.
+4. Restart Canvas:
 
-Each history has collection, workshop-number and scenario tags. The “sandbox no longer available” message is expected: you can inspect all recorded messages and tool results, but cannot resume these archived agents. Stop the viewer with Ctrl-C.
+   ```sh
+   agent-canvas
+   ```
 
-This opens a separate lecture archive rather than merging old recordings into your normal Canvas history. If the destination already exists, reuse its viewer or choose a fresh folder; the installer will not overwrite it. If port 28080 is occupied, change `--port` and open that port instead. On Windows, run these commands in WSL.
+   Open the URL printed in its terminal. On first launch, choose your usage-data preference and **Skip for now** on model setup. The “LLM isn’t set up” banner only affects new runs; saved histories still open. Beside **Conversations**, choose **View → Filter by tags → `lecture=odsc2026`**. Click **More** if the list is collapsed. Open a conversation and expand its tool calls and observations.
 
-[Set up your own runs](./setup#run-new-exercises) only if you want to perform the exercises yourself.
+The npm launcher normally stores conversations in `~/.openhands/agent-canvas/dev_conversations`. If you configured another local store, pass its absolute path with `--store /absolute/path/dev_conversations`. If your backend uses a custom port, pass its loopback URL with `--backend-url http://127.0.0.1:PORT` so the stopped-backend check uses the right port. The importer previews by default and changes files only with `--install`.
+
+The imported records are for inspection. To try a task yourself, start a fresh conversation in the exercise's workspace. Historical commands refer to the recorded environment, and imported archive agents have no model credentials or executable tools configured.
+
+The earlier stale-memory example uses historical custom tool types. The importer supplies documented generic compatibility wrappers for those records; messages, tool-call arguments, results, IDs, and timestamps are retained. The original package remains unchanged, and `odsc-lecture-import.json` beside the store records the import and compatibility mappings.
+
+## Run the full exercises
+
+If you have time, follow [the exercise prompts](./prompts) and [model/tool setup](./setup#run-new-exercises). Start fresh conversations in the specified workspaces. New results may differ from the recorded examples.
+
+## Recover or remove the import
+
+Keep the original ZIP and extracted package. If the importer reports a collision or changed history, keep your existing data; it does not overwrite it. The receipt lists the exact imported IDs and event hashes. Stop Canvas before removing imported history folders, and remove only those listed in the receipt. Leave other conversations, settings, credentials and workspaces alone.

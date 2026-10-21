@@ -60,6 +60,7 @@ export default defineConfig({
           items: [
             { text: "Overview", link: "/workshops/odsc-2026/" },
             { text: "Get Started", link: "/workshops/odsc-2026/setup" },
+            { text: "Saved Conversations", link: "/workshops/odsc-2026/conversations" },
             { text: "Exercise Prompts", link: "/workshops/odsc-2026/prompts" },
             { text: "Exercise 1: Compare Harnesses", link: "/workshops/odsc-2026/exercises/00-working-harness" },
             { text: "Exercise 2: Tool Design", link: "/workshops/odsc-2026/exercises/01-add-harness-capability" },
