@@ -2,6 +2,12 @@
 
 <a href="/learn-openhands-harness/slides/odsc-draft/s/odsc-cut-review/" target="_blank" rel="noreferrer">Full slide deck (draft, October 19)</a>
 
+::: tip Find the workshop conversations in Agent Canvas
+**Filter tag: `lecture=odsc2026`**
+
+In **Conversations**, choose **View → Filter by tags → `lecture=odsc2026`**. Click **More** if the list is collapsed. Look for names such as **W1 - 1A - OpenHands**, **W1 - 1B - Pi**, and **W1 - 1C - OpenCode**.
+:::
+
 Choose how you want to participate. **We recommend inspecting the saved conversations in your own Agent Canvas.** You can follow the recorded decisions and tool results without waiting for a new run or paying for model calls.
 
 | Option | What you do | When to choose it |
@@ -9,7 +15,7 @@ Choose how you want to participate. **We recommend inspecting the saved conversa
 | **[1. Inspect in Agent Canvas (recommended)](./conversations#inspect-the-conversations-in-your-own-canvas)** | Import the lecture histories, filter the conversation list, and expand tool calls and results. | Follow along with the instructor and investigate the traces yourself. |
 | [2. Run the full exercises](#run-new-exercises) | Start fresh conversations and perform the tasks with your own model access. | You have time to configure the tools and compare new runs. |
 
-Download the [lecture examples](https://github.com/rajshah4/learn-openhands-harness/releases/download/odsc-lecture-conversations-2026-10-21/harness-lecture-conversations-2026-10-21.zip) and unzip the student ZIP. See [saved-conversation directions](./conversations) for the recommended Canvas import.
+Download the [lecture examples](https://github.com/rajshah4/learn-openhands-harness/releases/download/odsc-lecture-conversations-2026-10-24/harness-lecture-conversations-2026-10-24.zip) and unzip the student ZIP. See [saved-conversation directions](./conversations) for the recommended Canvas import.
 
 ## Run the full exercises {#run-new-exercises}
 

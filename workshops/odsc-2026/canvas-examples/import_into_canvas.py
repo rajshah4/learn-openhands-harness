@@ -13,6 +13,7 @@ from urllib.parse import urlparse
 
 ROOT = Path(__file__).resolve().parent
 TAG = {'lecture': 'odsc2026'}
+PREVIOUS_MANIFEST_SHA = '78315a2843d8a888140c3816c0abd275166c9c7e16c961f5644b11d34f87db3e'
 
 def read(path):
     return json.loads(path.read_text(encoding='utf-8'))
@@ -86,11 +87,27 @@ def install(package, store, backend_url, apply=False):
     expected = {uuid.UUID(x['id']).hex for x in manifest['examples']}
     if receipt.exists():
         old = read(receipt)
-        assert set(old['ids']) == expected and old['source_manifest_sha256'] == sha(package / 'manifest.json'), 'Different import already recorded'
+        assert set(old['ids']) == expected and old['source_manifest_sha256'] in (sha(package / 'manifest.json'), PREVIOUS_MANIFEST_SHA), 'Different import already recorded'
         for cid, files in old['installed_event_hashes'].items():
             for name, digest in files.items():
                 assert sha(store / cid / 'events' / name) == digest, 'Installed history changed; refusing to overwrite'
-        return {'status': 'already installed', 'histories': len(expected), 'filter': 'lecture=odsc2026'}
+        updates = []
+        for row in manifest['examples']:
+            meta_path = store / uuid.UUID(row['id']).hex / 'meta.json'
+            meta = read(meta_path)
+            if meta.get('title') != row['title'] or meta.get('tags', {}).get('lecture') != 'odsc2026':
+                updates.append((meta_path, meta, row))
+        if updates and apply:
+            stopped_backend(backend_url)
+            for meta_path, meta, row in updates:
+                old.setdefault('previous_titles', {})[uuid.UUID(row['id']).hex] = meta.get('title')
+                meta['title'] = row['title']
+                meta['tags'] = {**meta.get('tags', {}), **TAG}
+                meta['autotitle'] = False
+                write(meta_path, meta)
+            old['source_manifest_sha256'] = sha(package / 'manifest.json')
+            write(receipt, old)
+        return {'status': 'labels updated' if updates and apply else 'label update preview' if updates else 'already installed', 'histories': len(expected), 'labels': len(updates), 'filter': 'lecture=odsc2026'}
     collisions = sorted(cid for cid in expected if (store / cid).exists())
     if collisions:
         raise ValueError('Existing conversation IDs would collide; nothing overwritten: ' + ', '.join(collisions))
@@ -118,7 +135,7 @@ def install(package, store, backend_url, apply=False):
                 d['tags'] = tags
                 d['confirmation_policy'] = {'kind': 'AlwaysConfirm'}
                 if filename == 'meta.json':
-                    d.update(autotitle=False, secrets={}, hook_config=None, plugins=None, tool_module_qualnames={}, client_tools=[])
+                    d.update(title=row['title'], autotitle=False, secrets={}, hook_config=None, plugins=None, tool_module_qualnames={}, client_tools=[])
                 else:
                     assert d['execution_status'] == 'finished'
                     assert not d['agent']['llm'].get('api_key') and not d['agent']['tools']
