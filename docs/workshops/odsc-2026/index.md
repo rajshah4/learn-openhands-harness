@@ -6,9 +6,8 @@ Choose how you want to participate. **We recommend inspecting the saved conversa
 
 | Option | What you do | When to choose it |
 |---|---|---|
-| [1. Read the HTML](/workshop-examples/2026-10-19-lecture/index.html) | Open the saved transcripts in your browser. | Quick access with no Canvas setup. |
-| **[2. Inspect in Agent Canvas (recommended)](./conversations#inspect-the-conversations-in-your-own-canvas)** | Import the lecture histories, filter the conversation list, and expand tool calls and results. | Follow along with the instructor and investigate the traces yourself. |
-| [3. Run the full exercises](./setup#run-new-exercises) | Start fresh conversations and perform the tasks with your own model access. | You have time to configure the tools and compare new runs. |
+| **[1. Inspect in Agent Canvas (recommended)](./conversations#inspect-the-conversations-in-your-own-canvas)** | Import the lecture histories, filter the conversation list, and expand tool calls and results. | Follow along with the instructor and investigate the traces yourself. |
+| [2. Run the full exercises](./setup#run-new-exercises) | Start fresh conversations and perform the tasks with your own model access. | You have time to configure the tools and compare new runs. |
 
 Follow [Get started](./setup) to choose your path. Use [saved-conversation directions](./conversations) for the recommended Canvas import, or [Exercise prompts](./prompts) to run the work yourself.
 

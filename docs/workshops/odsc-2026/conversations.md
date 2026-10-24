@@ -4,19 +4,14 @@ Choose how you want to participate. **We recommend inspecting the saved conversa
 
 | Option | What you do | When to choose it |
 |---|---|---|
-| 1. Read the HTML | Open the saved transcripts in your browser. | Quick access with no Canvas setup. |
-| **2. Inspect in Agent Canvas (recommended)** | Import the lecture histories, filter the conversation list, and expand tool calls and results. | Follow along with the instructor and investigate the traces yourself. |
-| 3. Run the full exercises | Start fresh conversations and perform the tasks with your own model access. | You have time to configure the tools and compare new runs. |
+| **[1. Inspect in Agent Canvas (recommended)](#inspect-the-conversations-in-your-own-canvas)** | Import the lecture histories, filter the conversation list, and expand tool calls and results. | Follow along with the instructor and investigate the traces yourself. |
+| [2. Run the full exercises](./setup#run-new-exercises) | Start fresh conversations and perform the tasks with your own model access. | You have time to configure the tools and compare new runs. |
 
 Download the [lecture examples ZIP](https://github.com/rajshah4/learn-openhands-harness/releases/download/odsc-lecture-conversations-2026-10-21/harness-lecture-conversations-2026-10-21.zip) and extract it. The selection contains 13 lecture conversations, three worker histories and two original animation outputs.
 
-## Read the HTML
-
-[Open the HTML examples online](/workshop-examples/2026-10-19-lecture/index.html), or open `harness-lecture-conversations/package/index.html` from the extracted ZIP. If local files are restricted, run `python3 serve_transcripts.py` inside the extracted folder and open the printed URL. No model key is needed.
-
 ## Inspect the conversations in your own Canvas
 
-These directions are for a **local npm installation of Agent Canvas 1.29.0**, using Agent Server 1.56.0. The import was tested on macOS with a fresh Canvas store. Windows, Linux, Docker and remote-backend imports have not been verified; use the HTML option if this local setup does not match yours.
+These directions are for a **local npm installation of Agent Canvas 1.29.0**, using Agent Server 1.56.0. The import was tested on macOS with a fresh Canvas store. Windows, Linux, Docker and remote-backend imports have not been verified. If this setup does not match yours, follow the instructor’s Canvas walkthrough during the session.
 
 1. Install the tested Canvas version, or check your existing version:
 
