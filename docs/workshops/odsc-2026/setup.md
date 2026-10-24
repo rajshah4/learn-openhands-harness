@@ -207,7 +207,7 @@ Single-workspace preparation also refuses existing directories, so it will not o
 
 The untouched Exercise 1 starter should fail its checks because it contains the planted bug. The repaired version should pass. Other exercises have different expected baselines; follow their preparation and checking instructions.
 
-Open [Exercise 1](/workshops/odsc-2026/exercises/00-working-harness) or the [prompt index](/workshops/odsc-2026/prompts) to continue. These profiles are a starting configuration. Follow each exercise when it asks you to change tools, models, or goal settings. Use [saved runs and results](/workshops/odsc-2026/results) if a capability is unavailable. Make your predictions before inspecting the saved results.
+Open [Exercise 1](/workshops/odsc-2026/exercises/00-working-harness) or the [prompt index](/workshops/odsc-2026/prompts) to continue. These profiles are a starting configuration. Follow each exercise when it asks you to change tools, models, or goal settings. If a capability is unavailable, inspect the [saved conversations in Agent Canvas](./conversations).
 
 ## If setup stops
 

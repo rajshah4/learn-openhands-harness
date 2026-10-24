@@ -19,7 +19,7 @@ Where a prompt contains `/absolute/path/to/.workshop-venv/bin/python`, replace i
 <details>
 <summary>Optional: get a prompt from the terminal</summary>
 
-Original W1/W2 prompt copies are saved in your session's `prompts/` folder with the interpreter path filled in. For updated W3-W6 tasks, use `classroom.py`; original session prompts for those workshops are reserves. You can also print one without creating a workspace:
+Prompt copies for all six exercises are saved in your session’s `prompts/` folder. W1/W2 copies include the Python interpreter path. You can also print a task without creating a workspace:
 
 ```bash
 .workshop-venv/bin/python workshops/odsc-2026/labs/classroom.py prompt w3-agreement-accepted
@@ -27,7 +27,4 @@ Original W1/W2 prompt copies are saved in your session's `prompts/` folder with 
 
 </details>
 
-Keep the course checkout outside the agent workspace. Run its external checker
-from your own terminal after the agent stops. The [worksheet](/workshops/odsc-2026/worksheet)
-records predictions, evidence, and decisions. [Saved results](/workshops/odsc-2026/results)
-provide a fallback when live access is unavailable.
+Keep the course checkout outside the agent workspace. Run its external checker from your own terminal after the agent stops. If you cannot run an exercise, inspect its saved conversation in [Agent Canvas](./conversations).

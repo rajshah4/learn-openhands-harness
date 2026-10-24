@@ -8,7 +8,7 @@ Start by comparing one repair agent against multiple agents. Both approaches mus
 
 1. Predict what changes before running or reading results.
 2. Try a single agent and a fresh validator, or use the saved examples.
-3. Record evidence and a decision in the [worksheet](/workshops/odsc-2026/worksheet).
+3. Compare the traces and decide which harness design you would use.
 
 ## Start With These Files
 

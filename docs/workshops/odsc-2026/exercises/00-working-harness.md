@@ -6,7 +6,7 @@ Start by varying the harness and holding the model, prompt, starter, and checks 
 
 1. Predict what changes before running or reading results.
 2. Try a harness choice and inspect the trace, or use the saved examples.
-3. Record evidence and a decision in the [worksheet](/workshops/odsc-2026/worksheet).
+3. Compare the traces and decide which harness design you would use.
 
 ## Start With These Files
 

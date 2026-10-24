@@ -6,7 +6,7 @@ Start by varying the tools and holding the PR explanation task and model fixed. 
 
 1. Predict what changes before running or reading results.
 2. Try a tool setup and inspect the trace, or use the saved examples.
-3. Record evidence and a decision in the [worksheet](/workshops/odsc-2026/worksheet).
+3. Compare the traces and decide which harness design you would use.
 
 ## Start With These Files
 
@@ -40,7 +40,7 @@ Optional terminal lane: remove MCP, keep `gh` installed and authenticated, and u
 
 ## Try A Variation
 
-The [recorded comparison](/workshops/odsc-2026/results#exercise-2) in the slides used Sonnet 4.6. Your Flash runs let you try the same tool choices with another model.
+The recorded comparison in the slides used Sonnet 4.6. Your Flash runs let you try the same tool choices with another model.
 
 Try the four-operation GitHub server first. Switch to the custom PR tool, then the broad server, in fresh conversations. Which interface makes the evidence easier to find? Open a citation and check it yourself.
 

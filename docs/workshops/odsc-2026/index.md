@@ -20,13 +20,4 @@ Follow [Get started](./setup) to choose your path. Use [saved-conversation direc
 | [5. Goals and stopping](/workshops/odsc-2026/exercises/04-let-it-run) | Inspect a staged report checkpoint, rejection and continuation |
 | [6. Delegation](/workshops/odsc-2026/exercises/05-multi-agent) | Compare one reservation owner with independent adversarial discovery |
 
-You can run the exercises yourself or inspect saved traces from my agent runs.
-Use the [worksheet](/workshops/odsc-2026/worksheet) to record your predictions and observations.
-
-Make your predictions before reading the [saved results](/workshops/odsc-2026/results).
-
-The slides show recorded experiments. These labs let you explore the same ideas with your current models and tools; your action sequences and results can differ.
-
-Afterward, use the [optional long project](/workshops/odsc-2026/long-project)
-or select a project from the full course. The talk's conceptual companion
-remains [harness-engineering](https://github.com/rajshah4/harness-engineering).
+Make your predictions before inspecting the saved conversations. The labs let you explore the same ideas with your own models and tools; your results may differ from the recorded examples.
