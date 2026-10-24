@@ -17,6 +17,7 @@ import subprocess
 import sys
 import time
 import uuid
+import classroom
 
 ROOT = Path(__file__).resolve().parent
 CASES = {
@@ -45,14 +46,15 @@ WORKSPACES = [
     *[('w2', 'w2-' + mode, 'Workshop-OpenHands; tools: ' + mode)
       for mode in ('terminal', 'primitive', 'broad', 'task-shaped')],
     *[(case, case, 'Workshop-OpenHands')
-      for case in ('w3-none', 'w3-older', 'w3-current')],
-    *[('w4-' + task, 'w4-' + tier + '-' + task, tier + ' model profile')
-      for tier in ('cheap', 'stronger') for task in ('rename', 'pagination', 'async', 'security')],
-    ('w5', 'w5-repair', 'Workshop-OpenHands; ordinary conversation'),
-    ('w5-goal', 'w5-goal', 'Workshop-OpenHands; native goal mode'),
-    ('w5-goal-capped', 'w5-goal-capped', 'Workshop-OpenHands; optional blocked goal, two-audit cap'),
-    ('w6-single', 'w6-single', 'Workshop-OpenHands; one repair owner'),
-    ('w6-validator', 'w6-validator', 'Workshop-Validator; owner plus native validator'),
+      for case in ('w3-agreement-none', 'w3-agreement-draft', 'w3-agreement-accepted')],
+    *[('w4-async', 'w4-counter-' + tier, tier + ' model profile')
+      for tier in ('flash', 'pro')],
+    *[('w4-controlled-security', 'w4-security-' + tier, tier + ' model profile')
+      for tier in ('flash', 'pro')],
+    ('w5-checkpoint-ordinary', 'w5-checkpoint-ordinary', 'Workshop-OpenHands; ordinary conversation'),
+    ('w5-checkpoint-goal', 'w5-checkpoint-goal', 'Workshop-OpenHands; native goal mode'),
+    ('w6-reservation-single', 'w6-reservation-single', 'Workshop-OpenHands; one repair owner'),
+    ('w6-reservation-team', 'w6-reservation-team', 'Workshop-OpenHands; independent adversary'),
 ]
 PROMPT_INDEX = 'https://rajshah4.github.io/learn-openhands-harness/workshops/odsc-2026/prompts'
 EXERCISE_PAGES = dict(zip(('w1', 'w2', 'w3', 'w4', 'w5', 'w6'), (
@@ -113,10 +115,16 @@ def prepare_all(parent):
         raise ValueError('Choose a workspace parent outside the course checkout, such as ../odsc-runs.')
     # Validate the inputs before creating the session. Preparation never resets old work.
     for case, _, _ in WORKSPACES:
-        prompt(case)
-        fixture = CASES[case][0]
-        if fixture and not (ROOT / 'starters' / fixture).is_dir():
-            raise ValueError('Missing starter: ' + fixture)
+        if case in classroom.CASES:
+            classroom.prompt(case)
+            fixture = classroom.CASES[case]['starter']
+            if not (classroom.DATA / 'starters' / fixture).is_dir():
+                raise ValueError('Missing classroom starter: ' + fixture)
+        else:
+            prompt(case)
+            fixture = CASES[case][0]
+            if fixture and not (ROOT / 'starters' / fixture).is_dir():
+                raise ValueError('Missing starter: ' + fixture)
     session = parent / ('session-' + time.strftime('%Y%m%d-%H%M%S') + '-' + uuid.uuid4().hex[:6])
     session.mkdir(parents=True, exist_ok=False)
     prompts = session / 'prompts'
@@ -129,10 +137,11 @@ def prepare_all(parent):
              'Each retry of prepare-all creates a new session and leaves previous runs alone.', '']
     for case, name, profile in WORKSPACES:
         workspace = session / name
+        classroom_case = case in classroom.CASES
         with contextlib.redirect_stdout(io.StringIO()):
-            prepare(case, workspace)
+            (classroom.prepare if classroom_case else prepare)(case, workspace)
         prompt_file = prompts / (name + '.txt')
-        prompt_file.write_text(prompt(case) + '\n')
+        prompt_file.write_text((classroom.prompt if classroom_case else prompt)(case) + '\n')
         record = {'case': case, 'workspace': str(workspace), 'profile_or_configuration': profile,
                   'exercise_page': exercise_url(case), 'prompt_file': str(prompt_file)}
         records.append(record)
@@ -140,7 +149,7 @@ def prepare_all(parent):
                       '  Get the prompt: ' + exercise_url(case),
                       '  Optional local prompt copy: ' + str(prompt_file)])
         if case != 'w2':
-            command = shlex.join([sys.executable, str(ROOT / 'lab.py'), 'check', case,
+            command = shlex.join([sys.executable, str(ROOT / ('classroom.py' if classroom_case else 'lab.py')), 'check', case,
                                   '--workspace', str(workspace)])
             record['check_command'] = command
             lines.append('  After the run, check: ' + command)

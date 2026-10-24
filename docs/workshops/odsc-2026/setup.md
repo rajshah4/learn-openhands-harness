@@ -58,13 +58,13 @@ If you already have a current course checkout, open a terminal in that folder an
 
 Run the remaining commands from the `learn-openhands-harness` folder.
 
-Prepare the original session folders for Exercises 1 and 2:
+Prepare the workspaces for all six exercises:
 
 ```bash
 .workshop-venv/bin/python workshops/odsc-2026/labs/lab.py prepare-all
 ```
 
-This creates a fresh session outside the checkout and prints `WORKSPACES.txt` plus the Python interpreter path. Use its W1 and W2 folders and prompts. It also includes the older W3-W6 fixtures, which are now reserves. **For the updated W3-W6 classroom sequence, use `classroom.py` and the exact preparation commands on the exercise pages.** These create separate new directories. Neither helper runs agents or makes model requests. Running preparation again preserves earlier work.
+This creates a fresh session outside the checkout with the workspaces for all six exercises. Open `WORKSPACES.txt` for each workspace’s Canvas profile, task prompt and check command. It also prints the Python interpreter path to use in the exercise prompts. Preparation makes no model requests. Running it again creates a new session and preserves earlier work.
 
 ## 4. Prepare the Pi and OpenCode connection files
 
@@ -197,7 +197,7 @@ For Pi or OpenCode, open its own folder, choose the matching profile, and start 
 
 After each run, copy its exact **After the run, check** command from `WORKSPACES.txt` into your course terminal. The command already contains your interpreter and workspace paths.
 
-For a fresh retry of Exercises 1 and 2, run `prepare-all` again and use its new session. For Exercises 3-6, use their `classroom.py prepare` command with a new path. To prepare just one extra attempt, use a new folder name:
+For a fresh set of all six exercises, run `prepare-all` again and use its new session. To retry one condition, use the preparation command on its exercise page with a new workspace path. For example:
 
 ```bash
 .workshop-venv/bin/python workshops/odsc-2026/labs/lab.py prepare w1 --workspace ../odsc-runs/w1-pi-retry
