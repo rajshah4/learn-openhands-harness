@@ -53,6 +53,10 @@ The imported records are for inspection. To try a task yourself, start a fresh c
 
 The earlier stale-memory example uses historical custom tool types. The importer supplies documented generic compatibility wrappers for those records; messages, tool-call arguments, results, IDs, and timestamps are retained. The original package remains unchanged, and `odsc-lecture-import.json` beside the store records the import and compatibility mappings.
 
+## Already imported an earlier download?
+
+Download and extract the current ZIP above. Stop Canvas, run the included `python3 import_into_canvas.py` to preview, then `python3 import_into_canvas.py --install`. For the October 21 package, this updates the display names without replacing recorded events or creating duplicate conversations. Restart Canvas and filter by **`lecture=odsc2026`**.
+
 ## Run the full exercises
 
 If you have time, follow [the exercise prompts](./prompts) and [model/tool setup](./setup#run-new-exercises). Start fresh conversations in the specified workspaces. New results may differ from the recorded examples.
