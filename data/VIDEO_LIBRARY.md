@@ -37,3 +37,5 @@ Public feed: `https://rajshah4.github.io/learn-openhands-harness/video-library/c
 The October 25 review confirmed the separate @rajistics_ai profiles on YouTube and Instagram. The 61-second multi-agent systems Short was verified from the YouTube channel listing and player metadata. Its Instagram match remains unknown. The public Instagram profile did not expose reel links during this review.
 
 The fresh Instagram profile review on October 25 found “6 ways to build a better agent” (65 seconds, posted October 25) and established the Instagram match for the AI-channel multi-agent systems Short. The new agent video uses its local source export for the cover. YouTube did not yet list this new upload publicly.
+
+The cybersecurity reel was added after Rajiv confirmed it was the second recent upload. Instagram showed publication on October 24 at 23:26 UTC and a duration of 33.917 seconds. Its YouTube match reports 34 seconds and was published October 25. The catalog retains the earlier Instagram date.
