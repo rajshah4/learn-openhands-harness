@@ -2,6 +2,8 @@
 
 Website: [rajshah4.github.io/learn-openhands-harness](https://rajshah4.github.io/learn-openhands-harness/)
 
+Reference library: [Sources from the current talk and further reading](https://rajshah4.github.io/learn-openhands-harness/references), organized by topic with slide provenance.
+
 Every coding agent ships two things: a model that reasons and a harness that does everything else. The harness decides what the model sees, which tools it can call, what it remembers across turns, when it stops, and whether it runs in a sandbox or on your bare machine. This translates into implications for performance, reliability, and latency.
 
 This tutorial gives you a working harness you can open, run, and change. You'll use two open-source projects, [Agent Server](https://docs.openhands.dev/sdk/arch/agent-server) (the HTTP API that owns the workspace, conversation state, and tool dispatch) and [Agent Canvas](https://github.com/OpenHands/agent-canvas) (the operator UI), as a microscope. You'll give the agent real tasks, read the trace of what happened, and then change one lever at a time to see the behavior shift.

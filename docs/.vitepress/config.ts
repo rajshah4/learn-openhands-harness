@@ -15,6 +15,7 @@ export default defineConfig({
       { text: "Projects", link: "/projects/" },
       { text: "Workshop", link: "/workshops/odsc-2026/" },
       { text: "Videos", link: "/videos" },
+      { text: "References", link: "/references" },
       {
         text: "GitHub",
         link: "https://github.com/rajshah4/learn-openhands-harness",
@@ -80,6 +81,7 @@ export default defineConfig({
             { text: "Quickstart", link: "/quickstart" },
             { text: "Harness Tour", link: "/harness-tour" },
             { text: "Videos", link: "/videos" },
+            { text: "References", link: "/references" },
           ],
         },
       ],
