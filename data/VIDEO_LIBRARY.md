@@ -31,3 +31,7 @@ Public feed: `https://rajshah4.github.io/learn-openhands-harness/video-library/c
 ## Featured talk and YouTube matches
 
 `featuredTalk` holds the wide full-talk card, independently of the shorts and their filters. The May 3, 2026 YouTube page reports a runtime of 2,054 seconds (34:14). Its original YouTube thumbnail is stored locally. Fifteen shorts were matched through the public @rajistics Shorts listing and verified against their titles, publication dates, and runtimes. Their durations agree with the Instagram versions within one second. Unknown matches remain absent.
+
+## Additional AI channel
+
+The October 25 review confirmed the separate @rajistics_ai profiles on YouTube and Instagram. The 61-second multi-agent systems Short was verified from the YouTube channel listing and player metadata. Its Instagram match remains unknown. The public Instagram profile did not expose reel links during this review.

@@ -10,6 +10,8 @@ pageClass: video-library-page
 
 <VideoGallery />
 
+More AI videos: [YouTube @rajistics_ai](https://www.youtube.com/@rajistics_ai) · [Instagram @rajistics_ai](https://www.instagram.com/rajistics_ai/).
+
 ## Longer walkthroughs
 
 The [Dynamic Workflows deep dive](https://www.youtube.com/watch?v=PtbrKTgj3X8) pairs with [P08: Dynamic Workflows](/projects/p08-dynamic-workflows). It follows the model as it writes orchestration code and delegates work.
