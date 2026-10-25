@@ -1,25 +1,17 @@
-# Videos And Talks
+---
+title: Harness Engineering Videos
+description: A full talk and short videos on agent tools, context, memory, model routing, verification, and multi-agent coordination by Rajiv Shah.
+aside: false
+sidebar: false
+pageClass: video-library-page
+---
 
-These videos provide a narrative view of harness engineering. Get the basic ideas here, then use the projects for hands-on experience.
+# Harness Engineering Videos
 
-## Harness Engineering Talk
+<VideoGallery />
 
-- [Engineering the Harness: talk and slides](https://github.com/rajshah4/harness-engineering#presentation-materials)
-- [YouTube recording](https://www.youtube.com/watch?v=KijChx7q2nY)
+## Longer walkthroughs
 
-Watch this first if you want the big picture: why stronger models still need a harness, and why the environment around the model controls reliability.
+The [Dynamic Workflows deep dive](https://www.youtube.com/watch?v=PtbrKTgj3X8) pairs with [P08: Dynamic Workflows](/projects/p08-dynamic-workflows). It follows the model as it writes orchestration code and delegates work.
 
-## Dynamic Workflows
-
-- [Dynamic Workflows deep dive](https://www.youtube.com/watch?v=PtbrKTgj3X8)
-- [P08: Dynamic Workflows](/projects/p08-dynamic-workflows)
-
-Watch this when you reach P08. It explains why some orchestration code should remain stable harness policy, while short-lived fan-out and fan-in plans can be authored by the model under guardrails.
-
-## Suggested Video Path
-
-1. Harness engineering talk.
-2. Quickstart and harness tour.
-3. P01 through P07.
-4. Dynamic workflows video.
-5. P08, P09, and P10.
+Ready to try a harness decision yourself? [Explore the projects](/projects/) or [start the workshop](/workshops/odsc-2026/).
