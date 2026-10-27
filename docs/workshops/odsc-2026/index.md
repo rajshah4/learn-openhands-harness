@@ -2,12 +2,6 @@
 
 <a href="/learn-openhands-harness/slides/odsc-draft/s/odsc-cut-review/" target="_blank" rel="noreferrer">Full slide deck (draft, October 19)</a>
 
-::: tip Find the workshop conversations in Agent Canvas
-**Filter tag: `lecture=odsc2026`**
-
-In **Conversations**, choose **View → Filter by tags → `lecture=odsc2026`**. Click **More** if the list is collapsed. Look for names such as **W1 - 1A - OpenHands**, **W1 - 1B - Pi**, and **W1 - 1C - OpenCode**.
-:::
-
 Choose how you want to participate. **We recommend inspecting the saved conversations in your own Agent Canvas.** You can follow the recorded decisions and tool results without waiting for a new run or paying for model calls.
 
 | Option | What you do | When to choose it |
