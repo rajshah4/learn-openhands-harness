@@ -34,16 +34,18 @@ python3 --version
 git --version
 ```
 
-Use Node.js 22.19 or newer, Python 3.11 or newer, and Git. If a command is missing, install [Node.js](https://nodejs.org/en/download), [Python](https://www.python.org/downloads/), or [Git](https://git-scm.com/downloads) before continuing. On Windows, use WSL and run all commands inside WSL.
+Use Node.js 24 or newer, Python 3.11 or newer, and Git. If a command is missing, install [Node.js](https://nodejs.org/en/download), [Python](https://www.python.org/downloads/), or [Git](https://git-scm.com/downloads) before continuing. On Windows, use WSL and run all commands inside WSL.
 
 ## 2. Install and launch Canvas
 
-Install the tested versions of Canvas and the two additional harnesses:
+Install Canvas and the two additional harnesses:
 
 ```bash
-npm install -g @openhands/agent-canvas@1.29.0 @earendil-works/pi-coding-agent@0.83.0 pi-acp@0.0.33 opencode-ai@1.18.23
+npm install -g @openhands/agent-canvas @earendil-works/pi-coding-agent pi-acp opencode-ai
 agent-canvas
 ```
+
+The exercise setup was tested with Canvas 1.29.0, Pi 0.83.0, pi-acp 0.0.33 and OpenCode 1.18.23. The install command uses the current published packages; newer versions have not been verified for these exercises.
 
 Open the URL printed in your terminal. Leave Canvas running and open a **second terminal** for the remaining commands.
 
