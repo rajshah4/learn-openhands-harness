@@ -16,7 +16,7 @@ By the end you'll have a `harness.py` you built yourself, with model routing, re
 
 ## Six workshop labs for ODSC 2026
 
-Start with the [workshop prerequisites and getting started](https://rajshah4.github.io/learn-openhands-harness/workshops/odsc-2026/setup). Inspect the saved conversations in Agent Canvas without a model key, or run the six exercises yourself.
+Open the [ODSC West workshop slides](https://rajshah4.github.io/learn-openhands-harness/slides/odsc-west-2026.pdf), then use the [workshop prerequisites and getting started](https://rajshah4.github.io/learn-openhands-harness/workshops/odsc-2026/setup). Inspect the saved conversations in Agent Canvas without a model key, or run the six exercises yourself.
 
 In Canvas, filter by **`lecture=odsc2026`**. Conversation names start with the workshop and scenario, such as **W1 - 1A - OpenHands**. The setup page links to the current conversation download and import instructions.
 
