@@ -2,14 +2,17 @@
 
 <a href="/learn-openhands-harness/slides/odsc-draft/s/odsc-cut-review/" target="_blank" rel="noreferrer">Full slide deck (draft, October 19)</a>
 
-Choose how you want to participate. **We recommend inspecting the saved conversations in your own Agent Canvas.** You can follow the recorded decisions and tool results without waiting for a new run or paying for model calls.
+Choose how you want to participate. You can inspect the saved runs without waiting for a model or paying for new calls, or run the exercises yourself.
 
 | Option | What you do | When to choose it |
 |---|---|---|
-| **[1. Inspect in Agent Canvas (recommended)](./conversations#inspect-the-conversations-in-your-own-canvas)** | Import the lecture histories, filter the conversation list, and expand tool calls and results. | Follow along with the instructor and investigate the traces yourself. |
-| [2. Run the full exercises](#run-new-exercises) | Start fresh conversations and perform the tasks with your own model access. | You have time to configure the tools and compare new runs. |
+| **[1. Browse the public Canvas](http://34.220.121.254:8080/)** | Open the temporary read-only workshop archive. No login or model key is needed. | Fastest way to follow the conversations during the workshop. |
+| [2. Inspect in your own Canvas](./conversations#inspect-the-conversations-in-your-own-canvas) | Download and import the lecture histories, then expand the tool calls and results locally. | Keep the conversations after the temporary server is removed. |
+| [3. Run the full exercises](#run-new-exercises) | Start fresh conversations and perform the tasks with your own model access. | Configure the tools and compare new runs yourself. |
 
-Download the [lecture examples](https://github.com/rajshah4/learn-openhands-harness/releases/download/odsc-lecture-conversations-2026-10-24/harness-lecture-conversations-2026-10-24.zip) and unzip the student ZIP. See [saved-conversation directions](./conversations) for the recommended Canvas import.
+The [public Canvas](http://34.220.121.254:8080/) contains the same 15 saved histories as the student archive. It is temporary and read-only. It uses plain HTTP, so do not enter credentials or private information.
+
+To keep the conversations, download the [lecture examples](https://github.com/rajshah4/learn-openhands-harness/releases/download/odsc-lecture-conversations-2026-10-24/harness-lecture-conversations-2026-10-24.zip), unzip the student ZIP, and follow the [saved-conversation directions](./conversations).
 
 ## Run the full exercises {#run-new-exercises}
 

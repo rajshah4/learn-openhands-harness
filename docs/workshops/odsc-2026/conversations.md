@@ -7,7 +7,7 @@ Choose how you want to participate. **We recommend inspecting the saved conversa
 | **[1. Inspect in Agent Canvas (recommended)](#inspect-the-conversations-in-your-own-canvas)** | Import the lecture histories, filter the conversation list, and expand tool calls and results. | Follow along with the instructor and investigate the traces yourself. |
 | [2. Run the full exercises](./setup#run-new-exercises) | Start fresh conversations and perform the tasks with your own model access. | You have time to configure the tools and compare new runs. |
 
-Download the [lecture examples ZIP](https://github.com/rajshah4/learn-openhands-harness/releases/download/odsc-lecture-conversations-2026-10-24/harness-lecture-conversations-2026-10-24.zip) and extract it. The selection contains 13 lecture conversations, three worker histories and two original animation outputs.
+Download the [lecture examples ZIP](https://github.com/rajshah4/learn-openhands-harness/releases/download/odsc-lecture-conversations-2026-10-24/harness-lecture-conversations-2026-10-24.zip) and extract it. The selection contains 12 primary lecture conversations, three worker histories and two original animation outputs.
 
 ## Inspect the conversations in your own Canvas
 
@@ -30,7 +30,7 @@ These directions use a **local npm installation of Agent Canvas**. Follow the [C
    python3 import_into_canvas.py --install
    ```
 
-   No model key or Canvas session credential is needed. The importer checks the package hashes, refuses conflicting conversation IDs, and adds 16 histories: 13 lecture conversations and three team-worker histories. It preserves their 526 recorded events. Repeating the same import verifies the installed files without duplicating them.
+   No model key or Canvas session credential is needed. The importer checks the package hashes, refuses conflicting conversation IDs, and adds 15 histories: 12 primary lecture conversations and three team-worker histories. It preserves their 472 recorded events. Repeating the same import verifies the installed files without duplicating them.
 
 4. **Start Canvas to view the saved conversations:**
 
