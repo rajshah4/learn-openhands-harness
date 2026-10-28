@@ -1,6 +1,6 @@
 # Get started for the workshop
 
-<a href="/learn-openhands-harness/slides/odsc-draft/s/odsc-cut-review/" target="_blank" rel="noreferrer">Full slide deck (draft, October 19)</a>
+<a href="/learn-openhands-harness/slides/odsc-draft/s/odsc-cut-review/" target="_blank" rel="noreferrer">Workshop slide deck</a>
 
 Choose how you want to participate. You can inspect the saved runs without waiting for a model or paying for new calls, or run the exercises yourself.
 
