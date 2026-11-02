@@ -13,7 +13,8 @@ export default defineConfig({
       { text: "Start", link: "/start-here" },
       { text: "Concepts", link: "/concepts/" },
       { text: "Projects", link: "/projects/" },
-      { text: "Workshop", link: "/workshops/odsc-2026/" },
+      { text: "ODSC Workshop", link: "/workshops/odsc-2026/" },
+      { text: "MLOps Workshop", link: "/workshops/mlops-2026/" },
       { text: "Videos", link: "/videos" },
       { text: "References", link: "/references" },
       {
@@ -55,6 +56,22 @@ export default defineConfig({
           ],
         },
       ],
+      "/workshops/mlops-2026/": [{
+        text: "MLOps 2026 Workshop",
+        items: [
+          { text: "Overview", link: "/workshops/mlops-2026/" },
+          { text: "Setup", link: "/workshops/mlops-2026/setup" },
+          { text: "Saved Conversations", link: "/workshops/mlops-2026/conversations" },
+          { text: "Exercise Prompts", link: "/workshops/mlops-2026/prompts" },
+          { text: "Exercise 1: Compare harnesses", link: "/workshops/mlops-2026/exercises/00-working-harness" },
+          { text: "Exercise 2: Choose tool access", link: "/workshops/mlops-2026/exercises/01-add-harness-capability" },
+          { text: "Exercise 3: Choose context", link: "/workshops/mlops-2026/exercises/02-place-context" },
+          { text: "Exercise 4: Route models", link: "/workshops/mlops-2026/exercises/03-model-routing" },
+          { text: "Exercise 5: Verify an API migration", link: "/workshops/mlops-2026/exercises/04-api-migration" },
+          { text: "Exercise 6: Delegate work", link: "/workshops/mlops-2026/exercises/05-multi-agent" },
+          { text: "Decision Worksheet", link: "/workshops/mlops-2026/worksheet" },
+        ],
+      }],
       "/workshops/": [
         {
           text: "ODSC 2026 Workshop",

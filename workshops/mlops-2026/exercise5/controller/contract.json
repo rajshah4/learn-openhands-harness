@@ -1,0 +1,207 @@
+[
+  {
+    "name": "omitted-memo",
+    "request": {
+      "customerId": " acme ",
+      "reference": "007",
+      "units": 2,
+      "unitPrice": "12.50"
+    },
+    "status": 200,
+    "body": {
+      "customerId": "acme",
+      "reference": 7,
+      "memo": null,
+      "total": 25.0
+    }
+  },
+  {
+    "name": "explicit-null",
+    "request": {
+      "customerId": " acme ",
+      "reference": "007",
+      "units": 2,
+      "unitPrice": "12.50",
+      "memo": null
+    },
+    "status": 200,
+    "body": {
+      "customerId": "acme",
+      "reference": 7,
+      "memo": null,
+      "total": 25.0
+    }
+  },
+  {
+    "name": "numeric-customer",
+    "request": {
+      "customerId": 412,
+      "reference": "007",
+      "units": 2,
+      "unitPrice": "12.50",
+      "memo": "renewal"
+    },
+    "status": 200,
+    "body": {
+      "customerId": "412",
+      "reference": 7,
+      "memo": "renewal",
+      "total": 25.0
+    }
+  },
+  {
+    "name": "text-reference",
+    "request": {
+      "customerId": " acme ",
+      "reference": "PO-7",
+      "units": 2,
+      "unitPrice": "12.50",
+      "memo": "rush"
+    },
+    "status": 200,
+    "body": {
+      "customerId": "acme",
+      "reference": "PO-7",
+      "memo": "rush",
+      "total": 25.0
+    }
+  },
+  {
+    "name": "integer-reference",
+    "request": {
+      "customerId": " acme ",
+      "reference": 7,
+      "units": 2,
+      "unitPrice": "12.50"
+    },
+    "status": 200,
+    "body": {
+      "customerId": "acme",
+      "reference": 7,
+      "memo": null,
+      "total": 25.0
+    }
+  },
+  {
+    "name": "numeric-string-units",
+    "request": {
+      "customerId": " acme ",
+      "reference": "007",
+      "units": "3",
+      "unitPrice": "0.10"
+    },
+    "status": 200,
+    "body": {
+      "customerId": "acme",
+      "reference": 7,
+      "memo": null,
+      "total": 0.3
+    }
+  },
+  {
+    "name": "zero-units",
+    "request": {
+      "customerId": " acme ",
+      "reference": "007",
+      "units": 0,
+      "unitPrice": "12.50"
+    },
+    "status": 422,
+    "body": null
+  },
+  {
+    "name": "too-many-units",
+    "request": {
+      "customerId": " acme ",
+      "reference": "007",
+      "units": 1001,
+      "unitPrice": "12.50"
+    },
+    "status": 422,
+    "body": null
+  },
+  {
+    "name": "negative-price",
+    "request": {
+      "customerId": " acme ",
+      "reference": "007",
+      "units": 2,
+      "unitPrice": "-1"
+    },
+    "status": 422,
+    "body": null
+  },
+  {
+    "name": "unknown-field",
+    "request": {
+      "customerId": " acme ",
+      "reference": "007",
+      "units": 2,
+      "unitPrice": "12.50",
+      "coupon": "FREE"
+    },
+    "status": 422,
+    "body": null
+  },
+  {
+    "name": "blank-customer",
+    "request": {
+      "customerId": "  ",
+      "reference": "007",
+      "units": 2,
+      "unitPrice": "12.50"
+    },
+    "status": 422,
+    "body": null
+  },
+  {
+    "name": "container-reference",
+    "request": {
+      "customerId": " acme ",
+      "reference": {
+        "id": 7
+      },
+      "units": 2,
+      "unitPrice": "12.50"
+    },
+    "status": 422,
+    "body": null
+  },
+  {
+    "name": "bad-units",
+    "request": {
+      "customerId": " acme ",
+      "reference": "007",
+      "units": "many",
+      "unitPrice": "12.50"
+    },
+    "status": 422,
+    "body": null
+  },
+  {
+    "name": "field-name-alias",
+    "request": {
+      "customer_id": " c2 ",
+      "reference": "19",
+      "units": 1,
+      "unit_price": "4.25"
+    },
+    "status": 200,
+    "body": {
+      "customerId": "c2",
+      "reference": 19,
+      "memo": null,
+      "total": 4.25
+    }
+  },
+  {
+    "name": "missing-reference",
+    "request": {
+      "customerId": "acme",
+      "units": 1,
+      "unitPrice": "1"
+    },
+    "status": 422,
+    "body": null
+  }
+]

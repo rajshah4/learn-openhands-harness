@@ -1,0 +1,174 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Quote API",
+    "version": "1.0"
+  },
+  "paths": {
+    "/quotes": {
+      "post": {
+        "summary": "Quote",
+        "operationId": "quote_quotes_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/QuoteRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QuoteResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "QuoteRequest": {
+        "properties": {
+          "customerId": {
+            "type": "string",
+            "title": "Customerid"
+          },
+          "reference": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Reference"
+          },
+          "memo": {
+            "type": "string",
+            "title": "Memo"
+          },
+          "units": {
+            "type": "integer",
+            "maximum": 1000.0,
+            "exclusiveMinimum": 0.0,
+            "title": "Units"
+          },
+          "unitPrice": {
+            "type": "number",
+            "exclusiveMinimum": 0.0,
+            "title": "Unitprice"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "customerId",
+          "reference",
+          "units",
+          "unitPrice"
+        ],
+        "title": "QuoteRequest"
+      },
+      "QuoteResponse": {
+        "properties": {
+          "customerId": {
+            "type": "string",
+            "title": "Customerid"
+          },
+          "reference": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Reference"
+          },
+          "memo": {
+            "type": "string",
+            "title": "Memo"
+          },
+          "total": {
+            "type": "number",
+            "title": "Total"
+          }
+        },
+        "type": "object",
+        "required": [
+          "customerId",
+          "reference",
+          "total"
+        ],
+        "title": "QuoteResponse"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  }
+}

@@ -20,6 +20,10 @@ Open the [ODSC West workshop slides](https://rajshah4.github.io/learn-openhands-
 
 In Canvas, filter by **`lecture=odsc2026`**. Conversation names start with the workshop and scenario, such as **W1 - 1A - OpenHands**. The setup page links to the current conversation download and import instructions.
 
+## MLOps 2026 workshop
+
+The separate [MLOps workshop](https://rajshah4.github.io/learn-openhands-harness/workshops/mlops-2026/) has six exercises, including the new API migration in Exercise 5. [Download and import the MLOps saved conversations](https://rajshah4.github.io/learn-openhands-harness/workshops/mlops-2026/conversations) and filter Canvas by `lecture=mlops2026`. The ODSC edition remains separate.
+
 ## How to use this tutorial
 
 Use this as a guided lab, not an autonomous agent task. The goal is to learn
