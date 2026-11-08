@@ -13,8 +13,6 @@ export default defineConfig({
       { text: "Start", link: "/start-here" },
       { text: "Concepts", link: "/concepts/" },
       { text: "Projects", link: "/projects/" },
-      { text: "ODSC Workshop", link: "/workshops/odsc-2026/" },
-      { text: "MLOps Workshop", link: "/workshops/mlops-2026/" },
       { text: "Videos", link: "/videos" },
       { text: "References", link: "/references" },
       {
