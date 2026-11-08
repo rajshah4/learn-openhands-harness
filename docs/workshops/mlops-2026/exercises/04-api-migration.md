@@ -1,6 +1,12 @@
-# Exercise 5: Verify an API migration
+# Exercise 5: Verification
 
-## What Problem Are You Solving?
+## The harness decision
+
+What evidence should the harness require before accepting the agent’s work? Decide what to check, who owns the acceptance criteria, and how failures reach the agent.
+
+The API migration is the case study. The reusable decision is how to verify behavior at the boundary that matters to the user.
+
+## Case study: An API migration
 
 A service can pass its own model tests and still change the JSON that clients receive. Migrate a small quote API from Pydantic 1 to native Pydantic 2 while preserving its accepted HTTP contract.
 

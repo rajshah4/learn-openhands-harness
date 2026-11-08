@@ -9,9 +9,11 @@ Make the prediction before opening the result. Record evidence from the trace ra
 | 3. Context | | | | |
 | 4. Routing | | | | |
 | 5. Verification | | | | |
-| 6. Delegation | | | | |
+| 6. Multi-agent systems | | | | |
 
-## Exercise 5
+## Exercise 5: Verification
+
+What evidence should the harness require before accepting the agent’s work?
 
 ```text
 The client behavior we would freeze before migration:
@@ -27,4 +29,24 @@ The code change that responds to it:
 Who invoked the verifier in this recorded run:
 
 What the passing replay establishes:
+```
+
+## Exercise 6: Multi-agent systems
+
+When should you use multiple agents, and how should they work together?
+
+```text
+Keep one agent when:
+
+Add another agent when:
+
+The independent work each agent owns:
+
+The context and tools each agent needs:
+
+Who verifies and integrates the results:
+
+The coordination cost we would accept:
+
+The evidence that would change our choice:
 ```

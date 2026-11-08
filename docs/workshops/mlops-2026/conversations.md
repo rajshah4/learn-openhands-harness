@@ -40,8 +40,8 @@ The import was tested on macOS using Canvas 1.33.0 and Agent Server/SDK 1.58.1, 
 | 2. Choose tools | 2A Terminal, 2B Four GitHub operations, 2C Custom PR tool. |
 | 3. Choose context | 3A No supplied task memory, 3B Useful saved route, 3C Stale route from an earlier take. |
 | 4. Model choice | Open the two SVG files and shared prompt in package/animations/. These are original outputs, not conversation histories. |
-| 5. Verify an API migration | M5-A API migration and external HTTP replay. The source conversation UUID is f5bdbb0e-e907-4959-85c5-204c96a41000. |
-| 6. Delegate work | 6A Single owner, 6B Lead and three workers, and worker histories 6B.1 to 6B.3. |
+| 5. Verification | M5-A API migration and external HTTP replay. The source conversation UUID is f5bdbb0e-e907-4959-85c5-204c96a41000. |
+| 6. Multi-agent systems | 6A Single owner, 6B Lead and three workers, and worker histories 6B.1 to 6B.3. |
 
 In M5-A, the agent invokes the controller-written replay. It sees seven mismatches, adds a serializer and passes the same 15 cases. The visible Error status is the 40-iteration cap after the pass. No Stop hook executed. The recorded final artifact is not supplied as a correct solution. For fresh runs, use the [Exercise 5 starter](./exercises/04-api-migration).
 

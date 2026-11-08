@@ -1,4 +1,10 @@
-# Exercise 6: What You Want Is a Multi-Agent System?
+# Exercise 6: Multi-agent systems
+
+## The harness decision
+
+When is one agent enough, and when do multiple agents earn their coordination cost? Decide how to divide the work, what context and tools each agent needs, and who checks and integrates the results.
+
+Use the coupled repair and independent investigation below to make that choice. Delegation is one part of the multi-agent design.
 
 Another agent adds another context window, another tool loop, and another path
 through the problem. It also adds setup, tokens, handoffs, and coordination.
