@@ -85,3 +85,7 @@ The goal is not to memorize APIs. The goal is deeper understanding, so on your n
 ## Six workshop labs for ODSC 2026
 
 Start the [ODSC workshop](/workshops/odsc-2026/) for setup instructions and six hands-on labs on harness design.
+
+## Six workshop labs for MLOps 2026
+
+Start the [MLOps 2026 conference workshop](/workshops/mlops-2026/) for six labs on harness design, including verification and multi-agent systems. Follow the [setup instructions](/workshops/mlops-2026/setup) to inspect the saved conversations in Canvas or run the exercises.
