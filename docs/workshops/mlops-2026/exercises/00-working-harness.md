@@ -153,15 +153,3 @@ Use this procedure:
 8. Change one harness behavior at a time if you run a follow-up experiment.
 
 The [optional long-project lab](/workshops/mlops-2026/long-project) includes the exact prompt, the starter application, the verifier, and guidance for adapting the benchmark to your own application. The repository also contains the [measurement protocol](https://github.com/rajshah4/learn-openhands-harness/blob/main/workshops/odsc-2026/experiments/harness-suite/MEASUREMENT-PROTOCOL.md) and the [complete measured report](https://github.com/rajshah4/learn-openhands-harness/blob/main/workshops/odsc-2026/evidence/harness-suite/20260824-aws-incident-v2.md).
-
-## Add the First Decision to Your Harness
-
-Complete the opening section of the [decision worksheet](/workshops/mlops-2026/worksheet):
-
-```text
-I trust a coding-agent result when the trace shows:
-
-The harness, rather than the model alone, supplied:
-
-The first efficiency measurement I would add is:
-```

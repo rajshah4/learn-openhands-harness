@@ -69,7 +69,6 @@ export default defineConfig({
           { text: "Exercise 4: Route models", link: "/workshops/mlops-2026/exercises/03-model-routing" },
           { text: "Exercise 5: Verification", link: "/workshops/mlops-2026/exercises/04-api-migration" },
           { text: "Exercise 6: Multi-agent systems", link: "/workshops/mlops-2026/exercises/05-multi-agent" },
-          { text: "Decision Worksheet", link: "/workshops/mlops-2026/worksheet" },
         ],
       }],
       "/workshops/": [

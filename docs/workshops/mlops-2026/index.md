@@ -4,7 +4,7 @@ Six exercises for the MLOps conference edition of Harness Engineering. Each exer
 
 Exercise 5 focuses on verification: deciding what evidence establishes that an agent’s work meets the task’s requirements. The API migration makes that decision concrete. Exercise 6 focuses on multi-agent systems: deciding when another agent helps, how to divide the work, and who checks and integrates the results.
 
-Start with [setup](./setup), open the [exercise prompts](./prompts), and record decisions in the [worksheet](./worksheet). You can follow the instructor's recorded examples or run a fresh attempt with your own configured model.
+Start with [setup](./setup) and open the [exercise prompts](./prompts). You can follow the instructor's recorded examples or run a fresh attempt with your own configured model.
 
 | Exercise | Open the instructions | Harness decision |
 |---|---|---|
