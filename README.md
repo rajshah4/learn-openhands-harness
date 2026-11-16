@@ -106,7 +106,7 @@ Task prompt, repo path, budget, and one-off exceptions stay outside the harness.
 ## Prerequisites
 
 - macOS or Linux (Windows works but the canvas dev script assumes a POSIX shell)
-- **Node.js 22.12+** and `npm`
+- **Node.js 24+** and `npm`
 - **`uv`** ([install](https://docs.astral.sh/uv/getting-started/installation/))
 - **An LLM API key** (Anthropic, OpenAI, or anything [LiteLLM](https://docs.litellm.ai/docs/providers) supports)
 - **Docker** is optional for the first walkthrough but recommended for real work

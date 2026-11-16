@@ -34,7 +34,7 @@ In Canvas, choose **Open Workspace**, select the printed directory, and start a 
 
 The two-round cap limits outer judge audits, not all model calls or elapsed time. Goal mode uses a judge model as well as the agent. Inspect its explanation and run the optional behavior check yourself.
 
-If your version does not recognize `/goal`, run the ordinary repair and inspect the saved complete/capped events. See the [Canvas goal instructions](https://github.com/OpenHands/docs/blob/main/openhands/usage/agent-canvas/conversations.mdx#run-a-goal).
+If your version does not recognize `/goal`, run the ordinary repair and inspect the saved complete/capped events. See the [Canvas goal instructions](https://docs.openhands.dev/openhands/usage/agent-canvas/conversations#run-a-goal).
 
 ## Try A Variation
 

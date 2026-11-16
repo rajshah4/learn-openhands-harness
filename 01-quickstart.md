@@ -15,8 +15,8 @@ If anything in this section fails, fix it before continuing. The rest of the tut
 ## 1.1 Install prerequisites
 
 ```bash
-# Node 22.12+
-node --version   # → v22.12.x or higher
+# Node 24+
+node --version   # → v24.x or higher
 
 # uv (used by the canvas to run uvx-spawned backends)
 curl -LsSf https://astral.sh/uv/install.sh | sh
@@ -198,7 +198,7 @@ If any of the above is false, fix it now. Common failures and fixes:
 
 | Symptom | Likely cause | Fix |
 |---|---|---|
-| `node: command not found` | Wrong Node version | `nvm install 22.12 && nvm use 22.12` |
+| `node: command not found` | Wrong Node version | `nvm install 24 && nvm use 24` |
 | `uvx: command not found` | `uv` not on `PATH` | Re-source your shell, or `~/.local/bin/uvx --version` |
 | Server exits immediately, no health endpoint | `uvx` install/start failure or a busy port | Re-read the launcher error; rerun after freeing the port or fixing `uvx` |
 | `500 Internal Server Error` when creating a conversation, with a host path like `/Users/...` or `/private/var/...` in the stack trace | Dockerized agent server cannot see the host path passed as `working_dir` | Set `AGENT_WORKSPACE_HOST_ROOT` + `AGENT_WORKSPACE_SERVER_ROOT`, or set `WORKSPACE_DIR` to the server path such as `/projects/agent-canvas` |

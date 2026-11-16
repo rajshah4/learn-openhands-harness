@@ -26,7 +26,7 @@ Every project follows the same loop:
 
 ## What You Need
 
-- Node.js 22.12 or newer.
+- Node.js 24 or newer.
 - `uv`.
 - An LLM API key.
 - [Download and install Agent Canvas](https://docs.openhands.dev/openhands/usage/agent-canvas/setup).
