@@ -6,7 +6,7 @@ Reference library: [Sources from the current talk and further reading](https://r
 
 Every coding agent ships two things: a model that reasons and a harness that does everything else. The harness decides what the model sees, which tools it can call, what it remembers across turns, when it stops, and whether it runs in a sandbox or on your bare machine. This translates into implications for performance, reliability, and latency.
 
-This tutorial gives you a working harness you can open, run, and change. You'll use two open-source projects, [Agent Server](https://docs.openhands.dev/sdk/arch/agent-server) (the HTTP API that owns the workspace, conversation state, and tool dispatch) and [Agent Canvas](https://github.com/OpenHands/agent-canvas) (the operator UI), as a microscope. You'll give the agent real tasks, read the trace of what happened, and then change one lever at a time to see the behavior shift.
+This tutorial gives you a working harness you can open, run, and change. You'll use two open-source projects, [Agent Server](https://docs.openhands.dev/sdk/arch/agent-server) (the HTTP API that owns the workspace, conversation state, and tool dispatch) and [Agent Canvas](https://docs.openhands.dev/openhands/usage/agent-canvas/setup) (the operator UI), as a microscope. You'll give the agent real tasks, read the trace of what happened, and then change one lever at a time to see the behavior shift.
 
 By the end you'll have a `harness.py` you built yourself, with model routing, retrieval config, memory policy, a security profile, and a critic. More importantly, you'll be able to look at any agent product and answer: *what would I change about its harness if I owned the source?*
 
@@ -150,7 +150,7 @@ None of this is required. The tutorial is self-contained.
 
 - [Agent Server architecture](https://docs.openhands.dev/sdk/arch/agent-server). Design intent.
 - [Agent Server: Local](https://docs.openhands.dev/sdk/guides/agent-server/local-server) and [Docker Sandbox](https://docs.openhands.dev/sdk/guides/agent-server/docker-sandbox) guides.
-- [`OpenHands/agent-canvas`](https://github.com/OpenHands/agent-canvas). The UI. The `DEVELOPMENT.md` is unusually honest about which knobs you actually have.
+- [Agent Canvas installation and downloads](https://docs.openhands.dev/openhands/usage/agent-canvas/setup). Source code lives in [`OpenHands/OpenHands`](https://github.com/OpenHands/OpenHands).
 - [`OpenHands/software-agent-sdk`](https://github.com/OpenHands/software-agent-sdk). The SDK the server is built on.
 
 ---

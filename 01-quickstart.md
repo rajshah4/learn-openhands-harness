@@ -59,8 +59,7 @@ The canvas dev script will install Python dependencies into uvx-managed envs on 
 
 ## 1.2 Clone and start the canvas
 
-Current Agent Canvas can start three ways: the published `agent-canvas` command,
-the Docker image, or a source checkout. Use the source checkout for this course.
+The [official Agent Canvas installer page](https://docs.openhands.dev/openhands/usage/agent-canvas/setup) has current downloads and installation options. Use the source checkout for this course.
 The next lesson asks the agent to inspect `agent-canvas` itself, so having the
 repo on disk is part of the exercise.
 
@@ -71,7 +70,7 @@ cloned or another scratch repo. Do not point it at your main work repo until you
 have moved to the Docker path in the tour.
 
 ```bash
-git clone https://github.com/OpenHands/agent-canvas.git
+git clone https://github.com/OpenHands/OpenHands.git agent-canvas
 cd agent-canvas
 npm install
 npm run dev

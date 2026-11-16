@@ -2,6 +2,10 @@
 
 The quickstart gets you from zero to a visible OpenHands trace. The full runnable instructions live in the repo at [`01-quickstart.md`](https://github.com/rajshah4/learn-openhands-harness/blob/main/01-quickstart.md).
 
+## Download Agent Canvas
+
+Use the [official Agent Canvas installer page](https://docs.openhands.dev/openhands/usage/agent-canvas/setup) for current downloads and installation options. For the source-reading exercises below, use the source checkout.
+
 ## What You Are Proving
 
 You are checking that Agent Server and Agent Canvas are working, that the model can run through the harness, and that you can inspect the resulting events.
@@ -14,7 +18,7 @@ Read the current repo and write three facts about it into FACTS.txt.
 
 ## Minimal Flow
 
-1. Clone `OpenHands/agent-canvas`.
+1. Clone the [OpenHands source repository](https://github.com/OpenHands/OpenHands) into an `agent-canvas` folder: `git clone https://github.com/OpenHands/OpenHands.git agent-canvas`, then `cd agent-canvas`.
 2. Run `npm install`.
 3. Run `npm run dev`.
 4. Open `http://localhost:8000`.

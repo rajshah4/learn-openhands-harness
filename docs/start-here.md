@@ -29,7 +29,7 @@ Every project follows the same loop:
 - Node.js 22.12 or newer.
 - `uv`.
 - An LLM API key.
-- Agent Canvas running locally.
+- [Download and install Agent Canvas](https://docs.openhands.dev/openhands/usage/agent-canvas/setup).
 - A scratch repo for live agent work.
 - Docker by P06, when the course moves into sandboxed workspaces.
 

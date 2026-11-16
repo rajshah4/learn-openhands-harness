@@ -13,6 +13,9 @@ hero:
       text: Start The Course
       link: /start-here
     - theme: alt
+      text: Download Agent Canvas
+      link: https://docs.openhands.dev/openhands/usage/agent-canvas/setup
+    - theme: alt
       text: See The Visual Intro
       link: /concepts/visual-intro
     - theme: alt
