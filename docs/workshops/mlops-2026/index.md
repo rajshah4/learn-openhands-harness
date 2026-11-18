@@ -2,8 +2,6 @@
 
 Six exercises for the MLOps conference edition of Harness Engineering. Each exercise asks you to make a harness design decision and use the trace to assess it.
 
-Exercise 5 focuses on verification: deciding what evidence establishes that an agent’s work meets the task’s requirements. The API migration makes that decision concrete. Exercise 6 focuses on multi-agent systems: deciding when another agent helps, how to divide the work, and who checks and integrates the results.
-
 Choose how you want to participate. **Open the public Canvas to follow along without installing anything.** You can inspect the saved conversations without a login, model key or new model calls.
 
 | Option | What you do | When to choose it |
