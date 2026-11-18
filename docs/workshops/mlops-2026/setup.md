@@ -1,10 +1,20 @@
 # Set up for the MLOps workshop
 
-Choose whether to follow the instructor's saved traces or run the exercises. Reading traces needs no model key. New coding attempts need a model configured in your own harness.
+Choose how you want to participate. **Open the public Canvas to follow along without installing anything.** You can inspect the saved conversations without a login, model key or new model calls.
+
+| Option | What you do | When to choose it |
+|---|---|---|
+| **[1. Browse the public Canvas](http://34.215.46.146:8080/)** | Open the read-only MLOps workshop archive and expand tool calls and results. No installation, login or model key is needed. | Fastest way to follow the workshop and inspect the recorded work. |
+| [2. Inspect in your own Canvas](./conversations#inspect-in-your-own-agent-canvas) | Download and import the same histories into a local Canvas. | Keep the conversations after the temporary server is removed. |
+| [3. Run the exercises yourself](#run-a-fresh-exercise) | Start fresh conversations with your own configured model and workspace. | Change the harness and compare new runs. |
+
+The public server is temporary and read-only. It uses plain HTTP. Do not enter credentials or private information. New runs, edits and resumed conversations are blocked.
 
 ## Inspect recorded work
 
-Use [saved conversations](./conversations) for the current selection and availability. Download the separate MLOps ZIP and follow its preview, import and tag-filter steps. The bundle was tested with a fresh ordinary Canvas store and no model key. See the saved-conversation page for the tested versions and recovery directions.
+Open the [public MLOps Canvas](http://34.215.46.146:8080/) or use the [direct workshop links](./conversations#find-each-exercise). It contains all 15 saved histories and 575 events, plus both original Exercise 4 SVG outputs.
+
+To keep a local copy, use [saved conversations](./conversations) to download the separate MLOps ZIP and follow its preview, import and tag-filter steps. The bundle was tested with a fresh ordinary Canvas store and no model key. See the saved-conversation page for the tested versions and recovery directions.
 
 ## Run a fresh exercise
 

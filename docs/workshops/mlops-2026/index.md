@@ -4,7 +4,17 @@ Six exercises for the MLOps conference edition of Harness Engineering. Each exer
 
 Exercise 5 focuses on verification: deciding what evidence establishes that an agent’s work meets the task’s requirements. The API migration makes that decision concrete. Exercise 6 focuses on multi-agent systems: deciding when another agent helps, how to divide the work, and who checks and integrates the results.
 
-Start with [setup](./setup) and open the [exercise prompts](./prompts). You can follow the instructor's recorded examples or run a fresh attempt with your own configured model.
+Choose how you want to participate. **Open the public Canvas to follow along without installing anything.** You can inspect the saved conversations without a login, model key or new model calls.
+
+| Option | What you do | When to choose it |
+|---|---|---|
+| **[1. Browse the public Canvas](http://34.215.46.146:8080/)** | Open the read-only MLOps workshop archive and expand tool calls and results. No installation, login or model key is needed. | Fastest way to follow the workshop and inspect the recorded work. |
+| [2. Inspect in your own Canvas](./conversations#inspect-in-your-own-agent-canvas) | Download and import the same histories into a local Canvas. | Keep the conversations after the temporary server is removed. |
+| [3. Run the exercises yourself](./setup#run-a-fresh-exercise) | Start fresh conversations with your own configured model and workspace. | Change the harness and compare new runs. |
+
+The public server is temporary and read-only. It uses plain HTTP. Do not enter credentials or private information. New runs, edits and resumed conversations are blocked.
+
+Use [Get started](./setup) for setup details and [saved conversations](./conversations#browse-the-public-canvas) for direct workshop links. Open the [exercise prompts](./prompts) when running a fresh attempt.
 
 | Exercise | Open the instructions | Harness decision |
 |---|---|---|
