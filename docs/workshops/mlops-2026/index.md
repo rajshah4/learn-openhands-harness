@@ -1,5 +1,7 @@
 # MLOps conference workshop
 
+<a href="/learn-openhands-harness/slides/mlops-2026-workshop-slides.pdf" target="_blank" rel="noreferrer">Workshop slides (PDF)</a>
+
 Six exercises for the MLOps conference edition of Harness Engineering. Each exercise asks you to make a harness design decision and use the trace to assess it.
 
 Choose how you want to participate. **Open the public Canvas to follow along without installing anything.** You can inspect the saved conversations without a login, model key or new model calls.
